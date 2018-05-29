@@ -20,4 +20,11 @@ public class MaxTest {
         int max = maximum.summation(3, 7);
         assertThat(max, is(7));
     }
+
+    @Test
+    public void whenThirdIsGreater() {
+        Max max = new Max();
+        int maximum = max.max(1,3,7);
+        assertThat(maximum, is(7));
+    }
 }

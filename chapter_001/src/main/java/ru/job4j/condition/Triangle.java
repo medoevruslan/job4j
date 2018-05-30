@@ -59,8 +59,6 @@ public class Triangle {
      */
 
     public boolean exist(double ab, double ac, double bc) {
-        boolean exist = false;
-
         return (ab < ac + bc) && (ac < bc + ab) && (bc < ac + ab);
     }
 }

@@ -9,7 +9,7 @@ public class Max {
      * @return наибольшее из двух чисел.
      */
 
-    public int summation(int first, int second) {
+    public int max(int first, int second) {
         return first > second ? first : second;
     }
 
@@ -22,9 +22,6 @@ public class Max {
      */
 
     public int max(int first, int second, int third) {
-        int temp = this.summation(first, second);
-        temp = this.summation(temp, third);
-
-        return temp;
+        return max(first, max(second, third));
     }
 }

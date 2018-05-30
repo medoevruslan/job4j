@@ -8,7 +8,7 @@ package ru.job4j.loop;
 
 public class Counter {
 
-    int sum = 0;
+    private int sum = 0;
 
     /**
      * Метод вычесляет сумму всех четных чисел
@@ -17,7 +17,7 @@ public class Counter {
      * @return Сумма четных чисел
      */
     public int add(int start, int finish) {
-        for (int i = start; i <= finish ; i++) {
+        for (int i = start; i <= finish; i++) {
             if (i % 2 == 0) {
                 sum += i;
             }

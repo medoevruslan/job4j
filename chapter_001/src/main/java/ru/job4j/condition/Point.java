@@ -22,9 +22,7 @@ public class Point {
     public static void main(String[] args) {
         Point a = new Point(3, 7);
         Point b = new Point(4, 9);
-
         double result = a.distanceTo(b);
-
         System.out.println("Расстояние между точками А и В : " + result);
     }
 }

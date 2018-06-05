@@ -14,10 +14,10 @@ public class ArrayMergerTest {
 
     @Test
     public void whenUseArraymergerThanMergedArray() {
-        ArrayMerger arrayMerger = new ArrayMerger();
+        ArrayMerger array = new ArrayMerger();
         int[] arr1 = {1, 4, 7, 9, 13};
         int[] arr2 = {2, 3, 5, 8};
-        int[] result = arrayMerger.merge(arr1, arr2);
+        int[] result = array.merge(arr1, arr2);
         int[] expctd = {1, 2, 3, 4, 5, 7, 8, 9, 13};
         assertThat(result, is(expctd));
     }

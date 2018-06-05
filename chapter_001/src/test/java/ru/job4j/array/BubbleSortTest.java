@@ -13,9 +13,9 @@ import static org.hamcrest.core.Is.is;
 public class BubbleSortTest {
     @Test
     public void whenSortArrayWithTenElementsThanSortedArray() {
-        BubbleSort bubbleSort = new BubbleSort();
+        BubbleSort sorter = new BubbleSort();
         int[] input = new int[]{3, 7, 2, 0, 5, 9, 4, 1, 6, 8};
-        int[] result = bubbleSort.sort(input);
+        int[] result = sorter.sort(input);
         int[] expected = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         assertThat(result, is(expected));
     }

@@ -13,15 +13,15 @@ import static org.hamcrest.core.Is.is;
 public class ArrayCharTest {
     @Test
     public void whenStartWithPrefixThanTrue() {
-        ArrayChar arrayChar = new ArrayChar("Hello");
-        boolean result = arrayChar.startWith("He");
+        ArrayChar array = new ArrayChar("Hello");
+        boolean result = array.startWith("He");
         assertThat(result, is(true));
     }
 
     @Test
     public void whenStartWithPrefixThanFalse() {
-        ArrayChar arrayChar = new ArrayChar("Hello");
-        boolean result = arrayChar.startWith("Hi");
+        ArrayChar array = new ArrayChar("Hello");
+        boolean result = array.startWith("Hi");
         assertThat(result, is(false));
     }
 

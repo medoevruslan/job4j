@@ -14,18 +14,16 @@ public class MatrixCheck {
      * @return true or false.
      */
     public boolean mono(boolean[][] data) {
-        boolean rst = true;
         boolean tmp = data[0][0];
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data.length; j++) {
                 if (i - j == 0) {
                     if (data[i][j] != tmp || data[i][data.length - 1 - i] != tmp) {
-                        rst = false;
-                        break;
+                        return false;
                     }
                 }
             }
         }
-        return rst;
+        return true;
     }
 }

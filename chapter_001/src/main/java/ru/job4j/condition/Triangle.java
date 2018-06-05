@@ -42,7 +42,6 @@ public class Triangle {
         double ac = this.a.distanceTo(this.c);
         double bc = this.b.distanceTo(this.c);
         double p = this.period(ab, ac, bc);
-
         if (this.exist(ab, ac, bc)) {
             result = Math.sqrt(p * (p - ab) * (p - ac) * (p - bc));
         }

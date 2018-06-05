@@ -13,20 +13,20 @@ import static org.junit.Assert.assertThat;
 public class DummyBotTest {
     @Test
     public void whenGreetBot() {
-        DummyBot dummyBot = new DummyBot();
-        assertThat(dummyBot.answer("Привет, Бот"), is("Привет, умник."));
+        DummyBot bot = new DummyBot();
+        assertThat(bot.answer("Привет, Бот"), is("Привет, умник."));
     }
 
     @Test
     public void whenByuBot() {
-        DummyBot dummyBot = new DummyBot();
-        assertThat(dummyBot.answer("Пока"), is("До скорой встречи."));
+        DummyBot bot = new DummyBot();
+        assertThat(bot.answer("Пока"), is("До скорой встречи."));
     }
 
     @Test
     public void whenUknownBot() {
-        DummyBot dummyBot = new DummyBot();
-        assertThat(dummyBot.answer("Сколько тебе лет?"), is("Это ставит меня в тупик. Спросите другой вопрос."));
+        DummyBot bot = new DummyBot();
+        assertThat(bot.answer("Сколько тебе лет?"), is("Это ставит меня в тупик. Спросите другой вопрос."));
     }
 
 }

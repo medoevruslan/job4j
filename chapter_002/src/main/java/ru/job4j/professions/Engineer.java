@@ -1,4 +1,4 @@
-package ru.job4j;
+package ru.job4j.professions;
 
 public class Engineer extends Profession {
     public void build(Building building){}

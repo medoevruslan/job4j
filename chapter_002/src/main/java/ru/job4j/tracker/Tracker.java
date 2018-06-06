@@ -13,10 +13,12 @@ import java.util.*;
  */
 
 public class Tracker {
+
     /**
      * Переменная для хранения случайных чисел.
      */
     static final Random RN = new Random();
+
     /**
      * Массив для хранение заявок.
      */

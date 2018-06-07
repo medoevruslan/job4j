@@ -20,19 +20,19 @@ public class ArrayMerger {
      */
 
     public int[] merge(int[] arrayOne, int[] arrayTwo) {
-        int[] mergedArray = new int[arrayOne.length + arrayTwo.length];
-        int a1 = 0, a2 = 0;
-        for (int i = 0; i < mergedArray.length; i++) {
-            if (a1 == arrayOne.length) {
-                mergedArray[i] = arrayTwo[a2++];
-            } else if (a2 == arrayTwo.length) {
-                mergedArray[i] = arrayOne[a1++];
-            } else if (arrayOne[a1] < arrayTwo[a2]) {
-                mergedArray[i] = arrayOne[a1++];
+        int[] merged = new int[arrayOne.length + arrayTwo.length];
+        int first = 0, second = 0;
+        for (int i = 0; i < merged.length; i++) {
+            if (first == arrayOne.length) {
+                merged[i] = arrayTwo[second++];
+            } else if (second == arrayTwo.length) {
+                merged[i] = arrayOne[first++];
+            } else if (arrayOne[first] < arrayTwo[second]) {
+                merged[i] = arrayOne[first++];
             } else {
-                mergedArray[i] = arrayTwo[a2++];
+                merged[i] = arrayTwo[second++];
             }
         }
-        return mergedArray;
+        return merged;
     }
 }

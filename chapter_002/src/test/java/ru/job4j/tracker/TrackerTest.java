@@ -26,7 +26,6 @@ public class TrackerTest {
         Item prev = new Item("prev", "prevDescr", 123L);
         tracker.add(prev);
         Item next = new Item("next", "nextDescr", 1234L);
-        next.setId(prev.getId());
         tracker.replace(prev.getId(), next);
         assertThat(tracker.findById(prev.getId()).getName(), is("next"));
     }

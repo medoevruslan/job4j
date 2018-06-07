@@ -28,7 +28,7 @@ public class StartUI {
     /**
      * Метод инициализации интерфейса взаимодейтвия с пользователем.
      */
-    private void init() {
+    public void init() {
         boolean exit = false;
         while (!exit) {
             this.showMenu();
@@ -97,7 +97,7 @@ public class StartUI {
         String desc = this.input.ask("Введите описание :");
         Item item = new Item(name, desc, System.currentTimeMillis());
         this.tracker.replace(id, item);
-        System.out.println("--------- Заявка отредактирована." + item.getId() + " Id заявки " + item.getId() +  " ---------");
+        System.out.println("--------- Заявка по Id " + item.getId() + " отредактирована ---------");
     }
 
     /**

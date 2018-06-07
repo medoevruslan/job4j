@@ -116,8 +116,8 @@ public class Tracker {
         for (Item item : this.items) {
             if (item.getId().equals(id)) {
                 result = item;
+                break;
             }
-            break;
         }
         return result;
     }

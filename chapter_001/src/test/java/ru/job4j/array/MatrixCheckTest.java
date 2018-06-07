@@ -17,7 +17,7 @@ public class MatrixCheckTest {
     public void whenDataMonoTrueByTrueThanTrue() {
         MatrixCheck check = new MatrixCheck();
         boolean[][] input = new boolean[][]{
-                {true, true, true},
+                {true, true, true, false},
                 {true, true, true},
                 {true, true, true}
         };

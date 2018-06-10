@@ -11,7 +11,7 @@ package ru.job4j.tracker;
 public class MenuTracker {
     private Tracker tracker;
     private Input input;
-    private UserAction[] actions = new UserAction[7];
+    public UserAction[] actions = new UserAction[7];
 
     public MenuTracker(Input input, Tracker tracker) {
         this.input = input;
@@ -43,8 +43,9 @@ public class MenuTracker {
      * Ключ соответсвующий пункту меню.
      * @param key Пункт меню.
      */
-    public void select(String key) {
-            this.actions[Integer.valueOf(key)].execute(input, tracker);
+    public void select(int key) {
+        this.actions[key].execute(input, tracker);
+
     }
 
     /**
@@ -104,7 +105,12 @@ public class MenuTracker {
             String desc = input.ask("Введите описание : ");
             Item item = new Item(name, desc, System.currentTimeMillis());
             tracker.replace(id, item);
-            System.out.println("--------- Заявка по Id " + item.getId() + " отредактирована ---------");
+            if (item.getId() != null) {
+                System.out.println("--------- Заявка по Id " + item.getId() + " отредактирована ---------");
+            } else {
+                System.out.println("Заявки с таким Id не существует");
+            }
+
         }
 
         public String info() {
@@ -135,7 +141,7 @@ public class MenuTracker {
     /**
      * Класс реализует поиск заявки по Id и вывод её на экран.
      */
-    class FindById implements UserAction {
+     class FindById implements UserAction {
         public int key() {
             return 4;
         }
@@ -144,7 +150,11 @@ public class MenuTracker {
             System.out.println("--------- Поиск заявки по Id ---------");
             String id = input.ask("Введите id заявки");
             Item item = tracker.findById(id);
-            System.out.println("***** Заявка : " + item.getName() + " ***** Описание : " + item.getDesc());
+            if (item != null){
+                System.out.println("***** Заявка : " + item.getName() + " ***** Описание : " + item.getDesc());
+            } else {
+                System.out.println("Заявки с таким Id не найдено");
+            }
         }
 
         public String info() {

@@ -44,12 +44,16 @@ public class Tracker {
      * @param id Уникальный номер заявки.
      */
     public void delete(String id) {
+        if (this.position == 0) {
+            System.out.println("Список заявок пуст");
+        }
         for (int index = 0; index < this.position; index++) {
             if (this.items[index].getId().equals(id)) {
                 this.items[index] = null;
                 position--;
                 System.arraycopy(this.items, index + 1, this.items, index, position);
-                break;
+            } else {
+                System.out.println("Заявка с таким Id не найдена");
             }
         }
     }
@@ -96,11 +100,16 @@ public class Tracker {
      */
     public Item[] findByName(String key) {
         Item[] temp = new Item[this.position];
+        boolean find = false;
         int i = 0;
         for (int index = 0; index < this.position; index++) {
             if (this.items[index] != null && this.items[index].getName().equals(key)) {
                 temp[i++] = this.items[index];
+                find = true;
             }
+        }
+        if (!find) {
+            System.out.println("Заявок с таким именем не найдено");
         }
         return Arrays.copyOf(temp, i);
     }
@@ -113,10 +122,12 @@ public class Tracker {
 
     public Item findById(String id) {
         Item result = null;
-        for (Item item : this.items) {
-            if (item.getId().equals(id)) {
-                result = item;
-                break;
+        if (this.items[position] != null) {
+            for (Item item : this.items) {
+                if (item.getId().equals(id)) {
+                    result = item;
+                    break;
+                }
             }
         }
         return result;

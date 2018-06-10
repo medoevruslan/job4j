@@ -23,15 +23,15 @@ public class StartUI {
     public void init() {
         MenuTracker menu = new MenuTracker(this.input, this.tracker);
         menu.fillActions();
-        String key;
+        int key;
         do {
             menu.showMenu();
-            key = this.input.ask("Please, select : ");
+            key = input.ask("Select : ", menu.actions);
             menu.select(key);
-        } while (!"6".equals(key));
+        } while (key != 6);
     }
 
     public static void main(String[] args) {
-        new StartUI(new ConsoleInput(), new Tracker()).init();
+        new StartUI(new ValidateInput(), new Tracker()).init();
     }
 }

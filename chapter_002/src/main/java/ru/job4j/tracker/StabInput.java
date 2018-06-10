@@ -28,4 +28,8 @@ public class StabInput implements Input {
     public String ask(String question) {
         return this.values[this.position++];
     }
+
+    public int ask(String question, UserAction[] actions) {
+        throw new MenuOutException("Out of menu range");
+    }
 }

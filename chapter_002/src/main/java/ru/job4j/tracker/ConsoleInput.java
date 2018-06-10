@@ -14,4 +14,20 @@ public class ConsoleInput implements Input {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
+
+    public int ask(String question, UserAction[] actions ) {
+        int key = Integer.valueOf(this.ask(question));
+        boolean exist = false;
+        for (UserAction action : actions) {
+            if (key == action.key()) {
+                exist = true;
+                break;
+            }
+        }
+        if (exist) {
+            return key;
+        } else {
+            throw new  MenuOutException("Out of menu range");
+        }
+    }
 }

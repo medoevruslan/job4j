@@ -130,7 +130,6 @@ public class MenuTracker {
             System.out.println("--------- Удаление ---------");
             String id = input.ask("Введите id заявки которую необходимо удалить : ");
             tracker.delete(id);
-            System.out.println("--------- Заявка с номером id " + id +  " удалена ---------");
         }
 
         public String info() {
@@ -150,7 +149,7 @@ public class MenuTracker {
             System.out.println("--------- Поиск заявки по Id ---------");
             String id = input.ask("Введите id заявки");
             Item item = tracker.findById(id);
-            if (item != null){
+            if (item != null) {
                 System.out.println("***** Заявка : " + item.getName() + " ***** Описание : " + item.getDesc());
             } else {
                 System.out.println("Заявки с таким Id не найдено");

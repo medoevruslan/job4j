@@ -30,6 +30,19 @@ public class StabInput implements Input {
     }
 
     public int ask(String question, UserAction[] actions) {
-        throw new MenuOutException("Out of menu range");
+        int key = Integer.valueOf(this.ask(question));
+        boolean exist = false;
+        for (UserAction action : actions) {
+            if (key == action.key()) {
+                exist = true;
+                break;
+            }
+        }
+        if (exist) {
+            return key;
+        } else {
+            throw new  MenuOutException("Out of menu range");
+        }
     }
 }
+

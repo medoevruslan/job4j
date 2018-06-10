@@ -15,7 +15,7 @@ public class ConsoleInput implements Input {
         return scanner.nextLine();
     }
 
-    public int ask(String question, UserAction[] actions ) {
+    public int ask(String question, UserAction[] actions) {
         int key = Integer.valueOf(this.ask(question));
         boolean exist = false;
         for (UserAction action : actions) {

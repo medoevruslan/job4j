@@ -46,16 +46,18 @@ public class Tracker {
     public void delete(String id) {
         if (this.position == 0) {
             System.out.println("Список заявок пуст");
+            return;
         }
         for (int index = 0; index < this.position; index++) {
             if (this.items[index].getId().equals(id)) {
                 this.items[index] = null;
                 position--;
                 System.arraycopy(this.items, index + 1, this.items, index, position);
-            } else {
-                System.out.println("Заявка с таким Id не найдена");
+                System.out.println("--------- Заявка с номером id " + id +  " удалена ---------");
+                return;
             }
         }
+        System.out.println("Заявка с таким Id не найдена");
     }
 
     /**
@@ -122,7 +124,7 @@ public class Tracker {
 
     public Item findById(String id) {
         Item result = null;
-        if (this.items[position] != null) {
+        if (this.items[0] != null) {
             for (Item item : this.items) {
                 if (item.getId().equals(id)) {
                     result = item;

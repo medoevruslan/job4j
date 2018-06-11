@@ -29,20 +29,23 @@ public class StabInput implements Input {
         return this.values[this.position++];
     }
 
-    public int ask(String question, UserAction[] actions) {
-        int key = Integer.valueOf(this.ask(question));
-        boolean exist = false;
+    private boolean isValidKey(int key, UserAction[] actions) {
+        boolean valid = false;
         for (UserAction action : actions) {
             if (key == action.key()) {
-                exist = true;
+                valid = true;
                 break;
             }
         }
-        if (exist) {
-            return key;
-        } else {
+        return valid;
+    }
+
+    public int ask(String question, UserAction[] actions) {
+        int key = Integer.valueOf(this.ask(question));
+        if (!isValidKey(key, actions)) {
             throw new  MenuOutException("Out of menu range");
         }
+        return key;
     }
 }
 

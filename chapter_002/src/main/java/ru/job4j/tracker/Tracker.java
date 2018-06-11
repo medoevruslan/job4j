@@ -44,20 +44,22 @@ public class Tracker {
      * @param id Уникальный номер заявки.
      */
     public void delete(String id) {
-        if (this.position == 0) {
-            System.out.println("Список заявок пуст");
-            return;
-        }
-        for (int index = 0; index < this.position; index++) {
-            if (this.items[index].getId().equals(id)) {
-                this.items[index] = null;
-                position--;
-                System.arraycopy(this.items, index + 1, this.items, index, position);
-                System.out.println("--------- Заявка с номером id " + id +  " удалена ---------");
-                return;
+        boolean isDeleted = false;
+        if (this.position != 0) {
+            for (int index = 0; index < this.position; index++) {
+                if (this.items[index].getId().equals(id)) {
+                    this.items[index] = null;
+                    position--;
+                    System.arraycopy(this.items, index + 1, this.items, index, position);
+                    System.out.println("--------- Заявка с номером id " + id + " удалена ---------");
+                    isDeleted = true;
+                    break;
+                }
             }
         }
-        System.out.println("Заявка с таким Id не найдена");
+        if (!isDeleted) {
+            System.out.println("Заявка с таким id не найдена");
+        }
     }
 
     /**

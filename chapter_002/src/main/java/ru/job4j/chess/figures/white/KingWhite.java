@@ -9,21 +9,28 @@ import ru.job4j.chess.figures.Figure;
  * @version $Id$.
  * @since 0.1.
  */
-public class BishopWhite extends Figure {
-    public BishopWhite(Cell position) {
+public class KingWhite extends Figure {
+    public KingWhite(Cell position) {
         super(position);
+    }
+
+    private boolean isValidMove(Cell position, Cell dest) {
+        int valid = (int) (Math.pow((dest.x - position.x), 2) + Math.pow((dest.y - position.y), 2));
+        return (valid == 1 || valid == 2);
     }
 
     @Override
     public Cell[] way(Cell position, Cell dest) {
-        if (Math.abs(dest.x - position.x) != Math.abs(dest.y - position.y)) {
+        if (!isValidMove(position, dest)) {
             throw new ImpossibleMoveException("That figure can't move that way");
         }
         return new Cell[] {dest};
     }
+
     @Override
     public Figure copy(Cell dest) {
-        return new BishopWhite(dest);
+        return new KingWhite(dest);
     }
 }
+
 

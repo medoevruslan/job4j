@@ -12,15 +12,16 @@ import java.util.LinkedList;
 public class PriorityQueue {
     private LinkedList<Task> tasks = new LinkedList<>();
 
+
     public void put(Task task) {
-        if (this.tasks.isEmpty()) {
+        if (this.tasks.isEmpty() || this.tasks.size() == 1) {
             this.tasks.add(task);
-        }else if (task.getPriority() == 1 ) {
+        } else if (task.getPriority() <= this.tasks.getFirst().getPriority()) {
             this.tasks.add(0, task);
-        } else if (task.getPriority() == 3) {
-            tasks.add(this.tasks.size() -1, task);
+        } else if (task.getPriority() >= this.tasks.getLast().getPriority()) {
+            this.tasks.add(this.tasks.size() - 1, task);
         }
-        }
+    }
 
     public Task take() {
         return this.tasks.poll();

@@ -1,6 +1,7 @@
 package ru.job4j.coffemaker;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Medoev Ruslan (mr.r.m3@icloud.com)
@@ -10,24 +11,25 @@ import java.util.Arrays;
 
 public class CoffeMaker {
 
-    private int[] changes(int value, int price) {
+    public int[] changes(int value, int price) {
+        List<Integer> list = new ArrayList<>();
+        int[] result = null;
         int[] coins = new int[] {10, 5, 2, 1};
-        int[] rst = null;
-        int rstIndx = 0;
         if (value >= price) {
             int change = value - price;
-            rstIndx = change / 10 + 3;
-            rst = new int[rstIndx];
-            rstIndx = 0;
             for (int i = 0; change != 0;) {
                 if (change >= coins[i]) {
-                    rst[rstIndx++] = coins[i];
+                    list.add(coins[i]);
                     change -= coins[i];
                 } else {
                     i++;
                 }
             }
+            result = new int[list.size()];
+            for (int i = 0; i < result.length ; i++) {
+                result[i] = list.get(i);
+            }
         }
-        return Arrays.copyOf(rst, rstIndx);
+        return result;
     }
 }

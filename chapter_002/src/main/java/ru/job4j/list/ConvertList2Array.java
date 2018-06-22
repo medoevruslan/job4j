@@ -1,5 +1,6 @@
 package ru.job4j.list;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +24,16 @@ public class ConvertList2Array {
             array[rows][col++] = a;
         }
         return array;
+    }
+
+    public List<Integer> convert(List<int[]> list) {
+        List<Integer> result = new ArrayList<>();
+        for (int[] index : list) {
+            for (int element : index) {
+                result.add(element);
+            }
+        }
+        return result;
     }
 }
 

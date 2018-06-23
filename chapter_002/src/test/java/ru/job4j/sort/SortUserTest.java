@@ -30,4 +30,40 @@ public class SortUserTest {
         ArrayList<User> actual = new ArrayList<>(result);
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void whenSortedByNameLengthThen() {
+        List<User> users = Arrays.asList(
+                new User("1234", 18),
+                new User("12", 23),
+                new User("123", 11),
+                new User("1", 45)
+        );
+        List<User> expected = Arrays.asList(
+                new User("1", 45),
+                new User("12", 23),
+                new User("123", 11),
+                new User("1234", 18)
+                );
+        List<User> result = new SortUser().sortNameLength(users);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void whenSortByFieldsThen() {
+        List<User> users = Arrays.asList(
+                new User("Игорь", 18),
+                new User("Михаил", 23),
+                new User("Игорь", 11),
+                new User("Михаил", 45)
+        );
+        List<User> expected = Arrays.asList(
+                new User("Игорь", 11),
+                new User("Игорь", 18),
+                new User("Михаил", 23),
+                new User("Михаил", 45)
+        );
+        List<User> result = new SortUser().sortByFields(users);
+        assertEquals(expected, result);
+    }
 }

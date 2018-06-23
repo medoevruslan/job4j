@@ -61,11 +61,11 @@ public class Tracker {
      * @param item Заявку котороую необходимо вставить.
      */
     public void replace(String id, Item item) {
-        for (Item itm : this.items) {
-            if (itm != null && itm.getId().equals(id)) {
-                item.setId(itm.getId());
-                this.items.add(this.items.indexOf(itm), item);
-                this.items.remove(itm);
+        for (int index = 0; index < this.items.size(); index++) {
+            if (this.items.get(index) != null && this.items.get(index).getId().equals(id)) {
+                item.setId(this.items.get(index).getId());
+                this.items.remove(index);
+                this.items.add(index, item);
                 break;
             }
         }
@@ -94,13 +94,12 @@ public class Tracker {
      */
     public ArrayList<Item> findByName(String key) {
         ArrayList<Item> list = new ArrayList<>();
-        for (Item item : this.items) {
-            if (item != null && item.getName().equals(key)) {
-                list.add(item);
+        if (!this.items.isEmpty()) {
+            for (Item item : this.items) {
+                if (item != null && item.getName().equals(key)) {
+                    list.add(item);
+                }
             }
-        }
-        if (list.isEmpty()) {
-            System.out.println("Заявок с таким именем не найдено");
         }
         return list;
     }

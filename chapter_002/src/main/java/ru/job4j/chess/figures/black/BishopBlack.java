@@ -9,6 +9,7 @@ import ru.job4j.chess.figures.Figure;
  * @version $Id$.
  * @since 0.1.
  */
+
 public class BishopBlack extends Figure {
 
     public BishopBlack(Cell position) {

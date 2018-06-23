@@ -1,5 +1,9 @@
 package ru.job4j.tracker;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Medoev Ruslan (mr.r.m3@icloud.com).
  * @version $Id$.
@@ -11,7 +15,7 @@ package ru.job4j.tracker;
 public class MenuTracker {
     private Tracker tracker;
     private Input input;
-    public UserAction[] actions = new UserAction[7];
+    public List<UserAction> actions = new ArrayList<>();
 
     public MenuTracker(Input input, Tracker tracker) {
         this.input = input;
@@ -19,13 +23,15 @@ public class MenuTracker {
     }
 
     public void fillActions() {
-        this.actions[0] = this.new AddItem(0, "Add new Item ");
-        this.actions[1] = this.new ShowAll(1, "Show all items");
-        this.actions[2] = new MenuTracker.EditItem(2, "Edit item");
-        this.actions[3] = new MenuTracker.Delete(3, "Delete item");
-        this.actions[4] = new FindById(4, "Find item by Id");
-        this.actions[5] = new FindByName(5, "Find items by name");
-        this.actions[6] = new Exit(6, "Exit program");
+        this.actions = Arrays.asList(
+                this.new AddItem(0, "Add new Item"),
+                this.new ShowAll(1, "Show all items"),
+                new MenuTracker.EditItem(2, "Edit item"),
+                new MenuTracker.Delete(3, "Delete item"),
+                new FindById(4, "Find item by Id"),
+                new FindByName(5, "Find items by name"),
+                new Exit(6, "Exit program")
+        );
     }
 
     /**
@@ -44,7 +50,7 @@ public class MenuTracker {
      * @param key Пункт меню.
      */
     public void select(int key) {
-        this.actions[key].execute(input, tracker);
+        this.actions.get(key).execute(input, tracker);
 
     }
 

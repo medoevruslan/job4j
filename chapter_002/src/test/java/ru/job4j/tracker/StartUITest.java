@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -42,7 +45,7 @@ public class StartUITest {
     public void whenUserAddItemThanTrackerHasItemWithSameName() {
         Input input = new StabInput(new String[] {"0", "test", "desc", "6"});
         new StartUI(input, tracker).init();
-        assertThat(tracker.findAll()[0].getName(), is("test"));
+        assertThat(tracker.findAll().get(0).getName(), is("test"));
     }
 
     @Test
@@ -66,8 +69,8 @@ public class StartUITest {
         this.addItems();
         Input input = new StabInput(new String[] {"5", "test1", "6"});
         new StartUI(input, tracker).init();
-        Item[] expexted = {first};
-        assertThat(tracker.findByName(first.getName()), is(expexted));
+        List<Item> expected = Arrays.asList(first);
+        assertThat(tracker.findByName(first.getName()), is(expected));
     }
 
     @Test
@@ -82,7 +85,7 @@ public class StartUITest {
                         .append("3. Delete item\n")
                         .append("4. Find item by Id\n")
                         .append("5. Find items by name\n")
-                        .append("6. Exit\n")
+                        .append("6. Exit program\n")
                         .append("--------- Список всех заявок : ---------\n")
                         .append("***** Имя заявки : test ***** Описание : desc ***** Id : " + item.getId() + "\n")
                         .append("0. Add new Item\n")
@@ -91,7 +94,7 @@ public class StartUITest {
                         .append("3. Delete item\n")
                         .append("4. Find item by Id\n")
                         .append("5. Find items by name\n")
-                        .append("6. Exit\n").toString()
+                        .append("6. Exit program\n").toString()
                 )
         );
     }
@@ -101,7 +104,7 @@ public class StartUITest {
         this.addItems();
         Input input = new StabInput(new String[] {"3", second.getId(), "6"});
         new StartUI(input, tracker).init();
-        assertThat(tracker.findAll()[1].getName(), is("test3"));
+        assertThat(tracker.findAll().get(1).getName(), is("test3"));
         assertThat(new String(out.toByteArray()), is(new StringBuilder()
                         .append("0. Add new Item\n")
                         .append("1. Show all items\n")
@@ -109,7 +112,7 @@ public class StartUITest {
                         .append("3. Delete item\n")
                         .append("4. Find item by Id\n")
                         .append("5. Find items by name\n")
-                        .append("6. Exit\n")
+                        .append("6. Exit program\n")
                         .append("--------- Удаление ---------\n")
                         .append("--------- Заявка с номером id " + second.getId() +  " удалена ---------\n")
                         .append("0. Add new Item\n")
@@ -118,7 +121,7 @@ public class StartUITest {
                         .append("3. Delete item\n")
                         .append("4. Find item by Id\n")
                         .append("5. Find items by name\n")
-                        .append("6. Exit\n").toString()
+                        .append("6. Exit program\n").toString()
                 )
         );
     }

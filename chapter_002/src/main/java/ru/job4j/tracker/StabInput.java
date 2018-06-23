@@ -6,6 +6,8 @@ package ru.job4j.tracker;
  * @since 0.1.
  */
 
+import java.util.List;
+
 /**
  * Класс для теста корректной работы StartUI.
  */
@@ -29,7 +31,7 @@ public class StabInput implements Input {
         return this.values[this.position++];
     }
 
-    private boolean isValidKey(int key, UserAction[] actions) {
+    private boolean isValidKey(int key, List<UserAction> actions) {
         boolean valid = false;
         for (UserAction action : actions) {
             if (key == action.key()) {
@@ -40,7 +42,7 @@ public class StabInput implements Input {
         return valid;
     }
 
-    public int ask(String question, UserAction[] actions) {
+    public int ask(String question, List<UserAction> actions) {
         int key = Integer.valueOf(this.ask(question));
         if (!isValidKey(key, actions)) {
             throw new  MenuOutException("Out of menu range");

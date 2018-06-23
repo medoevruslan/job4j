@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.util.List;
+
 /**
  * @author Medoev Ruslan (mr.r.m3@icloud.com).
  * @version $Id$.
@@ -17,7 +19,7 @@ public class ValidateInput implements Input {
         return this.input.ask(question);
     }
 
-    public int ask(String question, UserAction[] actions) {
+    public int ask(String question, List<UserAction> actions) {
         int key = -1;
         boolean invalid = true;
         do {

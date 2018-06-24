@@ -8,8 +8,8 @@ public class Logic3T {
     }
 
     public boolean isWinnerX() {
-        if ((table[0][0].hasMarkX() && table[1][1].hasMarkX() && table[2][2].hasMarkX()) ||
-                (table[0][2].hasMarkX() && table[1][1].hasMarkX() && table[2][0].hasMarkX())) {
+        if ((table[0][0].hasMarkX() && table[1][1].hasMarkX() && table[2][2].hasMarkX())
+                || (table[0][2].hasMarkX() && table[1][1].hasMarkX() && table[2][0].hasMarkX())) {
             return true;
         }
         for (int row = 0; row < table.length; row++) {
@@ -27,8 +27,8 @@ public class Logic3T {
 
 
     public boolean isWinnerO() {
-        if ((table[0][0].hasMarkO() && table[1][1].hasMarkO() && table[2][2].hasMarkO()) ||
-                (table[0][2].hasMarkO() && table[1][1].hasMarkO() && table[2][0].hasMarkO())) {
+        if ((table[0][0].hasMarkO() && table[1][1].hasMarkO() && table[2][2].hasMarkO())
+                || (table[0][2].hasMarkO() && table[1][1].hasMarkO() && table[2][0].hasMarkO())) {
             return true;
         }
         for (int row = 0; row < table.length; row++) {

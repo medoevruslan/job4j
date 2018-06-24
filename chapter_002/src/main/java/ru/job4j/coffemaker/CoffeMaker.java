@@ -26,7 +26,7 @@ public class CoffeMaker {
                 }
             }
             result = new int[list.size()];
-            for (int i = 0; i < result.length ; i++) {
+            for (int i = 0; i < result.length; i++) {
                 result[i] = list.get(i);
             }
         }

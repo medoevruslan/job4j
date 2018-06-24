@@ -36,7 +36,7 @@ public class RookBlack extends Figure {
         }
         Cell[] cells = new Cell[Math.abs(dest.x - position.x)];
         Cell nextCell = moveTo(position, dest);
-        for (int index = 0; index < cells.length ; index++) {
+        for (int index = 0; index < cells.length; index++) {
             cells[index] = nextCell;
             if (!nextCell.equals(dest)) {
                 nextCell = moveTo(nextCell, dest);

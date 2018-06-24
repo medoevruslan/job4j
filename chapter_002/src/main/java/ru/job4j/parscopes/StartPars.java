@@ -16,7 +16,7 @@ public class StartPars {
         if (!this.stacker.checkAndParse(input, this.list)) {
             System.out.println("Invalid brackets");
         } else {
-            System.out.println("String to parse - " + input +"\nresult : \n");
+            System.out.println("String to parse - " + input + "\nresult : \n");
             this.list.sort(new Comparator<Brackets>() {
                 @Override
                 public int compare(Brackets first, Brackets second) {

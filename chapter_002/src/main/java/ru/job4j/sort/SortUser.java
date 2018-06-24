@@ -13,7 +13,7 @@ public class SortUser {
         return new TreeSet<>(list);
     }
 
-    public List<User> sortNameLength (List<User>list) {
+    public List<User> sortNameLength(List<User> list) {
         list.sort(new Comparator<User>() {
             @Override
             public int compare(User o1, User o2) {

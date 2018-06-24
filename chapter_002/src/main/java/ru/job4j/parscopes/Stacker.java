@@ -1,5 +1,6 @@
 package ru.job4j.parscopes;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -21,7 +22,7 @@ public class Stacker {
      * @return true or false of operation.
      */
 
-    private boolean isValidMatch(char first, int start, char second, int end, LinkedList<Brackets> list) {
+    private boolean isValidMatch(char first, int start, char second, int end, ArrayList<Brackets> list) {
         boolean result = false;
         if (first == '(' && second == ')') {
             list.add(new Parentheses(start, end));
@@ -43,7 +44,7 @@ public class Stacker {
      * @return true or false of operation.
      */
 
-    boolean checkAndParse(String input, LinkedList<Brackets> list) {
+    boolean checkAndParse(String input, ArrayList<Brackets> list) {
         char[] bra = input.toCharArray();
         Stack<Character> stackBra = new Stack<>();
         Stack<Integer> stackInd = new Stack<>();

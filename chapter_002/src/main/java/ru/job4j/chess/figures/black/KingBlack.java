@@ -17,7 +17,7 @@ public class KingBlack extends Figure {
 
     @Override
     public Cell[] way(Cell position, Cell dest) {
-        if (Math.pow((dest.x - position.x) ,2) + Math.pow((dest.y - position.y), 2) > 2) {
+        if (Math.pow((dest.x - position.x), 2) + Math.pow((dest.y - position.y), 2) > 2) {
             throw new ImpossibleMoveException("That figure can't move that way");
         }
         return new Cell[] {dest};

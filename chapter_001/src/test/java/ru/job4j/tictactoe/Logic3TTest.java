@@ -42,7 +42,7 @@ public class Logic3TTest {
     @Test
     public void whenDoNotHasGas() {
         Figure3T[][] table = {
-                {new Figure3T(false),new Figure3T(true), new Figure3T(false)},
+                {new Figure3T(false), new Figure3T(true), new Figure3T(false)},
                 {new Figure3T(true), new Figure3T(false), new Figure3T(true)},
                 {new Figure3T(false), new Figure3T(true), new Figure3T(false)}
         };

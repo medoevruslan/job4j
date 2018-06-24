@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/MedoevRuslan/job4j.svg?branch=master)](https://travis-ci.org/MedoevRuslan/job4j)
+[![codecov](https://codecov.io/gh/MedoevRuslan/job4j/branch/master/graph/badge.svg)](https://codecov.io/gh/MedoevRuslan/job4j)
 # Репозиторий Медоева Руслана
 Я прохожу обучение на сайте Job4j. Планирую его пройти к концу 2018 года.
 

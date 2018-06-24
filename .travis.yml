@@ -1,9 +1,6 @@
 language: java
 sudo: false
 
-before_install:
-  - brew update && brew bundle
-
 after succes:
   - bash <(curl -s https://codecov.io/bash)
 

@@ -12,13 +12,18 @@ public class StringCompare implements Comparator<String> {
 
     @Override
     public int compare(String left, String right) {
-        int length = left.length() - right.length();
+        int lengthl = left.length();
+        int lengthr = right.length();
+        int lim = Math.min(lengthl, lengthr);
+        char[] lefcha = left.toCharArray();
+        char[] rigtcha = right.toCharArray();
         int result = 0;
-        if (length == 0) {
-            for (int indx = 0; indx < left.length(); indx++) {
-                result += left.charAt(indx) - right.charAt(indx);
+        for (int indx = 0; indx < lim; indx++) {
+            if (lefcha[indx] != rigtcha[indx]) {
+               result = lefcha[indx] - rigtcha[indx];
+               break;
             }
         }
-        return length == 0 ? result : length;
+        return result != 0 ? result : lengthl - lengthr;
     }
 }

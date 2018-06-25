@@ -28,8 +28,8 @@ public class StringCompareTest {
     public void whenLeftLessThanRightResultShouldBeNegative() {
         StringCompare compare = new StringCompare();
         int rst = compare.compare(
-                "Less",
-                "Greater"
+                "ar",
+                "z"
         );
         assertThat(rst, lessThan(0));
     }
@@ -38,8 +38,8 @@ public class StringCompareTest {
     public void whenLeftGreaterThanRightResultShouldBePositive() {
         StringCompare compare = new StringCompare();
         int rst = compare.compare(
-                "Greater",
-                "Less"
+                "z",
+                "ar"
         );
         assertThat(rst, greaterThan(0));
     }

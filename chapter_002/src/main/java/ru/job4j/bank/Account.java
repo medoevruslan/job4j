@@ -17,13 +17,12 @@ public class Account {
         this.value = value;
     }
 
-    public boolean transfer(List<Account> dest, int indx, double amount) {
+    public boolean transfer(Account dest, double amount) {
         boolean result = false;
-        Account account = dest.get(indx);
-        if (account != null && amount <= this.value && amount > 0) {
+        if (amount <= this.value && amount > 0) {
             result = true;
             this.value -= amount;
-            account.value += amount;
+            dest.value += amount;
         }
         return result;
     }

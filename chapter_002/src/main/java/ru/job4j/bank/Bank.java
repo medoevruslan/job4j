@@ -60,24 +60,23 @@ public class Bank {
         return list;
     }
 
-    public boolean transferMoney(String srcPassport, String srcRequisite, String dstPassport, String dstRequisite, double amount) {
-        boolean result = false;
-        int index = -1;
-        List<Account> source = this.getUserAccounts(srcPassport);
-        List<Account> destination = this.getUserAccounts(dstPassport);
-        for (Account acnt : destination) {
-            if (dstRequisite.equals(acnt.requisites)) {
-                index = destination.indexOf(acnt);
-                break;
+    public Account getAccount(String passport, String requisit) {
+        Account account = null;
+        List<Account> list = this.getUserAccounts(passport);
+        for (Account acnt : list) {
+            if (requisit.equals(acnt.requisites)) {
+                account = acnt;
             }
         }
-        if (index != -1) {
-            for (Account acnt : source) {
-                if (srcRequisite.equals(acnt.requisites)) {
-                    result = acnt.transfer(destination, index, amount);
-                    break;
-                }
-            }
+        return account;
+    }
+
+    public boolean transferMoney(String srcPassport, String srcRequisite, String dstPassport, String dstRequisite, double amount) {
+        boolean result = false;
+        Account source = getAccount(srcPassport, srcRequisite);
+        Account destination = getAccount(dstPassport, dstRequisite);
+        if (source != null && destination != null) {
+            result = source.transfer(destination, amount);
         }
         return result;
     }

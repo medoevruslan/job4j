@@ -12,14 +12,13 @@ public class StringCompare implements Comparator<String> {
 
     @Override
     public int compare(String left, String right) {
-        int le = 0;
-        int ri = 0;
-        for (char ind : left.toCharArray()) {
-            le += ind;
+        int length = left.length() - right.length();
+        int result = 0;
+        if (length == 0) {
+            for (int indx = 0; indx < left.length(); indx++) {
+                result += left.charAt(indx) - right.charAt(indx);
+            }
         }
-        for (char ind : right.toCharArray()) {
-            ri += ind;
-        }
-        return le - ri;
+        return length == 0 ? result : length;
     }
 }

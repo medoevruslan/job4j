@@ -34,10 +34,10 @@ public class BishopBlack extends Figure {
             throw new ImpossibleMoveException("That figure can't move that way");
         }
         Cell[] cells = new Cell[Math.abs(dest.x - position.x)];
-        int move = 0;
+        int mov = 0;
         for (int index = 0; index < cells.length; index++) {
             if (index != 0) {
-                cells[index] = moveTo(cells[move++], dest);
+                cells[index] = moveTo(cells[mov++], dest);
             }
            cells[index] = moveTo(position, dest);
         }

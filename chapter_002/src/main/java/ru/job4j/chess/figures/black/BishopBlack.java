@@ -17,16 +17,15 @@ public class BishopBlack extends Figure {
     }
 
     private Cell moveTo(Cell position, Cell dest) {
-        Cell rst = position;
         int x = (int) Math.signum(dest.x - position.x);
         int y = (int) Math.signum(dest.y - position.y);
         for (Cell cell : Cell.values()) {
-            if (rst.x + x == cell.x && rst.y + y == cell.y) {
-                rst = cell;
+            if (position.x + x == cell.x && position.y + y == cell.y) {
+                position = cell;
                 break;
             }
         }
-        return rst;
+        return position;
     }
 
     @Override
@@ -35,12 +34,12 @@ public class BishopBlack extends Figure {
             throw new ImpossibleMoveException("That figure can't move that way");
         }
         Cell[] cells = new Cell[Math.abs(dest.x - position.x)];
-        Cell nextCell = moveTo(position, dest);
+        int move = 0;
         for (int index = 0; index < cells.length; index++) {
-            cells[index] = nextCell;
-            if (!nextCell.equals(dest)) {
-                nextCell = moveTo(nextCell, dest);
+            if (index != 0) {
+                cells[index] = moveTo(cells[move++], dest);
             }
+           cells[index] = moveTo(position, dest);
         }
         return cells;
     }

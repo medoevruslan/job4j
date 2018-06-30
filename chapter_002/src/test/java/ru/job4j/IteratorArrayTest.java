@@ -55,4 +55,9 @@ public class IteratorArrayTest {
         assertThat(it.hasNext(), is(false));
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void shoulThrowNoSuchElementException () {
+        it = new IteratorArray(new int[][]{});
+        it.next();
+    }
 }

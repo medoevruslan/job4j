@@ -56,7 +56,7 @@ public class IteratorArrayTest {
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void shoulThrowNoSuchElementException () {
+    public void shoulThrowNoSuchElementException() {
         it = new IteratorArray(new int[][]{});
         it.next();
     }

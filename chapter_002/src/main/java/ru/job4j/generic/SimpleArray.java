@@ -34,7 +34,7 @@ public class SimpleArray<T> implements Iterable<T> {
     public void delete(int index) {
         this.rangeCheck(index);
         this.array[index] = null;
-        if (index != array.length -1) {
+        if (index != array.length - 1) {
             System.arraycopy(this.array, index + 1, this.array, index, this.array.length - 1);
         } else {
             System.arraycopy(this.array, index, this.array, index, array.length - 1);

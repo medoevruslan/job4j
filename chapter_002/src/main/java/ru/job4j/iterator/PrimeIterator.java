@@ -17,16 +17,26 @@ public class PrimeIterator implements Iterator {
         this.array = array;
     }
 
-    @Override
-    public boolean hasNext() {
-        boolean isTrue = false;
-        for (int pointer = index; pointer < array.length; pointer++) {
-            if (array[pointer] > 1 && ((array[pointer] % 2) != 0 || array[pointer] == 2)) {
-                isTrue = true;
+    private boolean isPrime(int num) {
+        boolean rst = false;
+        for (int i = num; i < array.length; i++) {
+            int count = 0;
+            for (int j = 1; j <= array[i]; j++) {
+                if (array[i] % j == 0) {
+                    count++;
+                }
+            }
+            if (count == 2) {
+                rst = true;
                 break;
             }
         }
-        return array.length > index && isTrue;
+        return rst;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return array.length > index && isPrime(index);
     }
 
     @Override

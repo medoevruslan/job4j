@@ -12,7 +12,6 @@ import java.util.NoSuchElementException;
 public class SimpleArray<T> implements Iterable<T> {
     private Object[] array;
     private int index = 0;
-    private int position = 0;
     private int size = index;
 
     public SimpleArray(int index) {
@@ -81,9 +80,11 @@ public class SimpleArray<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
+            private int position = 0;
+
             @Override
             public boolean hasNext() {
-                if (array.length == 0) {
+                if (position == array.length || array.length == 0) {
                     throw new NoSuchElementException();
                 }
                 return position < array.length;
@@ -91,7 +92,7 @@ public class SimpleArray<T> implements Iterable<T> {
 
             @Override
             public T next() {
-                if (position == array.length) {
+                if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
                 return (T) array[position++];

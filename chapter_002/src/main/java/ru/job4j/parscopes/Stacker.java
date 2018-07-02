@@ -1,8 +1,6 @@
 package ru.job4j.parscopes;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * @author Medoev Ruslan (mr.r.m3@icloud.com)
@@ -11,6 +9,13 @@ import java.util.Stack;
  */
 
 public class Stacker {
+
+    private final Map<Character, Character> braces = new HashMap<>();
+    {
+        braces.put('[', ']');
+        braces.put('{', '}');
+        braces.put('(', ')');
+    }
 
     /**
      * Method check the brackets and add them to list.
@@ -49,10 +54,10 @@ public class Stacker {
         Stack<Character> stackBra = new Stack<>();
         Stack<Integer> stackInd = new Stack<>();
         for (int i = 0; i < bra.length; i++) {
-            if (bra[i] == '(' || bra[i] == '{' || bra[i] == '[') {
+            if (braces.containsKey(bra[i])) {
                 stackBra.push(bra[i]);
                 stackInd.push(i);
-            } else if (bra[i] == ')' || bra[i] == '}' || bra[i] == ']') {
+            } else if (braces.containsValue(bra[i])) {
                 if (!stackBra.empty()) {
                     if (!isValidMatch(stackBra.pop(), stackInd.pop(), bra[i], i, list)) {
                         return false;

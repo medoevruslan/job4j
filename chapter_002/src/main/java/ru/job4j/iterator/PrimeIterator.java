@@ -17,26 +17,27 @@ public class PrimeIterator implements Iterator {
         this.array = array;
     }
 
-    private boolean isPrime(int num) {
-        boolean rst = false;
-        for (int i = num; i < array.length; i++) {
-            int count = 0;
-            for (int j = 1; j <= array[i]; j++) {
-                if (array[i] % j == 0) {
-                    count++;
+        private boolean isPrime(int n) {
+            boolean found = true;
+            for (int j = 2; (j * j <= n); j++) {
+                if (n % j == 0) {
+                    found = false;
+                    break;
                 }
             }
-            if (count == 2) {
-                rst = true;
-                break;
-            }
-        }
-        return rst;
+            return found;
     }
 
     @Override
     public boolean hasNext() {
-        return array.length > index && isPrime(index);
+        boolean isTrue = false;
+        for (int i = index; i < array.length; i++) {
+           if (isPrime(array[i]) && i != 1) {
+               isTrue = true;
+               break;
+           }
+        }
+        return array.length > index && isTrue;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class PrimeIterator implements Iterator {
             throw new NoSuchElementException();
         }
         while (index < array.length) {
-            if (array[index] > 1 && (array[index]  == 2 || (array[index] % 2) != 0)) {
+            if (isPrime(array[index]) && array[index] != 1) {
                 rst = array[index++];
                 break;
             }

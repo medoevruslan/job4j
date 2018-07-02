@@ -13,9 +13,10 @@ public class SimpleArray<T> implements Iterable<T> {
     private Object[] array;
     private int index = 0;
     private int position = 0;
+    private int size = index;
 
-    public SimpleArray(int size) {
-        this.array = new Object[size];
+    public SimpleArray(int index) {
+        this.array = new Object[index];
     }
 
     public boolean add(T model) {
@@ -45,6 +46,31 @@ public class SimpleArray<T> implements Iterable<T> {
         this.rangeCheck(index);
         return (T) this.array[index];
     }
+
+    public int size() {
+        return this.size;
+    }
+
+    public int indexOf(T model) {
+        int result = -1;
+        if (model == null) {
+            for (int indx = 0; indx < size; indx++) {
+                if (this.array[indx] == null) {
+                    result = indx;
+                    break;
+                }
+            }
+        } else {
+            for (int indx = 0; indx < size; indx++) {
+                if (this.array[indx].equals(model)) {
+                    result = indx;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
 
     private void rangeCheck(int index) {
         if (index >= array.length) {

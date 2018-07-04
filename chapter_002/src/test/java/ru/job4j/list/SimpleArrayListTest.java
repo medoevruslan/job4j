@@ -3,6 +3,7 @@ package ru.job4j.list;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -27,7 +28,6 @@ public class SimpleArrayListTest {
 
     @Test
     public void whenDeleteFirstElementThan() {
-        list.delete();
-        assertThat(list.get(0), is(3));
+        assertThat(list.delete(), is(4));
     }
 }

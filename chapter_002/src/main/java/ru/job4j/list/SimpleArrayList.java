@@ -21,9 +21,10 @@ public class SimpleArrayList<E> {
     public E delete() {
         Node<E> result = this.first;
         this.first = result.next;
+        E temp = result.data;
         result = null;
         this.size--;
-        return this.first.data;
+        return temp;
     }
 
     public E get(int index) {

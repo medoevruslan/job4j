@@ -1,0 +1,83 @@
+package ru.job4j.list;
+
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+/**
+ * @author Medoev Ruslan (mr.r.m3@icloud.com).
+ * @version $Id$.
+ * @since 0.1.
+ */
+
+public class DynamicLinkedList<E> implements Iterable<E> {
+    private Node<E> first;
+    private int size = 0;
+    private int modCount;
+
+
+    public void add(E data) {
+        this.modCount++;
+        Node<E> newNode = new Node<>(data);
+        newNode.next = this.first;
+        this.first = newNode;
+        this.size++;
+    }
+
+    public E get(int index) {
+        if (index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+        Node<E> result = this.first;
+        for (int indx = 0; indx < index; indx++) {
+            result = result.next;
+        }
+        return (E) result;
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
+            private int position = 0;
+            private int expectedModCount = modCount;
+
+            @Override
+            public boolean hasNext() {
+                if (this.position == size) {
+                    throw new NoSuchElementException();
+                }
+                return this.position < size;
+            }
+
+            private Node<E> node(int position) {
+                Node<E> result = first;
+                if (position != 0) {
+                    for (int indx = 0; indx < position; indx++) {
+                        result = result.next;
+                    }
+                }
+                return result;
+            }
+
+            @Override
+            public E next() {
+                if (this.expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return (E) this.node(position++);
+            }
+        };
+    }
+
+    private static class Node<E> {
+        E data;
+        Node<E> next;
+
+        public Node(E data) {
+            this.data = data;
+        }
+    }
+}

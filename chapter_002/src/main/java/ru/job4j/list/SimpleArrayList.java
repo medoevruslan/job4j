@@ -22,6 +22,7 @@ public class SimpleArrayList<E> {
         Node<E> result = this.first;
         this.first = result.next;
         result = null;
+        this.size--;
         return this.first.data;
     }
 

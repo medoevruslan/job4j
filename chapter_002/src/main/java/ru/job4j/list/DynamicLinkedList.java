@@ -45,6 +45,10 @@ public class DynamicLinkedList<E> implements Iterable<E> {
         return (E) result;
     }
 
+    public int getSize() {
+        return this.size;
+    }
+
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {

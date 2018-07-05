@@ -39,24 +39,19 @@ public class DynamicLinkedList<E> implements Iterable<E> {
     public Iterator<E> iterator() {
         return new Iterator<E>() {
             private int position = 0;
+            private  Node<E> pointer = first;
             private int expectedModCount = modCount;
 
             @Override
             public boolean hasNext() {
-                if (this.position == size) {
-                    throw new NoSuchElementException();
-                }
                 return this.position < size;
             }
 
-            private Node<E> node(int position) {
-                Node<E> result = first;
+            private Node<E> node(int position, Node<E> pointer) {
                 if (position != 0) {
-                    for (int indx = 0; indx < position; indx++) {
-                        result = result.next;
-                    }
+                    pointer = pointer.next;
                 }
-                return result;
+                return pointer;
             }
 
             @Override
@@ -67,7 +62,7 @@ public class DynamicLinkedList<E> implements Iterable<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return (E) this.node(position++);
+                return (E) this.node(position++, this.pointer);
             }
         };
     }

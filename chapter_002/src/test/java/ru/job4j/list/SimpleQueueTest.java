@@ -37,7 +37,7 @@ public class SimpleQueueTest {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void WhenQueueIsEmptyShouldBeThrowException() {
+    public void whenQueueIsEmptyShouldBeThrowException() {
         queue = new SimpleQueue<>();
         queue.poll();
     }

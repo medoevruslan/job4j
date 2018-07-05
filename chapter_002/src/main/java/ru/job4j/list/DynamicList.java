@@ -51,9 +51,6 @@ public class DynamicList<E> implements Iterable<E> {
 
             @Override
             public boolean hasNext() {
-                if (position == array.length || array.length == 0) {
-                    throw new NoSuchElementException();
-                }
                 return position < array.length;
             }
 

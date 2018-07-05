@@ -42,6 +42,24 @@ public class DynamicList<E> implements Iterable<E> {
         return (E) this.array[index];
     }
 
+    public int getSize() {
+        return this.size;
+    }
+
+    public E delete(int index) {
+        if (index >= this.size) {
+            throw new IndexOutOfBoundsException();
+        }
+        this.modCount++;
+        E oldValue = (E) this.array[index];
+        int numMoved = this.size - index - 1;
+        if (numMoved > 0) {
+            System.arraycopy(this.array, index + 1, this.array, index, numMoved);
+        }
+        this.array[--this.size] = null;
+        return oldValue;
+    }
+
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {

@@ -24,6 +24,16 @@ public class DynamicLinkedList<E> implements Iterable<E> {
         this.size++;
     }
 
+    public E delete() {
+        this.modCount++;
+        Node<E> result = this.first;
+        this.first = result.next;
+        E temp = result.data;
+        result = null;
+        this.size--;
+        return temp;
+    }
+
     public E get(int index) {
         if (index > size) {
             throw new IndexOutOfBoundsException();

@@ -59,9 +59,9 @@ public class DynamicLinkedList<E> implements Iterable<E> {
 
             private Node<E> node(int position, Node<E> pointer) {
                 if (position != 0) {
-                    pointer = pointer.next;
+                   this.pointer = pointer.next;
                 }
-                return pointer;
+                return this.pointer;
             }
 
             @Override
@@ -72,7 +72,7 @@ public class DynamicLinkedList<E> implements Iterable<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return (E) this.node(position++, this.pointer);
+                return (E) this.node(position++, this.pointer).data;
             }
         };
     }

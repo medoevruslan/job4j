@@ -31,7 +31,7 @@ public class SimpleNodeSet<E> {
 
     public void add(E e) {
         if (this.list.getSize() != 0) {
-            if(!isExist(e)) {
+            if (!isExist(e)) {
                 this.list.add(e);
             }
         } else {

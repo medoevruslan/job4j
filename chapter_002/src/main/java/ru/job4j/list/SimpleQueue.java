@@ -6,10 +6,10 @@ package ru.job4j.list;
  * @since 0.1.
  */
 
-public class SimpleQueue<T> extends DynamicList<T> {
+public class SimpleQueue<T> extends DynamicLinkedList<T> {
 
     public T poll() {
-        return delete(0);
+        return deleteFirst();
     }
 
     public void push(T value) {

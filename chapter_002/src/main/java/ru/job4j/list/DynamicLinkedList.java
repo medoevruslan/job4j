@@ -12,37 +12,109 @@ import java.util.NoSuchElementException;
 
 public class DynamicLinkedList<E> implements Iterable<E> {
     private Node<E> first;
+    private Node<E> last;
     private int size = 0;
     private int modCount;
 
 
     public void add(E data) {
+        this.linklLast(data);
+    }
+
+    private void linkFirst(E data) {
         this.modCount++;
+        Node<E> f = this.first;
         Node<E> newNode = new Node<>(data);
-        newNode.next = this.first;
+        newNode.next = f;
         this.first = newNode;
+        if (f == null) {
+            this.last = newNode;
+        } else {
+            f.prev = newNode;
+        }
         this.size++;
     }
 
-    public E delete() {
+    private void linklLast(E data) {
         this.modCount++;
-        Node<E> result = this.first;
-        this.first = result.next;
-        E temp = result.data;
-        result = null;
+        Node<E> l = this.last;
+        Node<E> newNode = new Node<>(data);
+        newNode.prev = l;
+        this.last = newNode;
+        if (l == null) {
+            this.first = newNode;
+        } else {
+            l.next = newNode;
+        }
+        this.size++;
+    }
+
+    public E getFirst() {
+        if (this.first == null) {
+            throw new NoSuchElementException();
+        }
+        return this.first.data;
+    }
+
+    public E getLast() {
+        if(this.last == null) {
+            throw new NoSuchElementException();
+        }
+        return this.last.data;
+    }
+
+    public E deleteFirst() {
+        this.modCount++;
+        Node<E> next = this.first.next;
+        E data = this.first.data;
+        this.first.next = null;
+        this.first.data = null;
+        this.first = next;
+        if (this.first == null) {
+            this.last = null;
+        } else {
+            this.first.prev = null;
+        }
         this.size--;
-        return temp;
+        return data;
     }
 
     public E get(int index) {
-        if (index > size) {
+        if (index >= size) {
             throw new IndexOutOfBoundsException();
         }
-        Node<E> result = this.first;
-        for (int indx = 0; indx < index; indx++) {
-            result = result.next;
+        return (E) this.node(index).data;
+    }
+
+    public E deleteLast() {
+        this.modCount++;
+        E data = this.last.data;
+        Node<E> prev = this.last.prev;
+        this.last.prev = null;
+        this.last.data = null;
+        this.last = prev;
+        if (this.last == null) {
+            this.first = null;
+        } else {
+            this.last.next = null;
         }
-        return (E) result;
+        this.size--;
+        return data;
+    }
+
+    private Node<E> node(int index) {
+        Node<E> result = this.first;
+        if (index < size / 2 ) {
+            for (int indx = 0; indx < index; indx++) {
+                result = result.next;
+            }
+        } else {
+            result = this.last;
+            for (int indx = this.size - 1; indx > index; indx--) {
+                result = result.prev;
+            }
+        }
+        return result;
     }
 
     public int getSize() {
@@ -63,7 +135,7 @@ public class DynamicLinkedList<E> implements Iterable<E> {
 
             private Node<E> node(int position, Node<E> pointer) {
                 if (position != 0) {
-                   this.pointer = pointer.next;
+                    this.pointer = pointer.next;
                 }
                 return this.pointer;
             }
@@ -84,6 +156,7 @@ public class DynamicLinkedList<E> implements Iterable<E> {
     private static class Node<E> {
         E data;
         Node<E> next;
+        Node<E> prev;
 
         public Node(E data) {
             this.data = data;

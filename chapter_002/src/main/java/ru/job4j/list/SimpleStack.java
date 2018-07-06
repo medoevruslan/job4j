@@ -9,7 +9,7 @@ package ru.job4j.list;
 public class SimpleStack<T> extends DynamicLinkedList<T> {
 
     public T poll() {
-        return delete();
+        return deleteLast();
     }
 
     public void push(T value) {

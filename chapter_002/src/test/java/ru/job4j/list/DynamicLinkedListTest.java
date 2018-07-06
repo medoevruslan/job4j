@@ -33,22 +33,43 @@ public class DynamicLinkedListTest {
     }
 
     @Test
-    public void whenDeleteTwoElementsElementsThan3() {
-        list.delete();
-        assertThat(list.delete(), is(3));
+    public void whenDeleteLastTwoElementsElementsThan3() {
+        list.deleteLast();
+        assertThat(list.deleteLast(), is(3));
+    }
+
+    @Test
+    public void whenDeleteFirstTwoElementsThan2() {
+        list.deleteFirst();
+        assertThat(list.deleteFirst(), is(2));
+    }
+
+    @Test
+    public void whenGetFirstThan1() {
+        assertThat(list.getFirst(), is(1));
+    }
+
+    @Test
+    public void whenGetLastThan4() {
+        assertThat(list.getLast(), is(4));
+    }
+
+    @Test
+    public void whenGetByIndex2Than3() {
+        assertThat(list.get(2), is(3));
     }
 
     @Test
     public void whenNextSequentialInvokationIs() {
         Iterator<Integer> it = list.iterator();
         assertThat(it.hasNext(), is(true));
-        assertThat(it.next(), is(4));
-        assertThat(it.hasNext(), is(true));
-        assertThat(it.next(), is(3));
+        assertThat(it.next(), is(1));
         assertThat(it.hasNext(), is(true));
         assertThat(it.next(), is(2));
         assertThat(it.hasNext(), is(true));
-        assertThat(it.next(), is(1));
+        assertThat(it.next(), is(3));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(4));
         assertThat(it.hasNext(), is(false));
     }
 
@@ -57,10 +78,10 @@ public class DynamicLinkedListTest {
         Iterator<Integer> it = list.iterator();
         MatcherAssert.assertThat(it.hasNext(), Matchers.is(true));
         MatcherAssert.assertThat(it.hasNext(), Matchers.is(true));
-        MatcherAssert.assertThat(it.next(), Matchers.is(4));
-        MatcherAssert.assertThat(it.next(), Matchers.is(3));
-        MatcherAssert.assertThat(it.next(), Matchers.is(2));
         MatcherAssert.assertThat(it.next(), Matchers.is(1));
+        MatcherAssert.assertThat(it.next(), Matchers.is(2));
+        MatcherAssert.assertThat(it.next(), Matchers.is(3));
+        MatcherAssert.assertThat(it.next(), Matchers.is(4));
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -69,8 +90,8 @@ public class DynamicLinkedListTest {
         linkedList.add(1);
         linkedList.add(2);
         Iterator<Integer> it = linkedList.iterator();
-        assertThat(it.next(), is(2));
         assertThat(it.next(), is(1));
+        assertThat(it.next(), is(2));
         it.next();
     }
 

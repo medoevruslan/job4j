@@ -57,7 +57,7 @@ public class DynamicLinkedList<E> implements Iterable<E> {
     }
 
     public E getLast() {
-        if(this.last == null) {
+        if (this.last == null) {
             throw new NoSuchElementException();
         }
         return this.last.data;
@@ -104,7 +104,7 @@ public class DynamicLinkedList<E> implements Iterable<E> {
 
     private Node<E> node(int index) {
         Node<E> result = this.first;
-        if (index < size / 2 ) {
+        if (index < size / 2) {
             for (int indx = 0; indx < index; indx++) {
                 result = result.next;
             }

@@ -3,6 +3,8 @@ package ru.job4j.list;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.NoSuchElementException;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -36,7 +38,7 @@ public class SimpleQueueTest {
         assertThat(queue.getSize(), is(4));
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = NoSuchElementException.class)
     public void whenQueueIsEmptyShouldBeThrowException() {
         queue = new SimpleQueue<>();
         queue.poll();

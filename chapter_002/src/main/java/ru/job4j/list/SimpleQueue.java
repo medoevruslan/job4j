@@ -1,5 +1,7 @@
 package ru.job4j.list;
 
+import java.util.NoSuchElementException;
+
 /**
  * @author Medoev Ruslan (mr.r.m3@icloud.com).
  * @version $Id$.
@@ -9,6 +11,9 @@ package ru.job4j.list;
 public class SimpleQueue<T> extends DynamicLinkedList<T> {
 
     public T poll() {
+        if (getSize() == 0) {
+            throw new NoSuchElementException();
+        }
         return deleteFirst();
     }
 

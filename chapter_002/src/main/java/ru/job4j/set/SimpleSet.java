@@ -32,7 +32,6 @@ public class SimpleSet<E> {
         boolean isExist = false;
         for (int indx = 0; indx < this.list.getSize(); indx++) {
             if (this.list.get(indx).equals(e)) {
-                this.list.set(indx, e);
                 isExist = true;
                 break;
             }

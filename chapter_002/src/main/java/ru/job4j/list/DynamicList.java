@@ -42,6 +42,15 @@ public class DynamicList<E> implements Iterable<E> {
         return (E) this.array[index];
     }
 
+    public E set(int index, E e) {
+        if (index >= this.size) {
+            throw new IndexOutOfBoundsException();
+        }
+        E oldValue = (E) this.array[index];
+        this.array[index] = e;
+        return oldValue;
+    }
+
     public int getSize() {
         return this.size;
     }

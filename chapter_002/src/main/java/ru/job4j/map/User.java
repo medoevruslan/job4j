@@ -20,7 +20,14 @@ public class User {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name, children);
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return this.children == user.children && Objects.equals(this.name, user.name);
     }
 }

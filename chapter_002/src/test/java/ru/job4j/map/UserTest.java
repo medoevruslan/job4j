@@ -39,4 +39,9 @@ public class UserTest {
     public void whenOnlyEqualsOverridenButHashCodeNo() {
         System.out.println(map);
     }
+
+    @Test
+    public void whenEqualsAndHashCodeWereOverriden() {
+        System.out.println(map);
+    }
 }

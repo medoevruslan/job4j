@@ -1,6 +1,7 @@
 package ru.job4j.map;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 /**
  * @author Medoev Ruslan (mr.r.m3@icloud.com).
@@ -16,5 +17,10 @@ public class User {
     public User(String name, int children) {
         this.name = name;
         this.children = children;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, children);
     }
 }

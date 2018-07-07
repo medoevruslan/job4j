@@ -36,7 +36,7 @@ public class UserTest {
     }
 
     @Test
-    public void whenOnlyEqualsOverridenButHashCodeNo(){
+    public void whenOnlyEqualsOverridenButHashCodeNo() {
         System.out.println(map);
     }
 }

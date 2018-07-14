@@ -42,7 +42,7 @@ public class Node<T extends Comparable<T>> implements Comparable<T> {
             if (o == this) {
                 rst = true;
             } else {
-                rst = this.eqValue((T)o);
+                rst = this.eqValue((T) o);
             }
         }
         return rst;

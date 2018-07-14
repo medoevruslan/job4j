@@ -75,7 +75,7 @@ public class Tree<T extends Comparable<T>> implements SimpleTree<T> {
     }
 
     @Override
-    public Iterator <T> iterator() {
+    public Iterator<T> iterator() {
         return new Iterator<T>() {
             private Queue<Node<T>> data = new LinkedList<>();
             private int expectedModCount = modCount;

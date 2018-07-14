@@ -19,6 +19,17 @@ public class Tree<T extends Comparable<T>> implements SimpleTree<T> {
         this.size++;
     }
 
+    public boolean isBinary() {
+        boolean rst = true;
+        Iterator<T> it = this.iterator();
+        while (it.hasNext()) {
+            if (((Node<T>) it.next()).leaves().size() > 2) {
+                rst = false;
+            }
+        }
+        return rst;
+    }
+
     private boolean canToAdd(Optional<Node<T>> parent, T child) {
         boolean canTo = parent.isPresent();
         if (canTo) {
@@ -31,7 +42,6 @@ public class Tree<T extends Comparable<T>> implements SimpleTree<T> {
         }
         return canTo;
     }
-
 
     public boolean add(T parent, T child) {
         boolean rst = false;
@@ -65,7 +75,7 @@ public class Tree<T extends Comparable<T>> implements SimpleTree<T> {
     }
 
     @Override
-    public Iterator<T> iterator() {
+    public Iterator <T> iterator() {
         return new Iterator<T>() {
             private Queue<Node<T>> data = new LinkedList<>();
             private int expectedModCount = modCount;
@@ -95,7 +105,7 @@ public class Tree<T extends Comparable<T>> implements SimpleTree<T> {
                         }
                     }
                     this.position++;
-                return this.current.getValue();
+                return (T) this.current;
             }
         };
     }

@@ -2,20 +2,11 @@ package ru.job4j.tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-/**
- * @author Medoev Ruslan (mr.r.m3@icloud.com).
- * @version $Id$.
- * @since 0.1.
- */
-
-public class Node<T extends Comparable<T>> {
+public class Node<T extends Comparable<T>> implements Comparable<T> {
     private final List<Node<T>> children = new ArrayList<>();
     private final T value;
-
-    public T getValue() {
-        return this.value;
-    }
 
     public Node(final T value) {
         this.value = value;
@@ -33,5 +24,27 @@ public class Node<T extends Comparable<T>> {
         return this.value.compareTo(that) == 0;
     }
 
+    @Override
+    public int compareTo(T o) {
+        return this.compareTo(o);
+    }
 
+    @Override
+    public int hashCode() {
+        int result = 17;
+        return result * 31 + (this.value == null ? 0 : this.value.hashCode());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        boolean rst = false;
+        if (o != null && getClass() == this.getClass()) {
+            if (o == this) {
+                rst = true;
+            } else {
+                rst = this.eqValue((T)o);
+            }
+        }
+        return rst;
+    }
 }

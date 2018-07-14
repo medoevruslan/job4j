@@ -28,7 +28,6 @@ public class TreeTest {
         tree.add(5, 6);
     }
 
-
     @Test
     public void when6ElFindLastThen6() {
         assertThat(
@@ -90,5 +89,10 @@ public class TreeTest {
         it.next();
         it.next();
         it.next();
+    }
+
+    @Test
+    public void whenTreeIsNotBinaryThenFalse() {
+        assertThat(tree.isBinary(), is(false));
     }
 }

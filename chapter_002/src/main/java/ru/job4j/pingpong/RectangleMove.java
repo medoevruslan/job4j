@@ -19,6 +19,9 @@ public class RectangleMove implements Runnable {
     public void run() {
         while (true) {
             try {
+                if (Thread.interrupted()) {
+                    break;
+                }
                 while (this.rect.getX() != 290) {
                     this.rect.setX(this.rect.getX() + 1);
                     Thread.sleep(50);
@@ -27,8 +30,8 @@ public class RectangleMove implements Runnable {
                     this.rect.setX(this.rect.getX() - 1);
                     Thread.sleep(50);
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            }catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
     }

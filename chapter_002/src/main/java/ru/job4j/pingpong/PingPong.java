@@ -16,7 +16,7 @@ public class PingPong extends Application {
     private static final String JOB4J = "Пинг-понг www.job4j.ru";
 
     @Override
-    public void start(Stage stage ) {
+    public void start(Stage stage) {
         int limitX = 300;
         int limitY = 300;
         Group group = new Group();

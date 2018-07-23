@@ -1,5 +1,8 @@
 package ru.job4j.list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -10,6 +13,7 @@ import java.util.NoSuchElementException;
  * @since 0.1.
  */
 
+@ThreadSafe
 public class DynamicLinkedList<E> implements Iterable<E> {
     private Node<E> first;
     private Node<E> last;
@@ -17,11 +21,13 @@ public class DynamicLinkedList<E> implements Iterable<E> {
     private int modCount;
 
 
-    public void add(E data) {
+    @GuardedBy("this")
+    public synchronized void add(E data) {
         this.linklLast(data);
     }
 
-    private void linkFirst(E data) {
+    @GuardedBy("this")
+    private synchronized void linkFirst(E data) {
         this.modCount++;
         Node<E> f = this.first;
         Node<E> newNode = new Node<>(data);
@@ -35,7 +41,8 @@ public class DynamicLinkedList<E> implements Iterable<E> {
         this.size++;
     }
 
-    private void linklLast(E data) {
+    @GuardedBy("this")
+    private synchronized void linklLast(E data) {
         this.modCount++;
         Node<E> l = this.last;
         Node<E> newNode = new Node<>(data);
@@ -63,7 +70,8 @@ public class DynamicLinkedList<E> implements Iterable<E> {
         return this.last.data;
     }
 
-    public E deleteFirst() {
+    @GuardedBy("this")
+    public synchronized E deleteFirst() {
         this.modCount++;
         Node<E> next = this.first.next;
         E data = this.first.data;
@@ -79,14 +87,16 @@ public class DynamicLinkedList<E> implements Iterable<E> {
         return data;
     }
 
-    public E get(int index) {
+    @GuardedBy("this")
+    public synchronized E get(int index) {
         if (index >= size) {
             throw new IndexOutOfBoundsException();
         }
         return (E) this.node(index).data;
     }
 
-    public E deleteLast() {
+    @GuardedBy("this")
+    public synchronized E deleteLast() {
         this.modCount++;
         E data = this.last.data;
         Node<E> prev = this.last.prev;
@@ -121,8 +131,9 @@ public class DynamicLinkedList<E> implements Iterable<E> {
         return this.size;
     }
 
+    @GuardedBy("this")
     @Override
-    public Iterator<E> iterator() {
+    public synchronized Iterator<E> iterator() {
         return new Iterator<E>() {
             private int position = 0;
             private  Node<E> pointer = first;

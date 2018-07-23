@@ -1,5 +1,8 @@
 package ru.job4j.list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -11,6 +14,7 @@ import java.util.NoSuchElementException;
  * @since 0.1.
  */
 
+@ThreadSafe
 public class DynamicList<E> implements Iterable<E> {
     private Object[] array;
     private int size = 0;
@@ -27,7 +31,8 @@ public class DynamicList<E> implements Iterable<E> {
         this.array = Arrays.copyOf(this.array, newCapacity);
     }
 
-    public boolean add(E value) {
+    @GuardedBy("this")
+    public synchronized boolean add(E value) {
         if (size >= this.array.length) {
             this.grow();
         }
@@ -42,7 +47,8 @@ public class DynamicList<E> implements Iterable<E> {
         return (E) this.array[index];
     }
 
-    public E set(int index, E e) {
+    @GuardedBy("this")
+    public synchronized E set(int index, E e) {
         if (index >= this.size) {
             throw new IndexOutOfBoundsException();
         }
@@ -55,7 +61,8 @@ public class DynamicList<E> implements Iterable<E> {
         return this.size;
     }
 
-    public E delete(int index) {
+    @GuardedBy("this")
+    public synchronized E delete(int index) {
         if (index >= this.size) {
             throw new IndexOutOfBoundsException();
         }
@@ -69,8 +76,9 @@ public class DynamicList<E> implements Iterable<E> {
         return oldValue;
     }
 
+    @GuardedBy("this")
     @Override
-    public Iterator<E> iterator() {
+    public synchronized Iterator<E> iterator() {
         return new Iterator<E>() {
             private int position = 0;
             private int expectedModCount = modCount;

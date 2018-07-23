@@ -17,7 +17,7 @@ public class UnSyncThread {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true) {
+                while (true) {
                     if (UnSyncThread.ready) {
                         System.out.println("Main thread changed flag. Finish working.");
                         break;

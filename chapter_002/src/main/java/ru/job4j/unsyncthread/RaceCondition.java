@@ -33,11 +33,11 @@ public class RaceCondition implements Runnable  {
     @Override
     public void run() {
         this.increment();
-        System.out.println("Value after increment in " +
-                Thread.currentThread().getName() + " " + this.getValue());
+        System.out.println("Value after increment in "
+                + Thread.currentThread().getName() + " " + this.getValue());
         this.decrement();
-        System.out.println("Value after decrement in " +
-                Thread.currentThread().getName() + " " + this.getValue());
+        System.out.println("Value after decrement in "
+                + Thread.currentThread().getName() + " " + this.getValue());
     }
 
     public static void main(String[] args) {

@@ -20,6 +20,7 @@ public class ThreadPool {
         int size = Runtime.getRuntime().availableProcessors();
         for (int i = 0; i < size; i++) {
             this.threads.add(new Thread(new Worker()));
+            threads.get(i).start();
         }
     }
 

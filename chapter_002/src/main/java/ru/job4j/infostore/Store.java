@@ -1,6 +1,8 @@
 package ru.job4j.infostore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -10,11 +12,13 @@ import java.util.List;
  */
 
 public class Store {
+    private int add = 0;
+    private int rem = 0;
+    private int changed = 0;
 
     public String diff(List<User> previous, List<User> current) {
-        int changed = 0;
-        ArrayList<User> added = new ArrayList<>(current);
-        ArrayList<User> removed = new ArrayList<>(previous);
+        HashSet<User> added = new HashSet<>(current);
+        HashSet<User> removed = new HashSet<>(previous);
         added.removeAll(previous);
         removed.removeAll(current);
         for (User user : current) {
@@ -24,12 +28,31 @@ public class Store {
                 }
             }
         }
+        this.add = added.size();
+        this.rem = removed.size();
         return String.format("Added users - %d, changed - %d, removed users - %d", added.size(), changed, removed.size());
+    }
+
+    public int getAdd() {
+        return this.add;
+    }
+
+    public int getRem() {
+        return this.rem;
+    }
+
+    public int getChanged() {
+        return this.changed;
     }
 
     static class User {
         int id;
         String name;
+
+        public User(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
 
         @Override
         public boolean equals(Object o) {

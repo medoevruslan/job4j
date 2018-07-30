@@ -13,11 +13,7 @@ import java.util.ArrayList;
 
 @ThreadSafe
 public class UserStorage {
-    private ArrayList<User> list;
-
-    public UserStorage() {
-        this.list = new ArrayList<>();
-    }
+    private final ArrayList<User> list = new ArrayList<>();
 
     @GuardedBy("this")
     public synchronized boolean add(User user) {

@@ -13,24 +13,24 @@ import java.util.Queue;
 
 @ThreadSafe
 public class SimpleBlockingQueue<T> {
-
+    @GuardedBy("this")
     private Queue<T> queue = new LinkedList<>();
     private int limit;
+    @GuardedBy("this")
     private int size = 0;
 
     public SimpleBlockingQueue(int limit) {
         this.limit = limit;
     }
 
-    public boolean isEmpty() {
+    public synchronized boolean isEmpty() {
         return queue.isEmpty();
     }
 
-    public int getSize() {
+    public synchronized int getSize() {
         return this.size;
     }
 
-    @GuardedBy("this")
     public synchronized T poll() throws InterruptedException {
         while (this.queue.isEmpty()) {
             System.out.println(Thread.currentThread().getName() + " waiting to offer, queue is empty");
@@ -43,7 +43,6 @@ public class SimpleBlockingQueue<T> {
         return res;
     }
 
-    @GuardedBy("this")
     public synchronized void offer(T value) throws InterruptedException {
         while (this.queue.size() == this.limit) {
             System.out.println(Thread.currentThread().getName() + " waiting to poll, queue is full");

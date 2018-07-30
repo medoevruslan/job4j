@@ -17,16 +17,14 @@ import java.util.NoSuchElementException;
 public class DynamicLinkedList<E> implements Iterable<E> {
     private Node<E> first;
     private Node<E> last;
+    @GuardedBy("this")
     private int size = 0;
     private int modCount;
 
-
-    @GuardedBy("this")
     public synchronized void add(E data) {
         this.linklLast(data);
     }
 
-    @GuardedBy("this")
     private synchronized void linkFirst(E data) {
         this.modCount++;
         Node<E> f = this.first;
@@ -41,7 +39,6 @@ public class DynamicLinkedList<E> implements Iterable<E> {
         this.size++;
     }
 
-    @GuardedBy("this")
     private synchronized void linklLast(E data) {
         this.modCount++;
         Node<E> l = this.last;
@@ -56,21 +53,20 @@ public class DynamicLinkedList<E> implements Iterable<E> {
         this.size++;
     }
 
-    public E getFirst() {
+    public synchronized E getFirst() {
         if (this.first == null) {
             throw new NoSuchElementException();
         }
         return this.first.data;
     }
 
-    public E getLast() {
+    public synchronized E getLast() {
         if (this.last == null) {
             throw new NoSuchElementException();
         }
         return this.last.data;
     }
 
-    @GuardedBy("this")
     public synchronized E deleteFirst() {
         this.modCount++;
         Node<E> next = this.first.next;
@@ -87,7 +83,6 @@ public class DynamicLinkedList<E> implements Iterable<E> {
         return data;
     }
 
-    @GuardedBy("this")
     public synchronized E get(int index) {
         if (index >= size) {
             throw new IndexOutOfBoundsException();
@@ -95,7 +90,6 @@ public class DynamicLinkedList<E> implements Iterable<E> {
         return (E) this.node(index).data;
     }
 
-    @GuardedBy("this")
     public synchronized E deleteLast() {
         this.modCount++;
         E data = this.last.data;
@@ -127,11 +121,10 @@ public class DynamicLinkedList<E> implements Iterable<E> {
         return result;
     }
 
-    public int getSize() {
+    public synchronized int getSize() {
         return this.size;
     }
 
-    @GuardedBy("this")
     @Override
     public synchronized Iterator<E> iterator() {
         return new Iterator<E>() {

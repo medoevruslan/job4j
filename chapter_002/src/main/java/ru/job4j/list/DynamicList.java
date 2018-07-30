@@ -17,8 +17,10 @@ import java.util.NoSuchElementException;
 @ThreadSafe
 public class DynamicList<E> implements Iterable<E> {
     private Object[] array;
+    @GuardedBy("this")
     private int size = 0;
     private int modCount = 0;
+
 
     public DynamicList() {
         this.array = new Object[20];
@@ -31,7 +33,6 @@ public class DynamicList<E> implements Iterable<E> {
         this.array = Arrays.copyOf(this.array, newCapacity);
     }
 
-    @GuardedBy("this")
     public synchronized boolean add(E value) {
         if (size >= this.array.length) {
             this.grow();
@@ -40,14 +41,13 @@ public class DynamicList<E> implements Iterable<E> {
         return true;
     }
 
-    public E get(int index) {
+    public synchronized E get(int index) {
         if (index >= this.size) {
             throw new IndexOutOfBoundsException();
         }
         return (E) this.array[index];
     }
 
-    @GuardedBy("this")
     public synchronized E set(int index, E e) {
         if (index >= this.size) {
             throw new IndexOutOfBoundsException();
@@ -57,11 +57,10 @@ public class DynamicList<E> implements Iterable<E> {
         return oldValue;
     }
 
-    public int getSize() {
+    public synchronized int getSize() {
         return this.size;
     }
 
-    @GuardedBy("this")
     public synchronized E delete(int index) {
         if (index >= this.size) {
             throw new IndexOutOfBoundsException();
@@ -76,7 +75,6 @@ public class DynamicList<E> implements Iterable<E> {
         return oldValue;
     }
 
-    @GuardedBy("this")
     @Override
     public synchronized Iterator<E> iterator() {
         return new Iterator<E>() {

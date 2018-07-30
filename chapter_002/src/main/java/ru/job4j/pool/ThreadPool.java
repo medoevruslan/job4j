@@ -27,12 +27,14 @@ public class ThreadPool {
     public void work(Runnable job) {
         if (this.isRunning) {
             this.tasks.offer(job);
-            this.notifyAll();
         }
     }
 
     public void shutdown() {
-           this.isRunning = false;
+        this.isRunning = false;
+        for (Thread thread : threads) {
+            thread.interrupt();
+        }
     }
 
     private class Worker implements Runnable {
@@ -40,13 +42,6 @@ public class ThreadPool {
         @Override
         public void run() {
             while (isRunning) {
-                while (tasks.isEmpty()) {
-                    try {
-                        this.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
                 tasks.poll();
             }
         }

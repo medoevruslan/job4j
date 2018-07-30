@@ -17,19 +17,25 @@ public class RectangleMove implements Runnable {
 
     @Override
     public void run() {
+        int x = 1;
+        int y = 1;
         while (true) {
             try {
                 if (Thread.interrupted()) {
                     break;
                 }
-                while (this.rect.getX() != 290) {
-                    this.rect.setX(this.rect.getX() + 1);
-                    Thread.sleep(50);
+                this.rect.setX(this.rect.getX() + x);
+                this.rect.setY(this.rect.getY() + y);
+                if (this.rect.getX() == 290) {
+                    x = -(int) (Math.random() * 3);
+                } else if (this.rect.getX() == 0) {
+                    x = (int) (Math.random() * 3);
+                } else if (this.rect.getY() == 290) {
+                    y = -(int) (Math.random() * 3);
+                } else if (this.rect.getY() == 0) {
+                    y = (int) (Math.random() * 3);
                 }
-                while (this.rect.getX() != 0) {
-                    this.rect.setX(this.rect.getX() - 1);
-                    Thread.sleep(50);
-                }
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

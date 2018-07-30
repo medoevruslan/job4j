@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
  */
 
 public class EmailNotification {
+    private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     private String subject;
     private String body;
 
@@ -21,7 +22,6 @@ public class EmailNotification {
     public void send(String subject, String body, String email) { }
 
     public void init(User user) {
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         executor.submit(new Runnable() {
             @Override
             public void run() {

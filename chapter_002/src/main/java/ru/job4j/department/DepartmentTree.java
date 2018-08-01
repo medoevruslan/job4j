@@ -13,12 +13,25 @@ public class DepartmentTree {
     public List<String> ascendSortDepartments(String[] input) {
         Set<String> set = new TreeSet<>();
         for (String department : input) {
-            if (department.contains("\\")) {
-                set.add(department.substring(0, department.lastIndexOf("\\")));
-            }
-            set.add(department);
+            set.addAll(this.branchesOf(department));
         }
         return new ArrayList<>(set);
+    }
+
+    private Set branchesOf(String department) {
+        Set<String> tree = new TreeSet<>();
+        String[] all = department.split("\\\\");
+        for (int border = 0; border < all.length; border++) {
+            StringBuilder builder = new StringBuilder();
+            for (int elem = 0; elem <= border; elem++) {
+                if (elem > 0) {
+                    builder.append("\\");
+                }
+                builder.append(all[elem]);
+                tree.add(builder.toString());
+            }
+        }
+        return tree;
     }
 
     public List<String> descendSortDepartments(String[] input) {

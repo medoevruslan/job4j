@@ -1,5 +1,4 @@
 package ru.job4j.threads;
-
 import java.util.concurrent.CountDownLatch;
 
 /**

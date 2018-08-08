@@ -22,23 +22,24 @@ public class Board {
     }
 
     private class Bomberman implements Runnable {
+        private Cell position;
         private Cell destination;
 
         /**
          * Method search for possible direction of object movement.
-         * @param position current position of object.
+         * @param source current source of object.
          * @return direction for move.
          */
 
-        private Cell moveDirection(Cell position) {
+        private Cell moveDirection(Cell source) {
             boolean pass = false;
-            Cell result = position;
+            Cell result = source;
             int[] moves = {-1, 0, 1};
             while (!pass) {
                 int x = (int) (Math.random() * 3);
                 int y = (int) (Math.random() * 3);
                 for (Cell cell : Cell.values()) {
-                    if (position.x + moves[x] == cell.x && position.y + moves[y] == cell.y) {
+                    if (source.x + moves[x] == cell.x && source.y + moves[y] == cell.y) {
                         result = cell;
                         pass = true;
                         break;
@@ -50,34 +51,34 @@ public class Board {
 
         /**
          * Move object on empty cell.
-         * @param position current position of object.
+         * @param source current source of object.
+         * @param dest destination to move object.
          * @return true
          */
 
-        public boolean move(Cell position) {
+        public boolean move(Cell source, Cell dest) {
             boolean pass = false;
-            ReentrantLock lock = board[position.x][position.y];
-            if (!lock.isHeldByCurrentThread()) {
-                lock.lock();
-            }
+            ReentrantLock lock = board[source.x][source.y];
+            lock.lock();
             try {
                 do {
-                    this.destination = this.moveDirection(position);
+                    this.destination = this.moveDirection(source);
                     pass = board[this.destination.x][this.destination.y].tryLock(500, TimeUnit.MILLISECONDS);
                 } while (!pass);
             } catch (InterruptedException ie) {
                 System.out.println(Thread.currentThread().getName() + " is interrupted");
             } finally {
                 lock.unlock();
+                position = destination;
             }
             return pass;
         }
 
         @Override
         public void run() {
-            move(Cell.A1);
+            move(Cell.A1, destination);
             while (true) {
-                move(destination);
+                move(position, destination);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ie) {

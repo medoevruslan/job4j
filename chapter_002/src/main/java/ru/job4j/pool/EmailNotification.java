@@ -1,5 +1,6 @@
 package ru.job4j.pool;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -11,6 +12,7 @@ import java.util.concurrent.Executors;
 
 public class EmailNotification {
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    private boolean readyTo = false;
     private String subject;
     private String body;
 
@@ -21,18 +23,19 @@ public class EmailNotification {
 
     public void send(String subject, String body, String email) { }
 
-    public void init(User user) {
+    public void mailTo(User user) {
         executor.submit(new Runnable() {
             @Override
             public void run() {
                 emailTo(user);
+                readyTo = true;
                 this.notifyAll();
             }
         });
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                while (subject == null && body == null) {
+                while (!readyTo) {
                     try {
                         this.wait();
                     } catch (InterruptedException e) {
@@ -40,8 +43,12 @@ public class EmailNotification {
                     }
                 }
                 send(subject, body, user.email);
+                readyTo = false;
             }
         });
+    }
+
+    public void shutdown() {
         executor.shutdown();
         while (!executor.isTerminated()) {
             try {

@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.sql.Timestamp;
+
 public class Item {
 
     private String id;
@@ -10,7 +12,6 @@ public class Item {
 
     public Item(String name, String desc, long create) {
         this.name = name;
-        this.id = id;
         this.desc = desc;
         this.create = create;
     }
@@ -27,8 +28,12 @@ public class Item {
         return this.id;
     }
 
+    public Timestamp getTime() {
+        Timestamp timeS = new Timestamp(create);
+        return timeS;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
-
 }

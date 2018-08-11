@@ -69,7 +69,6 @@ public class MenuTracker {
             String desc = input.ask("Введите описание заявки : ");
             Item item = new Item(name, desc, System.currentTimeMillis());
             tracker.add(item);
-            System.out.println("--------- Новая заявка с Id " + item.getId() + " создана ---------");
         }
     }
 
@@ -106,11 +105,6 @@ public class MenuTracker {
             String desc = input.ask("Введите описание : ");
             Item item = new Item(name, desc, System.currentTimeMillis());
             tracker.replace(id, item);
-            if (item.getId() != null) {
-                System.out.println("--------- Заявка по Id " + item.getId() + " отредактирована ---------");
-            } else {
-                System.out.println("Заявки с таким Id не существует");
-            }
         }
     }
 

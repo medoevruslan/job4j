@@ -48,14 +48,16 @@ where (price) in (
 );
 
 select pr.type_id, count(pr.type_id) as prod_count 
-from product as pr group by pr.type_id order by pr.type_id; 
+from product as pr group by pr.type_id;
 
 select * from product as prod 
 inner join type as typ on typ.id = prod.type_id
 where typ.name = 'СЫР' or typ.name = 'МОЛОКО';
 
-select * from type as typ group by typ.id
-having count(typ.id) < 10 order by typ.id;;
+select typ.name from poduct as prod
+inner join type as typ
+group by typ.name
+having count(prod.id) < 10;
 
 select * from product as prod 
 inner join type as typ on typ.id = prod.type_id;

@@ -1,8 +1,6 @@
 package ru.job4j.pool;
 
-import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * @author Medoev Ruslan (mr.r.m3@icloud.com)
@@ -11,46 +9,38 @@ import java.util.concurrent.Executors;
  */
 
 public class EmailNotification {
-    private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    private boolean readyTo = false;
-    private String subject;
-    private String body;
+    private final ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public void emailTo(User user) {
-        this.subject  = "Notification for " + user.name + " to email " + user.email;
-        this.body = "New event for " + user.name;
+        Future<String[]> result = pool.submit(new Callable<String[]>() {
+            @Override
+            public String[] call() throws Exception {
+                String[] message = new String[2];
+                message[0] = String.format("Notification for %s to email %s ", user.name, user.email);
+                message[1] = String.format("New event for %s", user.name);
+                return message;
+            }
+        });
+        pool.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String[] mail = result.get();
+                    send(mail[0], mail[1], user.email);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void send(String subject, String body, String email) { }
 
-    public void mailTo(User user) {
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                emailTo(user);
-                readyTo = true;
-                this.notifyAll();
-            }
-        });
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                while (!readyTo) {
-                    try {
-                        this.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                send(subject, body, user.email);
-                readyTo = false;
-            }
-        });
-    }
-
-    public void shutdown() {
-        executor.shutdown();
-        while (!executor.isTerminated()) {
+    public void close() {
+        pool.shutdown();
+        while (!pool.isTerminated()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

@@ -28,20 +28,21 @@ public class Tracker implements AutoCloseable {
     /**
      * Конструктор инициализирующий соединение с базой данных.
      * В случае отсутсвия необходимой таблицы - загружает её из скрипта в файле конфигурации.
-     * @param file файл конфигурации .
+     * @param config файл конфигурации для установки соединения с базой SQL.
      * @throws Exception
      */
-    public Tracker(File file) throws Exception  {
+    public Tracker(File config) throws Exception  {
+        Statement st;
         Properties props = new Properties();
-        FileReader reader = new FileReader(file);
+        FileReader reader = new FileReader(config);
         props.load(reader);
         String url = props.getProperty("url");
         String user = props.getProperty("user");
         String password = props.getProperty("password");
         String createTable = props.getProperty("table");
         connection = DriverManager.getConnection(url, user, password);
-        if (!isExist()) {
-            Statement st = connection.createStatement();
+        if (!isExist() && connection != null) {
+            st = connection.createStatement();
             Path path = Paths.get(createTable);
             st.executeUpdate(new String(Files.readAllBytes(path), "UTF-8"));
         }

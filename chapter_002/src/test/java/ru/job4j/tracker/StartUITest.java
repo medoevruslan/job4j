@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +23,16 @@ import static org.hamcrest.core.Is.is;
 public class StartUITest {
     private final PrintStream stdout = System.out;
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
-    private final Tracker tracker = new Tracker();
+    private Tracker tracker;
+
+    {
+        try {
+            tracker = new Tracker(new File("path"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private Item first, second, third;
 
     @Before

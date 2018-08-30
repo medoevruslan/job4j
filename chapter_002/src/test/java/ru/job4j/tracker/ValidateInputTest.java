@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,18 +32,18 @@ public class ValidateInputTest {
     }
 
     @Test
-    public void whenInputWordThan() {
+    public void whenInputWordThan() throws Exception {
         ValidateInput input = new ValidateInput(new StabInput(new String[] {"invalid", "2"}));
-        MenuTracker menu = new MenuTracker(input, new Tracker());
+        MenuTracker menu = new MenuTracker(input, new Tracker(new File("path")));
         menu.fillActions();
         input.ask("question", menu.actions);
         assertThat(this.out.toString(), is("Please, select key from menu.\n"));
     }
 
     @Test
-    public void whenInputInvalidNumber() {
+    public void whenInputInvalidNumber() throws Exception {
         ValidateInput input = new ValidateInput(new StabInput(new String[] {"7", "6"}));
-        MenuTracker menu = new MenuTracker(input, new Tracker());
+        MenuTracker menu = new MenuTracker(input, new Tracker(new File("path")));
         menu.fillActions();
         input.ask("question", menu.actions);
         assertThat(this.out.toString(), is("Please, enter correct number of menu.\n"));

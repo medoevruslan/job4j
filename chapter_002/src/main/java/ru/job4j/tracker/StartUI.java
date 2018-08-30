@@ -1,5 +1,6 @@
 package ru.job4j.tracker;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -31,7 +32,10 @@ public class StartUI {
         } while (key != 6);
     }
 
-    public static void main(String[] args) {
-        new StartUI(new ValidateInput(new ConsoleInput()), new Tracker()).init();
+    public static void main(String[] args) throws Exception {
+        File file = new File(args[0]);
+        try(Tracker tracker = new Tracker(file)) {
+            new StartUI(new ValidateInput(new ConsoleInput()), tracker).init();
+        }
     }
 }

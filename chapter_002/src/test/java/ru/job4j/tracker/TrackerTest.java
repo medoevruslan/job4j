@@ -1,6 +1,9 @@
 package ru.job4j.tracker;
 
 import org.junit.Test;
+
+import java.io.File;
+
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -13,16 +16,16 @@ import static org.hamcrest.core.Is.is;
 public class TrackerTest {
 
     @Test
-    public void whenAddNewItemThanTrackerHasSameItem() {
-        Tracker tracker = new Tracker();
+    public void whenAddNewItemThanTrackerHasSameItem() throws Exception {
+        Tracker tracker = new Tracker(new File("path"));
         Item item = new Item("test", "testDescr", 123L);
         tracker.add(item);
         assertThat(tracker.findAll().get(0), is(item));
     }
 
     @Test
-    public void whenReplaceNameThanReturnNewName() {
-        Tracker tracker = new Tracker();
+    public void whenReplaceNameThanReturnNewName() throws Exception {
+        Tracker tracker = new Tracker(new File("path"));
         Item prev = new Item("prev", "prevDescr", 123L);
         tracker.add(prev);
         Item next = new Item("next", "nextDescr", 1234L);
@@ -31,8 +34,8 @@ public class TrackerTest {
     }
 
     @Test
-    public void whenDeleteOneOfThreeTasksThanTrackerHasTwoTask() {
-        Tracker tracker = new Tracker();
+    public void whenDeleteOneOfThreeTasksThanTrackerHasTwoTask() throws Exception {
+        Tracker tracker = new Tracker(new File("path"));
         Item item1 = new Item("test1", "testDescr1", 123L);
         Item item2 = new Item("test2", "testDescr2", 1234L);
         Item item3 = new Item("test3", "testDescr3", 12345L);
@@ -44,8 +47,8 @@ public class TrackerTest {
     }
 
     @Test
-    public void whenTrackerFindByNameThan() {
-        Tracker tracker = new Tracker();
+    public void whenTrackerFindByNameThan() throws Exception {
+        Tracker tracker = new Tracker(new File("path"));
         Item item1 = new Item("name1", "descr1", 123L);
         Item item2 = new Item("name2", "descr2", 1234L);
         Item item3 = new Item("name3", "descr3", 12345L);

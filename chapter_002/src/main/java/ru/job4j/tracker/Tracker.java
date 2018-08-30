@@ -65,14 +65,28 @@ public class Tracker implements AutoCloseable {
     }
 
     /**
+     * Вспомогательный метод для корретного проведения тестов JUnit.
+     */
+    public void clearTable() {
+        try (Statement st = connection.createStatement()) {
+            st.execute("delete from items");
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    /**
      * Метод реализаущий добавление заявки в хранилище
      * @param item новая заявка
      */
     public Item add(Item item) {
-        try (PreparedStatement st = connection.prepareStatement("insert into items(name, desc, date) values(?, ?, ?)")) {
-            st.setString(1, item.getName());
-            st.setString(2, item.getDesc());
-            st.setTimestamp(3, new Timestamp(Calendar.getInstance().getTimeInMillis()));
+        try (PreparedStatement st
+                     = connection.prepareStatement(
+                             "insert into items(id, name, description, create_date) values(?, ?, ?, ?)")) {
+            st.setInt(1, item.getId());
+            st.setString(2, item.getName());
+            st.setString(3, item.getDesc());
+            st.setTimestamp(4, new Timestamp(Calendar.getInstance().getTimeInMillis()));
             st.executeUpdate();
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
@@ -84,9 +98,9 @@ public class Tracker implements AutoCloseable {
      * Метод удаляет заявку по заданому id.
      * @param id Уникальный номер заявки.
      */
-    public void delete(String id) {
+    public void delete(int id) {
         try (PreparedStatement st = connection.prepareStatement("delete from items where id = ? ")) {
-            st.setString(1, id);
+            st.setInt(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
@@ -98,12 +112,14 @@ public class Tracker implements AutoCloseable {
      * @param id Уникальный номер заявки.
      * @param item Заявку котороую необходимо вставить.
      */
-    public void replace(String id, Item item) {
-        try (PreparedStatement st = connection.prepareStatement("upate items set name = ?, desc = ?, date = ? where id = ?")) {
+    public void replace(int id, Item item) {
+        try (PreparedStatement st
+                     = connection.prepareStatement(
+                             "update items set name = ?, description = ?, create_date = ? where id = ?")) {
             st.setString(1, item.getName());
             st.setString(2, item.getDesc());
             st.setTimestamp(3, item.getTime());
-            st.setString(4, id);
+            st.setInt(4, id);
             st.executeUpdate();
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
@@ -120,8 +136,8 @@ public class Tracker implements AutoCloseable {
             ResultSet rst = stmt.executeQuery("select * from items");
             while (rst.next()) {
                 String name = rst.getString("name");
-                String desc = rst.getString("desc");
-                Timestamp time = rst.getTimestamp("date");
+                String desc = rst.getString("description");
+                Timestamp time = rst.getTimestamp("create_date");
                 items.add(new Item(name, desc, time.getTime()));
             }
         } catch (SQLException e) {
@@ -143,8 +159,8 @@ public class Tracker implements AutoCloseable {
             ResultSet rst = stmt.getResultSet();
             while (rst.next()) {
                 String name = rst.getString("name");
-                String desc = rst.getString("desc");
-                Timestamp time = rst.getTimestamp("date");
+                String desc = rst.getString("description");
+                Timestamp time = rst.getTimestamp("create_date");
                 items.add(new Item(name, desc, time.getTime()));
             }
         } catch (SQLException e) {
@@ -159,16 +175,16 @@ public class Tracker implements AutoCloseable {
      * @return null или искомую заявку.
      */
 
-    public Item findById(String id) {
+    public Item findById(int id) {
         Item item = null;
         try (PreparedStatement stmt = connection.prepareStatement("select * from items where id = ?")) {
-            stmt.setString(1, id);
+            stmt.setInt(1, id);
             stmt.execute();
             ResultSet rst = stmt.getResultSet();
             while (rst.next()) {
                 String name = rst.getString("name");
-                String desc = rst.getString("desc");
-                Timestamp time = rst.getTimestamp("date");
+                String desc = rst.getString("description");
+                Timestamp time = rst.getTimestamp("create_date");
                 item = new Item(name, desc, time.getTime());
             }
         } catch (SQLException e) {

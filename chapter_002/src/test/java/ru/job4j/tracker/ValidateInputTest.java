@@ -20,6 +20,8 @@ import static org.hamcrest.Matchers.is;
 public class ValidateInputTest {
     private final PrintStream stdout = System.out;
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    private final File config
+            = new File("/Users/ruslanmd/projects/job4j/chapter_002/src/main/resources/tracker_config.properties");
 
     @Before
     public void loadOut() {
@@ -33,19 +35,27 @@ public class ValidateInputTest {
 
     @Test
     public void whenInputWordThan() throws Exception {
-        ValidateInput input = new ValidateInput(new StabInput(new String[] {"invalid", "2"}));
-        MenuTracker menu = new MenuTracker(input, new Tracker(new File("path")));
-        menu.fillActions();
-        input.ask("question", menu.actions);
-        assertThat(this.out.toString(), is("Please, select key from menu.\n"));
+        try (Tracker tracker = new Tracker(config)) {
+            ValidateInput input = new ValidateInput(new StabInput(new String[]{"invalid", "2"}));
+            MenuTracker menu = new MenuTracker(input, tracker);
+            menu.fillActions();
+            input.ask("question", menu.actions);
+            assertThat(this.out.toString(), is("Please, select key from menu.\n"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void whenInputInvalidNumber() throws Exception {
+        try (Tracker tracker = new Tracker(config)) {
         ValidateInput input = new ValidateInput(new StabInput(new String[] {"7", "6"}));
-        MenuTracker menu = new MenuTracker(input, new Tracker(new File("path")));
+            MenuTracker menu = new MenuTracker(input, tracker);
         menu.fillActions();
         input.ask("question", menu.actions);
         assertThat(this.out.toString(), is("Please, enter correct number of menu.\n"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

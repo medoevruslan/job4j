@@ -1,7 +1,6 @@
 package ru.job4j.tracker;
 
 import java.io.File;
-import java.util.Date;
 
 /**
  * @author Medoev Ruslan (mr.r.m3@icloud.com).
@@ -34,7 +33,7 @@ public class StartUI {
 
     public static void main(String[] args) throws Exception {
         File file = new File(args[0]);
-        try(Tracker tracker = new Tracker(file)) {
+        try (Tracker tracker = new Tracker(file)) {
             new StartUI(new ValidateInput(new ConsoleInput()), tracker).init();
         }
     }

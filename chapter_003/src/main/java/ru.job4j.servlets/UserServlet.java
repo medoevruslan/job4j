@@ -31,7 +31,7 @@ public class UserServlet extends HttpServlet {
                     .append("<form action='" + req.getContextPath() + "/edit' method='get'>")
                     .append("<input type='hidden' name='id' value='" + user.getId() + "'>")
                     .append("<td><input type='submit' value='Edit'></form></td>")
-                    .append("<form action='"+ req.getContextPath() + "/edit' method='post'>")
+                    .append("<form action='" + req.getContextPath() + "/edit' method='post'>")
                     .append("<input type='hidden' name='action' value='delete'>")
                     .append("<input type='hidden' name='id' value='" + user.getId() + "'>")
                     .append("<td><input type='submit' value='Delete'></form></td></tr>");

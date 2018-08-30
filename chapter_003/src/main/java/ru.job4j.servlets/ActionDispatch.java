@@ -44,8 +44,11 @@ public class ActionDispatch {
         return req -> {
             int id = Integer.valueOf(req.getParameter("id"));
             String name = req.getParameter("name");
+            String email = req.getParameter("email");
+            String login = req.getParameter("login");
             User user = this.validate.findById(id);
-            return this.validate.update(user, name) ? String.format("User id %d updated", user.getId()) : "Incorrect id";
+            return this.validate.update(user, name, email, login)
+                    ? String.format("User id %d updated", user.getId()) : "Incorrect id";
         };
     }
 

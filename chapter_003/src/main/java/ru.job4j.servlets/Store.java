@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface Store {
     boolean add(User user);
-    boolean update(User user, String name);
+    boolean update(User user, String name, String email, String login);
     boolean delete(User user);
     User findById(int id);
     List<User> findAll();

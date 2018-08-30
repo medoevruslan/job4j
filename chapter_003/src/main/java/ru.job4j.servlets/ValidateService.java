@@ -23,10 +23,10 @@ public class ValidateService implements Store {
     }
 
     @Override
-    public boolean update(User user, String name) {
+    public boolean update(User user, String name, String email, String login) {
         boolean rst = false;
         if (user != null) {
-            rst = this.store.update(user, name);
+            rst = this.store.update(user, name, email, login);
         }
         return rst;
     }

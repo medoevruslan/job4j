@@ -24,10 +24,12 @@ public class MemoryStore implements Store {
     }
 
     @Override
-    public boolean update(User user, String name) {
-        user.setName(name);
+    public boolean update(User user, String name, String email, String login) {
         for (int i = 0; i < this.users.size(); i++) {
             if (user.getId() == users.get(i).getId()) {
+                user.setName(name);
+                user.setEmail(email);
+                user.setLogin(login);
                 users.set(i, user);
                 break;
             }

@@ -26,7 +26,7 @@ import java.util.*;
 
 public class SqlRuParser implements Job {
     private LocalDateTime boundDate = LocalDate.of(2018, 1, 1).atStartOfDay();
-    private final String REF = "http://www.sql.ru/forum/job-offers/";
+    private final String ref = "http://www.sql.ru/forum/job-offers/";
     private Logger log = Logger.getLogger(SqlRuParser.class);
     public List<Vacancy> list = new ArrayList<>();
     private boolean firstStart = true;
@@ -51,7 +51,7 @@ public class SqlRuParser implements Job {
         this.firstStart = false;
         do {
             try {
-                Document doc = Jsoup.connect(String.format("%s%d", REF, this.page++)).get();
+                Document doc = Jsoup.connect(String.format("%s%d", ref, this.page++)).get();
                 Elements elements = doc.select("tr:has(td.postslisttopic)");
                 for (Element element : elements) {
                     String name = element.child(1).text();

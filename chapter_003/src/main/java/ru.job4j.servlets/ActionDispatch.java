@@ -18,41 +18,39 @@ public class ActionDispatch {
         return instance;
     }
 
-    private final ConcurrentHashMap<String, Function<HttpServletRequest, String>> dispatcher = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Function<HttpServletRequest, Boolean>> dispatcher = new ConcurrentHashMap<>();
     private final ValidateService validate = ValidateService.getInstance();
 
-    private Function<HttpServletRequest, String> add() {
+    private Function<HttpServletRequest, Boolean> add() {
         return req -> {
             String name = req.getParameter("name");
             String login = req.getParameter("login");
             String email = req.getParameter("email");
             User user = new User(name, email, login);
-            this.validate.add(user);
-            return String.format("New user %s added", user);
+            return this.validate.add(user);
         };
     }
 
-    private Function<HttpServletRequest, String> delete() {
+    private Function<HttpServletRequest, Boolean> delete() {
         return  req -> {
             int id = Integer.valueOf(req.getParameter("id"));
             User user = this.validate.findById(id);
-            return this.validate.delete(user) ? String.format("User id %d deleted", user.getId()) : "Incorrect id";
+            return this.validate.delete(user);
         };
     }
 
-    private Function<HttpServletRequest, String> update() {
+    private Function<HttpServletRequest, Boolean> update() {
         return req -> {
             int id = Integer.valueOf(req.getParameter("id"));
             String name = req.getParameter("name");
             String email = req.getParameter("email");
             String login = req.getParameter("login");
             User user = this.validate.findById(id);
-            return this.validate.update(user, name, email, login)
-                    ? String.format("User id %d updated", user.getId()) : "Incorrect id";
+            return this.validate.update(user, name, email, login);
         };
     }
 
-    private void load(String action, Function<HttpServletRequest, String> handler) {
+    private void load(String action, Function<HttpServletRequest, Boolean> handler) {
         this.dispatcher.put(action, handler);
     }
 
@@ -62,7 +60,7 @@ public class ActionDispatch {
         this.load("update", this.update());
     }
 
-    public String execute(HttpServletRequest req) {
+    public Boolean execute(HttpServletRequest req) {
         return this.dispatcher.get(req.getParameter("action")).apply(req);
     }
 }

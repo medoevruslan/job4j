@@ -1,6 +1,8 @@
 package ru.job4j.servlets;
 
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 /**
  * @author Medoev Ruslan (mr.r.m3@icloud.com)
@@ -8,31 +10,20 @@ import java.time.LocalDateTime;
  * @since 0.1
  */
 public class User {
-    private static int instanceCount;
     private int id;
     private String name;
     private String email;
     private String login;
+    private String password;
     private LocalDateTime createDate;
+    private Role role;
 
-    public User(String name, String email, String login) {
-        instanceCount++;
-        this.id = instanceCount;
+    public User(String name, String email, String login, String password) {
         this.name = name;
         this.email = email;
         this.login = login;
+        this.password = password;
         this.createDate = LocalDateTime.now();
-    }
-
-    @Override
-    public String toString() {
-        return "User{"
-                + "id=" + id
-                + ", name='" + name + '\''
-                + ", email='" + email + '\''
-                + ", login='" + login + '\''
-                + ", createDate=" + createDate
-                + '}';
     }
 
     public int getId() {
@@ -51,8 +42,20 @@ public class User {
         return this.login;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getRole() {
+        return this.role.getName();
+    }
+
     public LocalDateTime getCreateDate() {
         return this.createDate;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -65,5 +68,13 @@ public class User {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

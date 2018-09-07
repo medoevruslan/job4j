@@ -8,7 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @version $Id$
  * @since 0.1
  */
-public class MemoryStore implements Store {
+public class MemoryStore implements Store<User> {
     private List<User> users = new CopyOnWriteArrayList<>();
     private static final MemoryStore INSTANCE = new MemoryStore();
     private MemoryStore() { }
@@ -24,12 +24,14 @@ public class MemoryStore implements Store {
     }
 
     @Override
-    public boolean update(User user, String name, String email, String login) {
+    public boolean update(User user, String name, String email, String login, String password, String role) {
         for (int i = 0; i < this.users.size(); i++) {
             if (user.getId() == users.get(i).getId()) {
                 user.setName(name);
                 user.setEmail(email);
                 user.setLogin(login);
+                user.setPassword(password);
+                user.setRole(new Role(role));
                 users.set(i, user);
                 break;
             }

@@ -7,10 +7,10 @@ import java.util.List;
  * @version $Id$
  * @since 0.1
  */
-public interface Store {
-    boolean add(User user);
-    boolean update(User user, String name, String email, String login);
-    boolean delete(User user);
-    User findById(int id);
-    List<User> findAll();
+public interface Store<T> {
+    boolean add(T t);
+    boolean update(T t, String name, String email, String login, String password, String role);
+    boolean delete(T t);
+    T findById(int id);
+    List<T> findAll();
 }

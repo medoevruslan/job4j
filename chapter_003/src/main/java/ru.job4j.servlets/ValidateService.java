@@ -7,7 +7,7 @@ import java.util.List;
  * @version $Id$
  * @since 0.1
  */
-public class ValidateService implements Store {
+public class ValidateService implements Store<User> {
     private static final ValidateService INSTANCE = new ValidateService();
     private ValidateService() { }
 
@@ -15,7 +15,7 @@ public class ValidateService implements Store {
         return INSTANCE;
     }
 
-    private final MemoryStore store = MemoryStore.getInstance();
+    private final Store store = DBStore.getInstance();
 
     @Override
     public boolean add(User user) {
@@ -23,10 +23,10 @@ public class ValidateService implements Store {
     }
 
     @Override
-    public boolean update(User user, String name, String email, String login) {
+    public boolean update(User user, String name, String email, String login, String password, String role) {
         boolean rst = false;
         if (user != null) {
-            rst = this.store.update(user, name, email, login);
+            rst = this.store.update(user, name, email, login, password, role);
         }
         return rst;
     }
@@ -40,9 +40,20 @@ public class ValidateService implements Store {
         return rst;
     }
 
+    public boolean isCorrect(String login, String password) {
+        boolean rst = false;
+        for (User user : this.findAll()) {
+            if (login.equals(user.getLogin()) && password.equals(user.getPassword())) {
+                rst = true;
+                break;
+            }
+        }
+        return  rst;
+    }
+
     @Override
     public User findById(int id) {
-        return this.store.findById(id);
+        return (User) this.store.findById(id);
     }
 
     @Override

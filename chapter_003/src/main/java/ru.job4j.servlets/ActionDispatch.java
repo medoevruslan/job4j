@@ -26,7 +26,10 @@ public class ActionDispatch {
             String name = req.getParameter("name");
             String login = req.getParameter("login");
             String email = req.getParameter("email");
-            User user = new User(name, email, login);
+            String password = req.getParameter("password");
+            String role = req.getParameter("role");
+            User user = new User(name, email, login, password);
+            user.setRole(new Role(role));
             return this.validate.add(user);
         };
     }
@@ -45,8 +48,10 @@ public class ActionDispatch {
             String name = req.getParameter("name");
             String email = req.getParameter("email");
             String login = req.getParameter("login");
+            String password = req.getParameter("password");
+            String role = req.getParameter("role");
             User user = this.validate.findById(id);
-            return this.validate.update(user, name, email, login);
+            return this.validate.update(user, name, email, login, password, role);
         };
     }
 
@@ -54,7 +59,7 @@ public class ActionDispatch {
         this.dispatcher.put(action, handler);
     }
 
-    public void init() {
+    public void initialize() {
         this.load("add", this.add());
         this.load("delete", this.delete());
         this.load("update", this.update());

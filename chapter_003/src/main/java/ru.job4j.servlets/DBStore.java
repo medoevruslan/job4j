@@ -17,7 +17,7 @@ import java.util.Properties;
  */
 
  /*
- * Class for store elements in Postrgresql
+ * Class for store elements in Postgresql
  */
 public class DBStore implements Store<User> {
     private static final Logger LOG = Logger.getLogger(DBStore.class);
@@ -66,7 +66,7 @@ public class DBStore implements Store<User> {
 
     /**
      * Get list of roles from database.
-     * @return
+     * @return Role's list.
      */
     public List<String> getRoles() {
         List<String> list = new ArrayList<>();
@@ -157,7 +157,7 @@ public class DBStore implements Store<User> {
 
     /**
      * Delete user from database.
-     * @param user Uset for delete.
+     * @param user User for delete.
      * @return true.
      */
     @Override

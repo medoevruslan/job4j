@@ -20,9 +20,9 @@ import java.util.Properties;
 
 public class BaseConnection {
     private Logger log = Logger.getLogger(BaseConnection.class);
-    private File config;
+    private String config;
 
-    public BaseConnection(File config) {
+    public BaseConnection(String config) {
         this.config = config;
     }
 
@@ -32,7 +32,7 @@ public class BaseConnection {
      * @return Connection object.
      * @throws SQLException
      */
-    private Connection connect(File config) throws SQLException {
+    private Connection connect(String config) throws SQLException {
         log.info("Create connection");
         Connection conn = null;
         try (InputStream is = new FileInputStream(config)) {
@@ -58,26 +58,14 @@ public class BaseConnection {
      */
     public Timestamp lastDate() {
         Timestamp date = null;
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet res = null;
-        try {
-            conn = this.connect(config);
+        try (Connection conn = this.connect(config)) {
             if (conn != null) {
-                stmt = conn.createStatement();
-                res = stmt.executeQuery("select create_date from vacancies order by create_date limit 1");
+                Statement stmt = conn.createStatement();
+                ResultSet res = stmt.executeQuery("select create_date from vacancies order by create_date limit 1");
                 date = res.getTimestamp("create_date");
             }
         } catch (SQLException e) {
             log.error("Can't get last vacansy's date ", e);
-        } finally {
-            try {
-                res.close();
-                stmt.close();
-                conn.close();
-            } catch (SQLException e) {
-                log.error("Can't close lastDate method connection", e);
-            }
         }
         return date;
     }
@@ -88,19 +76,15 @@ public class BaseConnection {
      */
     public void addToBase(List<Vacancy> list) {
         log.info("Add to base");
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rst = null;
-        try {
-            if (!this.isTableExist()) {
-                createTable();
-            }
-            conn = this.connect(config);
+        if (!this.isTableExist()) {
+            createTable();
+        }
+        try (Connection conn = this.connect(config)) {
             if (conn != null) {
                 for (Vacancy vacancy : list) {
-                    stmt = conn.prepareStatement("select id from vacancies where name = ? ");
+                    PreparedStatement stmt = conn.prepareStatement("select id from vacancies where name = ? ");
                     stmt.setString(1, vacancy.getName());
-                    rst = stmt.executeQuery();
+                    ResultSet rst = stmt.executeQuery();
                     if (!rst.next()) {
                         stmt = conn.prepareStatement("insert into vacancies(name, author, views, create_date) values(?, ?, ?, ?)");
                         stmt.setString(1, vacancy.getName());
@@ -113,14 +97,6 @@ public class BaseConnection {
             }
         } catch (SQLException e) {
             log.error("Connection error", e);
-        } finally {
-            try {
-                rst.close();
-                stmt.close();
-                conn.close();
-            } catch (SQLException e) {
-                log.error("Can't close addToBase method connection", e);
-            }
         }
     }
 
@@ -129,36 +105,38 @@ public class BaseConnection {
      * @return True or false.
      * @throws SQLException
      */
-    private boolean isTableExist() throws SQLException {
-        Connection conn = this.connect(config);
-        DatabaseMetaData data = conn.getMetaData();
-        ResultSet res = data.getTables(null, null, "vacancies", new String[] {"TABLE"});
-        return res.next();
+    private boolean isTableExist() {
+        boolean result = false;
+        try (Connection conn = this.connect(config)) {
+            DatabaseMetaData data = conn.getMetaData();
+            ResultSet res = data.getTables(null, null, "vacancies", new String[]{"TABLE"});
+            result = res.next();
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+        }
+        return result;
     }
 
     /**
      * Create table in database.
      * @throws SQLException
      */
-    private void createTable() throws SQLException {
+    private void createTable() {
         log.info("Creating table");
-        Connection conn = null;
-        Statement stmt = null;
-        try (InputStream is = new FileInputStream(config)) {
-            conn = this.connect(config);
+        try (InputStream is = new FileInputStream(config);
+             Connection conn = this.connect(config)) {
             if (conn != null) {
                 Properties props = new Properties();
                 props.load(is);
                 String table = props.getProperty("table");
                 Path path = Paths.get(table);
-                stmt = conn.createStatement();
+                Statement stmt = conn.createStatement();
                 stmt.execute(new String(Files.readAllBytes(path), "UTF8"));
             }
         } catch (IOException e) {
             log.error("File not found - createTable method", e);
-        } finally {
-            stmt.close();
-            conn.close();
+        } catch (SQLException sqle) {
+            log.error("Connection eeror at createTable", sqle);
         }
     }
 
@@ -169,14 +147,10 @@ public class BaseConnection {
     public List getVacancies() {
         log.error("Trying to get vacancies");
         List<Vacancy> vacancies = new ArrayList<>();
-        Connection conn = null;
-        Statement stmnt = null;
-        ResultSet rst = null;
-        try {
-            conn = this.connect(config);
+        try (Connection conn = this.connect(config)) {
             if (conn != null) {
-                stmnt = conn.createStatement();
-                rst = stmnt.executeQuery("select * from vacancies");
+                Statement stmnt = conn.createStatement();
+                ResultSet rst = stmnt.executeQuery("select * from vacancies");
                 while (rst.next()) {
                     String name = rst.getString("name");
                     String author = rst.getString("author");
@@ -187,14 +161,6 @@ public class BaseConnection {
             }
         } catch (SQLException e) {
             log.error("Connecion error", e);
-        } finally {
-            try {
-                rst.close();
-                stmnt.close();
-                conn.close();
-            } catch (SQLException e) {
-                log.error("Can't close getVacancies method connecion", e);
-            }
         }
         return vacancies;
     }

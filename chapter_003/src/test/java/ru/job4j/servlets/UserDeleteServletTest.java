@@ -45,7 +45,7 @@ public class UserDeleteServletTest {
         this.req = mock(HttpServletRequest.class);
         this.resp = mock(HttpServletResponse.class);
         this.session = mock(HttpSession.class);
-        this.sessionUser = new User("user","userMail", "user","user");
+        this.sessionUser = new User("user", "userMail", "user", "user");
         this.sessionUser.setRole(new Role("user"));
         this.create = new UserCreateServlet();
         this.update = new UserUpdateServlet();
@@ -75,7 +75,7 @@ public class UserDeleteServletTest {
 
         List<User> users;
         users = this.validate.findAll();
-        assertThat(users.size(), is (2));
+        assertThat(users.size(), is(2));
 
         Mockito.when(req.getParameter("action")).thenReturn("delete");
         Mockito.when(req.getParameter("id")).thenReturn("0");

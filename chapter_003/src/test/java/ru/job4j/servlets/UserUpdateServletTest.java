@@ -48,7 +48,7 @@ public class UserUpdateServletTest {
         this.req = mock(HttpServletRequest.class);
         this.resp = mock(HttpServletResponse.class);
         this.session = mock(HttpSession.class);
-        this.sessionUser = new User("user","userMail", "user","user");
+        this.sessionUser = new User("user", "userMail", "user", "user");
         this.sessionUser.setRole(new Role("user"));
         this.create = new UserCreateServlet();
         this.update = new UserUpdateServlet();

@@ -20,7 +20,7 @@ public class ValidateStub implements Validate {
     public boolean add(User user) {
         boolean rst = true;
         for (User usr : this.users) {
-            if (user.getLogin().equals(usr.getLogin())){
+            if (user.getLogin().equals(usr.getLogin())) {
                 rst = false;
                 break;
             }

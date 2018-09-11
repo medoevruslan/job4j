@@ -20,10 +20,29 @@ public class DynamicList<E> implements Iterable<E> {
     @GuardedBy("this")
     private int size = 0;
     private int modCount = 0;
+    private final int DEFAULT_SIZE = 20;
 
 
     public DynamicList() {
-        this.array = new Object[20];
+        this.array = new Object[DEFAULT_SIZE];
+    }
+
+    public DynamicList(int size) {
+        if (size == 0 ) {
+            this.array = new Object[DEFAULT_SIZE];
+        } else if (size < 0) {
+            throw new IllegalArgumentException(String.format("Illegal size %d", size));
+        } else {
+            this.array = new Object[size];
+        }
+    }
+
+    public synchronized boolean addAll(DynamicList<? extends E > input) {
+        modCount++;
+        Object[] arr = input.toArray();
+        int newSize = arr.length;
+        System.arraycopy(arr, 0, this.array, this.size, newSize);
+        return newSize != 0;
     }
 
     private void grow() {
@@ -33,10 +52,15 @@ public class DynamicList<E> implements Iterable<E> {
         this.array = Arrays.copyOf(this.array, newCapacity);
     }
 
+    public synchronized E[] toArray() {
+        return (E[]) this.array;
+    }
+
     public synchronized boolean add(E value) {
         if (size >= this.array.length) {
             this.grow();
         }
+        this.modCount++;
         this.array[this.size++] = value;
         return true;
     }
@@ -78,24 +102,27 @@ public class DynamicList<E> implements Iterable<E> {
     @Override
     public synchronized Iterator<E> iterator() {
         return new Iterator<E>() {
+            Object[] copy = this.copy(array);
             private int position = 0;
-            private int expectedModCount = modCount;
 
+            private Object[] copy(Object[] input) {
+                int len = input.length;
+                Object[] rst = new Object[len];
+                System.arraycopy(input, 0, rst, 0, len);
+                return rst;
+            }
 
             @Override
             public boolean hasNext() {
-                return position < array.length;
+                return position < this.copy.length;
             }
 
             @Override
             public E next() {
-                if (this.expectedModCount != modCount) {
-                    throw new ConcurrentModificationException();
-                }
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return (E) array[position++];
+                return (E) this.copy[position++];
             }
         };
     }

@@ -20,16 +20,16 @@ public class DynamicList<E> implements Iterable<E> {
     @GuardedBy("this")
     private int size = 0;
     private int modCount = 0;
-    private final int DEFAULT_SIZE = 20;
+    private final int defaultSize = 20;
 
 
     public DynamicList() {
-        this.array = new Object[DEFAULT_SIZE];
+        this.array = new Object[defaultSize];
     }
 
     public DynamicList(int size) {
-        if (size == 0 ) {
-            this.array = new Object[DEFAULT_SIZE];
+        if (size == 0) {
+            this.array = new Object[defaultSize];
         } else if (size < 0) {
             throw new IllegalArgumentException(String.format("Illegal size %d", size));
         } else {
@@ -37,8 +37,8 @@ public class DynamicList<E> implements Iterable<E> {
         }
     }
 
-    public synchronized boolean addAll(DynamicList<? extends E > input) {
-        modCount++;
+    public synchronized boolean addAll(DynamicList<? extends E> input) {
+        this.modCount++;
         Object[] arr = input.toArray();
         int newSize = arr.length;
         System.arraycopy(arr, 0, this.array, this.size, newSize);
@@ -46,7 +46,7 @@ public class DynamicList<E> implements Iterable<E> {
     }
 
     private void grow() {
-        modCount++;
+        this.modCount++;
         int oldCapacity = array.length;
         int newCapacity = oldCapacity + (oldCapacity / 2);
         this.array = Arrays.copyOf(this.array, newCapacity);

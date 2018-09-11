@@ -17,7 +17,6 @@ import java.io.IOException;
  * User's edit page.
  */
 public class UserUpdateServlet extends HttpServlet {
-    private final ActionDispatch dispatch = ActionDispatch.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,9 +27,10 @@ public class UserUpdateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ActionDispatch dispatch = ActionDispatch.getInstance();
         User user;
-        this.dispatch.initialize();
-        this.dispatch.execute(req);
+        dispatch.initialize();
+        dispatch.execute(req);
         HttpSession session = req.getSession();
         synchronized (session) {
             user = (User) session.getAttribute("user");

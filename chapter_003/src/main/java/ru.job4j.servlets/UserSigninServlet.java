@@ -25,7 +25,7 @@ public class UserSigninServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ValidateService validate = ValidateService.getInstance();
+        Validate validate = ValidateService.getInstance();
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         if (validate.isCorrect(login, password)) {

@@ -7,11 +7,11 @@ import java.util.List;
  * @version $Id$
  * @since 0.1
  */
-public class ValidateService implements Store<User> {
-    private static final ValidateService INSTANCE = new ValidateService();
+public class ValidateService implements Validate {
+    private static final Validate INSTANCE = new ValidateService();
     private ValidateService() { }
 
-    public static ValidateService getInstance() {
+    public static Validate getInstance() {
         return INSTANCE;
     }
 
@@ -59,5 +59,9 @@ public class ValidateService implements Store<User> {
     @Override
     public List<User> findAll() {
         return this.store.findAll();
+    }
+
+    @Override
+    public void resetList() {
     }
 }

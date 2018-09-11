@@ -1,32 +1,43 @@
 package ru.job4j.servlets;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Medoev Ruslan (mr.r.m3@icloud.com)
  * @version $Id$
  * @since 0.1
  */
-public class MemoryStore implements Store<User> {
-    private List<User> users = new CopyOnWriteArrayList<>();
-    private static final MemoryStore INSTANCE = new MemoryStore();
-    private MemoryStore() { }
 
-    public static MemoryStore getInstance() {
-        return INSTANCE;
-    }
+/*
+ * Class developed for make a test
+ */
+public class ValidateStub implements Validate {
+    private ArrayList<User> users = new ArrayList<>();
+    private int id = 0;
 
     @Override
     public boolean add(User user) {
-        this.users.add(user);
-        return true;
+        boolean rst = true;
+        for (User usr : this.users) {
+            if (user.getLogin().equals(usr.getLogin())){
+                rst = false;
+                break;
+            }
+        }
+        if (rst) {
+            user.setId(id++);
+            this.users.add(user);
+        }
+        return rst;
     }
 
     @Override
     public boolean update(User user, String name, String email, String login, String password, String role) {
         for (int i = 0; i < this.users.size(); i++) {
-            if (user.getId() == users.get(i).getId()) {
+            int id = user.getId();
+            if (id == users.get(i).getId()) {
+                user.setId(id);
                 user.setName(name);
                 user.setEmail(email);
                 user.setLogin(login);
@@ -58,7 +69,25 @@ public class MemoryStore implements Store<User> {
     }
 
     @Override
+    public boolean isCorrect(String login, String password) {
+        boolean rst = false;
+        for (User user : this.findAll()) {
+            if (login.equals(user.getLogin()) && password.equals(user.getPassword())) {
+                rst = true;
+                break;
+            }
+        }
+        return  rst;
+    }
+
+    @Override
     public List<User> findAll() {
         return this.users;
+    }
+
+    @Override
+    public void resetList() {
+        this.users.clear();
+        this.id = 0;
     }
 }

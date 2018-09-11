@@ -5,6 +5,11 @@
     <title></title>
 </head>
 <body>
+<c:if test="${error != '' }">
+    <div style="color: red">
+        <c:out value="${error}"/>
+    </div>
+</c:if>
 <form action="${pageContext.servletContext.contextPath}/create" method="post">
     <input type="hidden" name="action" value="add">
     Name : <input type="text" name="name"><br/>

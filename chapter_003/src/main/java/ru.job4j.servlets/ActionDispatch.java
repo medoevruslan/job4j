@@ -19,7 +19,7 @@ public class ActionDispatch {
     }
 
     private final ConcurrentHashMap<String, Function<HttpServletRequest, Boolean>> dispatcher = new ConcurrentHashMap<>();
-    private final ValidateService validate = ValidateService.getInstance();
+    private final Validate validate = ValidateService.getInstance();
 
     private Function<HttpServletRequest, Boolean> add() {
         return req -> {

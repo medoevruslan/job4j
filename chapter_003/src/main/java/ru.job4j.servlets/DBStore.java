@@ -16,7 +16,7 @@ import java.util.Properties;
  * @since 0.1
  */
 
- /*
+/*
  * Class for store elements in Postgresql
  */
 public class DBStore implements Store<User> {
@@ -101,10 +101,11 @@ public class DBStore implements Store<User> {
     /**
      * Add new user to database.
      * @param user New user.
-     * @return true.
+     * @return True if user added or false if it already exists.
      */
     @Override
     public boolean add(User user) {
+        boolean rst = false;
         try (Connection conn = SOURCE.getConnection()) {
             if (conn != null) {
                 PreparedStatement ps = conn.prepareStatement(
@@ -117,11 +118,12 @@ public class DBStore implements Store<User> {
                 ps.setTimestamp(5, Timestamp.valueOf(user.getCreateDate()));
                 ps.setString(6, user.getRole());
                 ps.executeUpdate();
+                rst = true;
             }
         } catch (SQLException e) {
             LOG.error("Can't add an object", e);
         }
-        return true;
+        return rst;
     }
 
     /**

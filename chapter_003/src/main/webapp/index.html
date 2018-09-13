@@ -7,6 +7,27 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function validate() {
+           var fname = $("#fName").val();
+           var lname = $("#lName").val();
+           var dscr = $("#descr").val();
+           var access = true;
+           if (fname == '') {
+               alert($("#fName").attr("placeholder"));
+               access = false;
+           }
+           else if (lname == '') {
+               alert($("#lName").attr("placeholder"));
+               access = false;
+           }
+           else if (dscr == '') {
+               alert($("#descr").attr("placeholder"));
+               access = false;
+           }
+          return access;
+        }
+    </script>
 </head>
 <body>
 <form>
@@ -14,33 +35,31 @@
         <h2 class="text-center">Please fill the fields</h2>
         <div class="form-group">
             <div class="radio-inline">
-                <label><input type="radio" name="radio" id="male" checked>Male</label>
+                <label for="male"><input type="radio" name="state" id="male" value="male" checked>Male</label>
             </div>
             <div class="radio-inline">
-                <label><input type="radio" name="radio" id="female">Female</label>
+                <label for="female"><input type="radio" name="state" id="female" value="female">Female</label>
             </div>
         </div>
         <div class="form-group">
-            <label for="fname">First Name :</label>
-            <input type="text" class="form-control" id="fname">
-        </div>
-        <div class="form-group">
-            <label for="lname">Last Name :</label>
-            <input type="text" class="form-control" id="lname">
-        </div>
-        <div class="form-group">
+            <label for="fName">First Name :</label>
+            <input type="text" class="form-control" id="fName" placeholder="Please, enter first name">
+            <label for="lName">Last Name :</label>
+            <input type="text" class="form-control" id="lName" placeholder="Please, enter second name">
             <label for="descr">Description :</label>
-            <textarea class="form-control" id="descr"></textarea>
+            <textarea class="form-control" id="descr" placeholder="Type some description..."></textarea>
         </div>
-        <table class="table table-bordered">
-            <tr class="active">
-                <td class="col-md-2">First name</td>
-                <td class="col-md-2">Last name</td>
-                <td class="col-md-1">Sex</td>
-                <td class="col-md-7">Description</td>
-            </tr>
-        </table>
+        <button type="button" class="btn btn-default" onclick="return validate()">Submit</button>
     </div>
 </form>
+<br/>
+<table class="table table-bordered form-group">
+    <tr class="active">
+        <td class="col-md-2">First name</td>
+        <td class="col-md-2">Last name</td>
+        <td class="col-md-1">Sex</td>
+        <td class="col-md-7">Description</td>
+    </tr>
+</table>
 </body>
 </html>

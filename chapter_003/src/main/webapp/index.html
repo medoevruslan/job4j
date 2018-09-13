@@ -9,23 +9,39 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script>
         function validate() {
-           var fname = $("#fName").val();
-           var lname = $("#lName").val();
-           var dscr = $("#descr").val();
-           var access = true;
-           if (fname == '') {
-               alert($("#fName").attr("placeholder"));
-               access = false;
-           }
-           else if (lname == '') {
-               alert($("#lName").attr("placeholder"));
-               access = false;
-           }
-           else if (dscr == '') {
-               alert($("#descr").attr("placeholder"));
-               access = false;
-           }
-          return access;
+            var fname = $("#fName").val();
+            var lname = $("#lName").val();
+            var dscr = $("#descr").val();
+            var access = true;
+            if ($("#buttons input:radio:checked").length == 0) {
+                alert("Please, select your gender");
+                access = false;
+            }
+            else if (fname == '') {
+                alert($("#fName").attr("placeholder"));
+                access = false;
+            }
+            else if (lname == '') {
+                alert($("#lName").attr("placeholder"));
+                access = false;
+            }
+            else if (dscr == '') {
+                alert($("#descr").attr("placeholder"));
+                access = false;
+            }
+            if (access) {
+                addRow();
+            }
+            return access;
+        }
+
+        function addRow() {
+            var fname = $("#fName").val();
+            var lname = $("#lName").val();
+            var dscr = $("#descr").val();
+            var gender = $("#buttons input:radio:checked").val();
+            $("#table tr:last").after(
+                "<tr><td>" + fname + "</td><td>" + lname + "</td><td>" + gender + "</td><td>" + dscr + "</td></tr>")
         }
     </script>
 </head>
@@ -33,9 +49,9 @@
 <form>
     <div class="container">
         <h2 class="text-center">Please fill the fields</h2>
-        <div class="form-group">
+        <div id="buttons">
             <div class="radio-inline">
-                <label for="male"><input type="radio" name="state" id="male" value="male" checked>Male</label>
+                <label for="male"><input type="radio" name="state" id="male" value="male">Male</label>
             </div>
             <div class="radio-inline">
                 <label for="female"><input type="radio" name="state" id="female" value="female">Female</label>
@@ -53,11 +69,11 @@
     </div>
 </form>
 <br/>
-<table class="table table-bordered form-group">
+<table class="table table-bordered form-group" id="table">
     <tr class="active">
         <td class="col-md-2">First name</td>
         <td class="col-md-2">Last name</td>
-        <td class="col-md-1">Sex</td>
+        <td class="col-md-1">Gender</td>
         <td class="col-md-7">Description</td>
     </tr>
 </table>

@@ -8,40 +8,49 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script>
+        function createUser(user) {
+            $.ajax({
+                url: "json",
+                type: "POST",
+                data: JSON.stringify(user),
+                contentType: "json",
+                success: addRow(user)
+            });
+        }
+
         function validate() {
-            var fname = $("#fName").val();
-            var lname = $("#lName").val();
-            var dscr = $("#descr").val();
             var access = true;
+            var user = new Object();
+            user.firstName = $("#fName").val();
+            user.lastName = $("#lName").val();
+            user.gender = $("#buttons input:radio:checked").val();
+            user.description = $("#descr").val();
             if ($("#buttons input:radio:checked").length == 0) {
                 alert("Please, select your gender");
                 access = false;
             }
-            else if (fname == '') {
+            else if (user.firstName == '') {
                 alert($("#fName").attr("placeholder"));
                 access = false;
             }
-            else if (lname == '') {
+            else if (user.lastName == '') {
                 alert($("#lName").attr("placeholder"));
                 access = false;
             }
-            else if (dscr == '') {
+            else if (user.description == '') {
                 alert($("#descr").attr("placeholder"));
                 access = false;
             }
             if (access) {
-                addRow();
+                createUser(user);
             }
             return access;
         }
 
-        function addRow() {
-            var fname = $("#fName").val();
-            var lname = $("#lName").val();
-            var dscr = $("#descr").val();
-            var gender = $("#buttons input:radio:checked").val();
+        function addRow(user) {
             $("#table tr:last").after(
-                "<tr><td>" + fname + "</td><td>" + lname + "</td><td>" + gender + "</td><td>" + dscr + "</td></tr>")
+                "<tr><td>" + user.firstName + "</td><td>" + user.lastName + "</td><td>"
+                + user.gender + "</td><td>" + user.description + "</td></tr>");
         }
     </script>
 </head>
@@ -71,10 +80,10 @@
 <br/>
 <table class="table table-bordered form-group" id="table">
     <tr class="active">
-        <td class="col-md-2">First name</td>
-        <td class="col-md-2">Last name</td>
-        <td class="col-md-1">Gender</td>
-        <td class="col-md-7">Description</td>
+        <th class="col-md-2">First name</th>
+        <th class="col-md-2">Last name</th>
+        <th class="col-md-1">Gender</th>
+        <th class="col-md-7">Description</th>
     </tr>
 </table>
 </body>

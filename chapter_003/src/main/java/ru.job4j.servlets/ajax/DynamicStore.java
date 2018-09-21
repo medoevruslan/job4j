@@ -1,6 +1,7 @@
 package ru.job4j.servlets.ajax;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Medoev Ruslan (mr.r.m3@icloud.com)
@@ -13,17 +14,18 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DynamicStore {
     private static final DynamicStore INSTANCE = new DynamicStore();
-    private DynamicStore() { };
-    private ConcurrentHashMap<Integer, JsonUser> map = new ConcurrentHashMap<>();
-    private int id = 0;
+    private DynamicStore() { }
+
+    private final ConcurrentHashMap<Integer, JsonUser> map = new ConcurrentHashMap<>();
+    private final AtomicInteger integer = new AtomicInteger(0);
 
     public static DynamicStore getInstance() {
         return INSTANCE;
     }
 
     public boolean add(JsonUser user) {
-        user.setId(String.valueOf(this.id));
-        this.map.put(this.id++, user);
+        user.setId(String.valueOf(this.integer.get()));
+        this.map.put(this.integer.getAndIncrement(), user);
         return true;
     }
 

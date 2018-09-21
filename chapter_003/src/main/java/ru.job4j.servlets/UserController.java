@@ -26,7 +26,7 @@ public class UserController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         BufferedReader reader = req.getReader();
         StringBuilder builder = new StringBuilder();
-        String result = "";
+        String result;
         while ((result = reader.readLine()) != null) {
             builder.append(result);
         }

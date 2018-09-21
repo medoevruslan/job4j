@@ -24,13 +24,16 @@ public class MemoryStore implements Store<User> {
     }
 
     @Override
-    public boolean update(User user, String name, String email, String login, String password, String role) {
+    public boolean update(User user, String name, String email,
+                          String login, String password, String country, String city, String role) {
         for (int i = 0; i < this.users.size(); i++) {
             if (user.getId() == users.get(i).getId()) {
                 user.setName(name);
                 user.setEmail(email);
                 user.setLogin(login);
                 user.setPassword(password);
+                user.setCountry(new Country(country));
+                user.setCity(new City(city));
                 user.setRole(new Role(role));
                 users.set(i, user);
                 break;

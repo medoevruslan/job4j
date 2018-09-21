@@ -15,6 +15,10 @@ public class User {
     private String password;
     private LocalDateTime createDate;
     private Role role;
+    private Country country;
+    private City city;
+
+    public User() { }
 
     public User(String name, String email, String login, String password) {
         this.name = name;
@@ -52,8 +56,20 @@ public class User {
         return this.createDate;
     }
 
+    public String getCountry() {
+        return this.country.getName();
+    }
+
+    public String getCity() {
+        return this.city.getName();
+    }
+
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setCreateDate(LocalDateTime date) {
+        this.createDate = date;
     }
 
     public void setName(String name) {
@@ -75,4 +91,13 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
 }

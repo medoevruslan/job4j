@@ -9,7 +9,8 @@ import java.util.List;
  */
 public interface Validate extends Store<User> {
     boolean add(User user);
-    boolean update(User user, String name, String email, String login, String password, String role);
+    boolean update(User user, String name, String email, String login, String password, String country,
+                   String city, String role);
     boolean delete(User user);
     User findById(int id);
     List<User> findAll();

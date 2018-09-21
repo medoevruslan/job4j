@@ -99,6 +99,91 @@ public class DBStore implements Store<User> {
     }
 
     /**
+     * Get list of countries.
+     * @return Countries list.
+     */
+    public List<String> getCountries() {
+        List<String> rst = new ArrayList<>();
+        try (Connection conn = SOURCE.getConnection()) {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("select * from country");
+            while (rs.next()) {
+                rst.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            LOG.error("Can't get countries", e);
+        }
+        return rst;
+    }
+
+    /**
+     * Add new country to database.
+     * @param country New country.
+     */
+    public void addCountry(String country) {
+        try (Connection conn = SOURCE.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("insert into country(name)values(?)");
+            ps.setString(1, country);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Can't add new country", e);
+        }
+    }
+
+    /**
+     * Get list of all cities.
+     * @return City's list.
+     */
+    public List<String> getAllCities() {
+        List<String> rst = new ArrayList<>();
+        try (Connection conn = SOURCE.getConnection()) {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("select * from city");
+            while (rs.next()) {
+                rst.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            LOG.error("Can't get cities", e);
+        }
+        return rst;
+    }
+
+    /**
+     * Get list of city in country.
+     * @param country Country name.
+     * @return List of county's cities.
+     */
+    public List<String> getCitiesByCountry(String country) {
+        List<String> rst = new ArrayList<>();
+        try (Connection conn = SOURCE.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("select * from city where country_id = "
+                    + "(select id from country where name = ?) ");
+            ps.setString(1, country);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                rst.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return rst;
+    }
+
+    /**
+     * Add new city to database.
+     * @param city New city.
+     */
+    public void addCity(String city) {
+        try (Connection conn = SOURCE.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("insert into city(name)values(?)");
+            ps.setString(1, city);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Can't add new city", e);
+        }
+    }
+
+    /**
      * Add new user to database.
      * @param user New user.
      * @return True if user added or false if it already exists.
@@ -109,14 +194,17 @@ public class DBStore implements Store<User> {
         try (Connection conn = SOURCE.getConnection()) {
             if (conn != null) {
                 PreparedStatement ps = conn.prepareStatement(
-                        "insert into users(name, email, login, password, create_date, role_id) "
-                                + "values (?, ?, ?, ?, ?, (select id from role where name = ?))");
+                        "insert into users(name, email, login, password, create_date, role_id, country_id, city_id) "
+                                + "values (?, ?, ?, ?, ?, (select id from role where name = ?)"
+                                + ", (select id from country where name = ?), (select id from city where name = ?))");
                 ps.setString(1, user.getName());
                 ps.setString(2, user.getEmail());
                 ps.setString(3, user.getLogin());
                 ps.setString(4, user.getPassword());
                 ps.setTimestamp(5, Timestamp.valueOf(user.getCreateDate()));
                 ps.setString(6, user.getRole());
+                ps.setString(7, user.getCountry());
+                ps.setString(8, user.getCity());
                 ps.executeUpdate();
                 rst = true;
             }
@@ -137,18 +225,23 @@ public class DBStore implements Store<User> {
      * @return true.
      */
     @Override
-    public boolean update(User user, String name, String email, String login,  String password, String role) {
+    public boolean update(User user, String name, String email, String login,  String password, String country,
+                          String city, String role) {
         try (Connection conn = SOURCE.getConnection()) {
             if (conn != null) {
                 PreparedStatement ps = conn.prepareStatement(
-                        "update users set name = ?, email = ?, login = ?, password = ?, role_id = ("
-                                + "select id from role where name = ?) where id = ?");
+                        "update users set name = ?, email = ?, login = ?, password = ?"
+                                + ", country_id = (select id from country where name = ?)"
+                                + ", city_id = (select id from city where name = ?) "
+                                + ", role_id = (select id from role where name = ?) where id = ?");
                 ps.setString(1, name);
                 ps.setString(2, email);
                 ps.setString(3, login);
                 ps.setString(4, password);
-                ps.setString(5, role);
-                ps.setInt(6, user.getId());
+                ps.setString(5, country);
+                ps.setString(6, city);
+                ps.setString(7, role);
+                ps.setInt(8, user.getId());
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -185,8 +278,9 @@ public class DBStore implements Store<User> {
         try (Connection conn = SOURCE.getConnection()) {
             if (conn != null) {
                 PreparedStatement ps = conn.prepareStatement(
-                        "select u.id, u.name as u_name, email, login, password, r.name as r_name "
-                                + "from users as u inner join role as r on(u.role_id = r.id) where u.id = ?");
+                        "select u.id, u.name as u_name, email, login, password, r.name as r_name, co.name as co_name"
+                                + ", ci.name as ci_name from users as u, role as r, city as ci, country as co "
+                                + "where r.id = u.role_id and co.id = u.country_id and ci.id = u.city_id and u.id = ?");
                 ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
@@ -194,9 +288,13 @@ public class DBStore implements Store<User> {
                     String email = rs.getString("email");
                     String login = rs.getString("login");
                     String password = rs.getString("password");
+                    String country = rs.getString("co_name");
+                    String city = rs.getString("ci_name");
                     String role = rs.getString("r_name");
                     user = new User(name, email, login, password);
                     user.setId(id);
+                    user.setCity(new City(city));
+                    user.setCountry(new Country(country));
                     user.setRole(new Role(role));
                 }
             }
@@ -218,17 +316,22 @@ public class DBStore implements Store<User> {
             if (conn != null) {
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery(
-                        "select u.id, u.name as u_name, email, login, password, r.name as r_name "
-                                + "from users as u inner join role as r on(u.role_id = r.id)");
+                        "select u.id, u.name as u_name, email, login, password, r.name as r_name, co.name as co_name"
+                                + ", ci.name as ci_name from users as u, role as r, city as ci, country as co "
+                                + "where r.id = u.role_id and co.id = u.country_id and ci.id = u.city_id");
                 while (rs.next()) {
                     int id = rs.getInt("id");
                     String name = rs.getString("u_name");
                     String email = rs.getString("email");
                     String login = rs.getString("login");
                     String password = rs.getString("password");
+                    String country = rs.getString("co_name");
+                    String city = rs.getString("ci_name");
                     String role = rs.getString("r_name");
                     User user = new User(name, email, login, password);
                     user.setId(id);
+                    user.setCity(new City(city));
+                    user.setCountry(new Country(country));
                     user.setRole(new Role(role));
                     users.add(user);
                 }

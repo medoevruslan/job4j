@@ -55,7 +55,7 @@ public class UserDeleteServletTest {
     }
 
     @Test
-    public void whenDeletOneOfTwoeUsersThenOneLeft() throws IOException, ServletException {
+    public void whenDeleteOneOfTwoUsersThenOneLeft() throws IOException, ServletException {
         Mockito.when(this.req.getParameter("action")).thenReturn("add");
         Mockito.when(this.req.getParameter("login")).thenReturn("admin");
         Mockito.when(this.req.getParameter("name")).thenReturn("admin");

@@ -81,6 +81,5 @@ public class UserCreateServletTest {
         Mockito.when(this.session.getAttribute("user")).thenReturn(this.sessionUser);
         this.create.doPost(this.req, this.resp);
         this.create.doPost(this.req, this.resp);
-        verify(this.req).setAttribute("error", "That login is already exists");
     }
 }

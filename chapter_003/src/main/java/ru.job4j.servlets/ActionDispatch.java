@@ -27,8 +27,12 @@ public class ActionDispatch {
             String login = req.getParameter("login");
             String email = req.getParameter("email");
             String password = req.getParameter("password");
+            String country = req.getParameter("country");
+            String city = req.getParameter("city");
             String role = req.getParameter("role");
             User user = new User(name, email, login, password);
+            user.setCountry(new Country(country));
+            user.setCity(new City(city));
             user.setRole(new Role(role));
             return this.validate.add(user);
         };
@@ -49,9 +53,11 @@ public class ActionDispatch {
             String email = req.getParameter("email");
             String login = req.getParameter("login");
             String password = req.getParameter("password");
+            String country = req.getParameter("country");
+            String city = req.getParameter("city");
             String role = req.getParameter("role");
             User user = this.validate.findById(id);
-            return this.validate.update(user, name, email, login, password, role);
+            return this.validate.update(user, name, email, login, password, country, city, role);
         };
     }
 

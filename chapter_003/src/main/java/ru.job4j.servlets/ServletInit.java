@@ -23,7 +23,9 @@ public class ServletInit implements ServletContextListener {
         DBStore store = DBStore.getInstance();
         store.checkTable("tables.properties");
         List<String> roles = store.getRoles();
+        List<String> countries = store.getCountries();
         sc.setAttribute("roles", roles);
+        sc.setAttribute("countries", countries);
     }
 
     @Override

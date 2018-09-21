@@ -28,13 +28,10 @@ public class UserUpdateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ActionDispatch dispatch = ActionDispatch.getInstance();
-        User user;
         dispatch.initialize();
         dispatch.execute(req);
         HttpSession session = req.getSession();
-        synchronized (session) {
-            user = (User) session.getAttribute("user");
-        }
+        User user = (User) session.getAttribute("user");
         resp.sendRedirect(String.format("%s/%s", req.getContextPath(), user.getRole()));
     }
 }

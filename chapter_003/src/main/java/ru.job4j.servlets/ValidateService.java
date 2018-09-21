@@ -23,10 +23,11 @@ public class ValidateService implements Validate {
     }
 
     @Override
-    public boolean update(User user, String name, String email, String login, String password, String role) {
+    public boolean update(User user, String name, String email, String login, String password,
+                          String country, String city, String role) {
         boolean rst = false;
         if (user != null) {
-            rst = this.store.update(user, name, email, login, password, role);
+            rst = this.store.update(user, name, email, login, password, country, city, role);
         }
         return rst;
     }

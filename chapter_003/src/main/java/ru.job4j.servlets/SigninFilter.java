@@ -19,7 +19,7 @@ public class SigninFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        }
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -27,18 +27,14 @@ public class SigninFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         if (!req.getRequestURI().contains("signin")) {
             HttpSession session = req.getSession();
-            synchronized (session) {
-                if (session.getAttribute("login") == null) {
-                    resp.sendRedirect(String.format("%s/signin", req.getContextPath()));
-                    return;
-                }
+            if (session.getAttribute("login") == null) {
+                resp.sendRedirect(String.format("%s/signin", req.getContextPath()));
+                return;
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
-    public void destroy() {
-
-    }
+    public void destroy() { }
 }

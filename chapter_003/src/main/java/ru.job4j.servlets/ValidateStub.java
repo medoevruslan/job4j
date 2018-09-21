@@ -33,7 +33,8 @@ public class ValidateStub implements Validate {
     }
 
     @Override
-    public boolean update(User user, String name, String email, String login, String password, String role) {
+    public boolean update(User user, String name, String email, String login,
+                          String password, String country, String city, String role) {
         for (int i = 0; i < this.users.size(); i++) {
             int id = user.getId();
             if (id == users.get(i).getId()) {
@@ -42,6 +43,8 @@ public class ValidateStub implements Validate {
                 user.setEmail(email);
                 user.setLogin(login);
                 user.setPassword(password);
+                user.setCountry(new Country(country));
+                user.setCity(new City(city));
                 user.setRole(new Role(role));
                 users.set(i, user);
                 break;

@@ -1,0 +1,92 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="insert_test_role" author="ruslan.m">
+        <insert tableName="role">
+            <column name="name" value="admin"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="moderator"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="user"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_test_users" author="ruslan.m">
+        <insert tableName="users">
+            <column name="name" value="admin"/>
+            <column name="login" value="admin"/>
+            <column name="password" value="admin"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="users">
+            <column name="name" value="user"/>
+            <column name="login" value="user"/>
+            <column name="password" value="user"/>
+            <column name="role_id" value="2"/>
+        </insert>
+        <insert tableName="users">
+            <column name="name" value="moderator"/>
+            <column name="login" value="moderator"/>
+            <column name="password" value="moderator"/>
+            <column name="role_id" value="3"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_test_address" author="ruslan.m">
+        <insert tableName="address">
+            <column name="city" value="Vishneve"/>
+            <column name="street" value="Tutina"/>
+            <column name="house" value="16"/>
+            <column name="user_id" value="1"/>
+        </insert>
+        <insert tableName="address">
+            <column name="city" value="Kiev"/>
+            <column name="street" value="Shevchenko"/>
+            <column name="house" value="23"/>
+            <column name="user_id" value="2"/>
+        </insert>
+        <insert tableName="address">
+            <column name="city" value="Nikolaev"/>
+            <column name="street" value="Lazurna"/>
+            <column name="house" value="53"/>
+            <column name="user_id" value="3"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_test_music_type" author="ruslan.m">
+        <insert tableName="music_type">
+            <column name="name" value="Rap"/>
+        </insert>
+        <insert tableName="music_type">
+            <column name="name" value="Rock"/>
+        </insert>
+        <insert tableName="music_type">
+            <column name="name" value="Funk"/>
+        </insert>
+        <insert tableName="music_type">
+            <column name="name" value="Jazz"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_test_meloman" author="ruslan.m">
+        <insert tableName="meloman">
+            <column name="user_id" value="1"/>
+            <column name="music_type_id" value="1"/>
+        </insert>
+        <insert tableName="meloman">
+            <column name="user_id" value="2"/>
+            <column name="music_type_id" value="3"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="tag-1.1" author="">
+        <tagDatabase tag="1.1"/>
+    </changeSet>
+</databaseChangeLog>

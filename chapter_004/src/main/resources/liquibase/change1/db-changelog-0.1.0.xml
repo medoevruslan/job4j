@@ -1,0 +1,71 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="create_role" author="ruslan.m">
+       <createTable tableName="role">
+           <column name="id" type="int" autoIncrement="true">
+               <constraints primaryKey="true" nullable="false"/>
+           </column>
+           <column name="name" type="varchar(20)"/>
+       </createTable>
+    </changeSet>
+
+    <changeSet id="create_users" author="ruslan.m">
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(20)"/>
+            <column name="login" type="varchar(20)">
+                <constraints unique="true"/>
+            </column>
+            <column name="password" type="varchar(30)"/>
+           <column name="role_id" type="int">
+               <constraints foreignKeyName="fk_user_role" references="role(id)" nullable="false"/>
+           </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_address" author="ruslan.m">
+        <createTable tableName="address">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="city" type="varchar(30)"/>
+            <column name="street" type="varchar(30)"/>
+            <column name="house" type="int"/>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="fk_address_user" references="users(id)" unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_music_type" author="ruslan.m">
+        <createTable tableName="music_type">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(20)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_meloman" author="ruslan.m">
+       <createTable tableName="meloman">
+           <column name="user_id" type="bigint">
+               <constraints foreignKeyName="fk_meloman_user" references="users(id)" nullable="false"/>
+           </column>
+       <column name="music_type_id" type="int">
+           <constraints foreignKeyName="fk_meloman_music_type" references="music_type(id)" nullable="false"/>
+       </column>
+       </createTable>
+    </changeSet>
+
+    <changeSet id="tag-1.0" author="ruslan.m">
+        <tagDatabase tag="1.0"/>
+    </changeSet>
+
+</databaseChangeLog>

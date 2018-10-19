@@ -22,7 +22,7 @@ import java.util.List;
 public class CitiesController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         PrintWriter writer =  resp.getWriter();
         resp.setContentType("json");
         String country = req.getParameter("country");

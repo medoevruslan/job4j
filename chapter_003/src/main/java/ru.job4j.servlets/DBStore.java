@@ -38,31 +38,50 @@ public class DBStore implements Store<User> {
         return INSTANCE;
     }
 
-    /**
+    public static Connection connection() {
+        Connection connection = null;
+        try {
+            connection = SOURCE.getConnection();
+        } catch (SQLException e) {
+            LOG.error("getConnection disruption");
+        }
+        return connection;
+    }
+
+    /*
      * Method checks if given table exists.
      * @param table Table to check.
      */
-    protected void checkTable(String table) {
-        try (Connection conn = SOURCE.getConnection();
-             InputStream is = this.getClass().getClassLoader().getResourceAsStream(table)) {
-            Properties props = new Properties();
-            props.load(is);
-            for (String tbl : props.stringPropertyNames()) {
-                String sql = props.getProperty(tbl);
-                DatabaseMetaData data = conn.getMetaData();
-                ResultSet rst = data.getTables(
-                        null, null, tbl, new String[]{"TABLE"});
-                if (!rst.next()) {
-                    Statement st = conn.createStatement();
-                    st.execute(sql);
-                }
-            }
-        } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
-        } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
-        }
-    }
+//    protected void checkTable(String table) {
+//        ResultSet rst = null;
+//        Statement st = null;
+//        try (Connection conn = SOURCE.getConnection();
+//             InputStream is = this.getClass().getClassLoader().getResourceAsStream(table)) {
+//            Properties props = new Properties();
+//            props.load(is);
+//            for (String tbl : props.stringPropertyNames()) {
+//                String sql = props.getProperty(tbl);
+//                DatabaseMetaData data = conn.getMetaData();
+//                rst = data.getTables(
+//                        null, null, tbl, new String[]{"TABLE"});
+//                if (!rst.next()) {
+//                    st = conn.createStatement();
+//                    st.execute(sql);
+//                }
+//            }
+//        } catch (SQLException | IOException e) {
+//            LOG.error(e.getMessage(), e);
+//        } finally {
+//            if (rst != null && st != null) {
+//                try {
+//                    rst.close();
+//                    st.close();
+//                } catch (SQLException e) {
+//                    LOG.error("Can't close ResSet or Statement", e);
+//                }
+//            }
+//        }
+//    }
 
     /**
      * Get list of roles from database.
@@ -70,13 +89,11 @@ public class DBStore implements Store<User> {
      */
     public List<String> getRoles() {
         List<String> list = new ArrayList<>();
-        try (Connection conn = SOURCE.getConnection()) {
-            if (conn != null) {
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery("select * from role");
-                while (rs.next()) {
-                    list.add(rs.getString("name"));
-                }
+        try (Connection conn = SOURCE.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery("select * from role")) {
+            while (rs.next()) {
+                list.add(rs.getString("name"));
             }
         } catch (SQLException e) {
             LOG.error("Can't get roles", e);
@@ -89,8 +106,8 @@ public class DBStore implements Store<User> {
      * @param role New role.
      */
     public void addRole(String role) {
-        try (Connection conn = SOURCE.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("insert into role(name)values(?)");
+        try (Connection conn = SOURCE.getConnection();
+             PreparedStatement ps = conn.prepareStatement("insert into role(name)values(?)")) {
             ps.setString(1, role);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -104,9 +121,9 @@ public class DBStore implements Store<User> {
      */
     public List<String> getCountries() {
         List<String> rst = new ArrayList<>();
-        try (Connection conn = SOURCE.getConnection()) {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("select * from country");
+        try (Connection conn = SOURCE.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery("select * from country")) {
             while (rs.next()) {
                 rst.add(rs.getString("name"));
             }
@@ -121,8 +138,8 @@ public class DBStore implements Store<User> {
      * @param country New country.
      */
     public void addCountry(String country) {
-        try (Connection conn = SOURCE.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("insert into country(name)values(?)");
+        try (Connection conn = SOURCE.getConnection();
+             PreparedStatement ps = conn.prepareStatement("insert into country(name)values(?)")) {
             ps.setString(1, country);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -136,9 +153,9 @@ public class DBStore implements Store<User> {
      */
     public List<String> getAllCities() {
         List<String> rst = new ArrayList<>();
-        try (Connection conn = SOURCE.getConnection()) {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("select * from city");
+        try (Connection conn = SOURCE.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery("select * from city")) {
             while (rs.next()) {
                 rst.add(rs.getString("name"));
             }
@@ -155,16 +172,25 @@ public class DBStore implements Store<User> {
      */
     public List<String> getCitiesByCountry(String country) {
         List<String> rst = new ArrayList<>();
-        try (Connection conn = SOURCE.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("select * from city where country_id = "
-                    + "(select id from country where name = ?) ");
+        ResultSet rs = null;
+        try (Connection conn = SOURCE.getConnection();
+             PreparedStatement ps = conn.prepareStatement("select * from city where country_id = "
+                     + "(select id from country where name = ?) ")) {
             ps.setString(1, country);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             while (rs.next()) {
                 rst.add(rs.getString("name"));
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    LOG.error(e.getMessage(), e);
+                }
+            }
         }
         return rst;
     }
@@ -174,8 +200,8 @@ public class DBStore implements Store<User> {
      * @param city New city.
      */
     public void addCity(String city) {
-        try (Connection conn = SOURCE.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("insert into city(name)values(?)");
+        try (Connection conn = SOURCE.getConnection();
+             PreparedStatement ps = conn.prepareStatement("insert into city(name)values(?)")) {
             ps.setString(1, city);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -191,23 +217,21 @@ public class DBStore implements Store<User> {
     @Override
     public boolean add(User user) {
         boolean rst = false;
-        try (Connection conn = SOURCE.getConnection()) {
-            if (conn != null) {
-                PreparedStatement ps = conn.prepareStatement(
-                        "insert into users(name, email, login, password, create_date, role_id, country_id, city_id) "
-                                + "values (?, ?, ?, ?, ?, (select id from role where name = ?)"
-                                + ", (select id from country where name = ?), (select id from city where name = ?))");
-                ps.setString(1, user.getName());
-                ps.setString(2, user.getEmail());
-                ps.setString(3, user.getLogin());
-                ps.setString(4, user.getPassword());
-                ps.setTimestamp(5, Timestamp.valueOf(user.getCreateDate()));
-                ps.setString(6, user.getRole());
-                ps.setString(7, user.getCountry());
-                ps.setString(8, user.getCity());
-                ps.executeUpdate();
-                rst = true;
-            }
+        try (Connection conn = SOURCE.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                     "insert into users(name, email, login, password, create_date, role_id, country_id, city_id) "
+                             + "values (?, ?, ?, ?, ?, (select id from role where name = ?)"
+                             + ", (select id from country where name = ?), (select id from city where name = ?))")) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getLogin());
+            ps.setString(4, user.getPassword());
+            ps.setTimestamp(5, Timestamp.valueOf(user.getCreateDate()));
+            ps.setString(6, user.getRole());
+            ps.setString(7, user.getCountry());
+            ps.setString(8, user.getCity());
+            ps.executeUpdate();
+            rst = true;
         } catch (SQLException e) {
             LOG.error("Can't add an object", e);
         }
@@ -217,33 +241,26 @@ public class DBStore implements Store<User> {
     /**
      * Edit user parametres.
      * @param user User for edit.
-     * @param name User's name.
-     * @param email User's email.
-     * @param login User's login.
-     * @param password User's password.
-     * @param role User's role.
+     * @param newUser Data for user update.
      * @return true.
      */
     @Override
-    public boolean update(User user, String name, String email, String login,  String password, String country,
-                          String city, String role) {
-        try (Connection conn = SOURCE.getConnection()) {
-            if (conn != null) {
-                PreparedStatement ps = conn.prepareStatement(
-                        "update users set name = ?, email = ?, login = ?, password = ?"
-                                + ", country_id = (select id from country where name = ?)"
-                                + ", city_id = (select id from city where name = ?) "
-                                + ", role_id = (select id from role where name = ?) where id = ?");
-                ps.setString(1, name);
-                ps.setString(2, email);
-                ps.setString(3, login);
-                ps.setString(4, password);
-                ps.setString(5, country);
-                ps.setString(6, city);
-                ps.setString(7, role);
-                ps.setInt(8, user.getId());
-                ps.executeUpdate();
-            }
+    public boolean update(User user, User newUser) {
+        try (Connection conn = SOURCE.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                     "update users set name = ?, email = ?, login = ?, password = ?"
+                             + ", country_id = (select id from country where name = ?)"
+                             + ", city_id = (select id from city where name = ?) "
+                             + ", role_id = (select id from role where name = ?) where id = ?")) {
+            ps.setString(1, newUser.getName());
+            ps.setString(2, newUser.getEmail());
+            ps.setString(3, newUser.getLogin());
+            ps.setString(4, newUser.getPassword());
+            ps.setString(5, newUser.getCountry());
+            ps.setString(6, newUser.getCity());
+            ps.setString(7, newUser.getRole());
+            ps.setInt(8, user.getId());
+            ps.executeUpdate();
         } catch (SQLException e) {
             LOG.error("Can't update user", e);
         }
@@ -257,8 +274,8 @@ public class DBStore implements Store<User> {
      */
     @Override
     public boolean delete(User user) {
-        try  (Connection conn = SOURCE.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("delete from users where id = ?");
+        try  (Connection conn = SOURCE.getConnection();
+              PreparedStatement ps = conn.prepareStatement("delete from users where id = ?")) {
             ps.setInt(1, user.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -275,33 +292,39 @@ public class DBStore implements Store<User> {
     @Override
     public User findById(int id) {
         User user = null;
-        try (Connection conn = SOURCE.getConnection()) {
-            if (conn != null) {
-                PreparedStatement ps = conn.prepareStatement(
-                        "select u.id, u.name as u_name, email, login, password, r.name as r_name, co.name as co_name"
-                                + ", ci.name as ci_name from users as u, role as r, city as ci, country as co "
-                                + "where r.id = u.role_id and co.id = u.country_id and ci.id = u.city_id and u.id = ?");
-                ps.setInt(1, id);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    String name = rs.getString("u_name");
-                    String email = rs.getString("email");
-                    String login = rs.getString("login");
-                    String password = rs.getString("password");
-                    String country = rs.getString("co_name");
-                    String city = rs.getString("ci_name");
-                    String role = rs.getString("r_name");
-                    user = new User(name, email, login, password);
-                    user.setId(id);
-                    user.setCity(new City(city));
-                    user.setCountry(new Country(country));
-                    user.setRole(new Role(role));
-                }
+        ResultSet rs = null;
+        try (Connection conn = SOURCE.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                     "select u.id, u.name as u_name, email, login, password, r.name as r_name, co.name as co_name"
+                             + ", ci.name as ci_name from users as u, role as r, city as ci, country as co "
+                             + "where r.id = u.role_id and co.id = u.country_id and ci.id = u.city_id and u.id = ?")) {
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("u_name");
+                String email = rs.getString("email");
+                String login = rs.getString("login");
+                String password = rs.getString("password");
+                String country = rs.getString("co_name");
+                String city = rs.getString("ci_name");
+                String role = rs.getString("r_name");
+                user = new User(name, email, login, password);
+                user.setId(id);
+                user.setCity(new City(city));
+                user.setCountry(new Country(country));
+                user.setRole(new Role(role));
             }
         } catch (SQLException e) {
             LOG.error("Can't find user by id", e);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    LOG.error(e.getMessage(), e);
+                }
+            }
         }
-
         return user;
     }
 
@@ -312,30 +335,29 @@ public class DBStore implements Store<User> {
     @Override
     public List<User> findAll() {
         ArrayList<User> users = new ArrayList<>();
-        try (Connection conn = SOURCE.getConnection()) {
-            if (conn != null) {
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(
-                        "select u.id, u.name as u_name, email, login, password, r.name as r_name, co.name as co_name"
-                                + ", ci.name as ci_name from users as u, role as r, city as ci, country as co "
-                                + "where r.id = u.role_id and co.id = u.country_id and ci.id = u.city_id");
-                while (rs.next()) {
-                    int id = rs.getInt("id");
-                    String name = rs.getString("u_name");
-                    String email = rs.getString("email");
-                    String login = rs.getString("login");
-                    String password = rs.getString("password");
-                    String country = rs.getString("co_name");
-                    String city = rs.getString("ci_name");
-                    String role = rs.getString("r_name");
-                    User user = new User(name, email, login, password);
-                    user.setId(id);
-                    user.setCity(new City(city));
-                    user.setCountry(new Country(country));
-                    user.setRole(new Role(role));
-                    users.add(user);
-                }
+        try (Connection conn = SOURCE.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(
+                     "select u.id, u.name as u_name, email, login, password, r.name as r_name, co.name as co_name"
+                             + ", ci.name as ci_name from users as u, role as r, city as ci, country as co "
+                             + "where r.id = u.role_id and co.id = u.country_id and ci.id = u.city_id")) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("u_name");
+                String email = rs.getString("email");
+                String login = rs.getString("login");
+                String password = rs.getString("password");
+                String country = rs.getString("co_name");
+                String city = rs.getString("ci_name");
+                String role = rs.getString("r_name");
+                User user = new User(name, email, login, password);
+                user.setId(id);
+                user.setCity(new City(city));
+                user.setCountry(new Country(country));
+                user.setRole(new Role(role));
+                users.add(user);
             }
+
         } catch (SQLException e) {
             LOG.error("Can't get user list", e);
         }

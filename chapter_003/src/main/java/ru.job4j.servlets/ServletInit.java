@@ -1,5 +1,10 @@
 package ru.job4j.servlets;
 
+import liquibase.Liquibase;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.LiquibaseException;
+import liquibase.resource.ClassLoaderResourceAccessor;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -12,7 +17,7 @@ import java.util.List;
  */
 
 /*
- * Check and initialize SQL tables.
+ * Starts liquibase to init test tables.
  * Transfer user's roles as attribute to the context path.
  */
 public class ServletInit implements ServletContextListener {
@@ -21,7 +26,15 @@ public class ServletInit implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext sc = sce.getServletContext();
         DBStore store = DBStore.getInstance();
-        store.checkTable("tables.properties");
+//        store.checkTable("tables.properties");
+        JdbcConnection jdbcConnection = new JdbcConnection(DBStore.connection());
+        try {
+            Liquibase liquibase = new Liquibase(
+                    "liquibase/db-changelog-master.xml", new ClassLoaderResourceAccessor(), jdbcConnection);
+            liquibase.update("");
+        } catch (LiquibaseException e) {
+            e.printStackTrace();
+        }
         List<String> roles = store.getRoles();
         List<String> countries = store.getCountries();
         sc.setAttribute("roles", roles);

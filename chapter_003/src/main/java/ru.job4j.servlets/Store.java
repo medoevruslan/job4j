@@ -9,8 +9,7 @@ import java.util.List;
  */
 public interface Store<T> {
     boolean add(T t);
-    boolean update(T t, String name, String email, String login, String password,
-                   String country, String city, String role);
+    boolean update(T t, T n);
     boolean delete(T t);
     T findById(int id);
     List<T> findAll();

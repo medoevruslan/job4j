@@ -1,0 +1,77 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="insert_test_role" author="ruslan.m">
+        <insert tableName="role">
+            <column name="name" value="admin"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="user"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_test_country" author="ruslan.m">
+        <insert tableName="country">
+            <column name="name" value="Russia"/>
+        </insert>
+        <insert tableName="country">
+            <column name="name" value="Ukraine"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_test_city" author="ruslan.m">
+        <insert tableName="city">
+            <column name="name" value="Moscow"/>
+            <column name="country_id" value="1"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="SPB"/>
+            <column name="country_id" value="1"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Krasnodar"/>
+            <column name="country_id" value="1"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Perm"/>
+            <column name="country_id" value="1"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Kiev"/>
+            <column name="country_id" value="2"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Kharkov"/>
+            <column name="country_id" value="2"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Odessa"/>
+            <column name="country_id" value="2"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Nikolaev"/>
+            <column name="country_id" value="2"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_test_users" author="ruslan.m">
+        <insert tableName="users">
+            <column name="name" value="admin"/>
+            <column name="login" value="admin"/>
+            <column name="password" value="admin"/>
+            <column name="role_id" value="1"/>
+            <column name="country_id" value="1"/>
+            <column name="city_id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="tag-1.1" author="">
+        <tagDatabase tag="1.1"/>
+    </changeSet>
+
+</databaseChangeLog>

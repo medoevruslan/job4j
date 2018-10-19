@@ -57,7 +57,11 @@ public class ActionDispatch {
             String city = req.getParameter("city");
             String role = req.getParameter("role");
             User user = this.validate.findById(id);
-            return this.validate.update(user, name, email, login, password, country, city, role);
+            User newUser = new User(name, email, login, password);
+            newUser.setCountry(new Country(country));
+            newUser.setCity(new City(city));
+            newUser.setRole(new Role(role));
+            return this.validate.update(user, newUser);
         };
     }
 

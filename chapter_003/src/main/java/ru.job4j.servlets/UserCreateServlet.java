@@ -24,7 +24,7 @@ public class UserCreateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ActionDispatch dispatch = ActionDispatch.getInstance();
         dispatch.initialize();
         dispatch.execute(req);

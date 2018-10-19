@@ -33,19 +33,18 @@ public class ValidateStub implements Validate {
     }
 
     @Override
-    public boolean update(User user, String name, String email, String login,
-                          String password, String country, String city, String role) {
+    public boolean update(User user, User newUser) {
         for (int i = 0; i < this.users.size(); i++) {
             int id = user.getId();
             if (id == users.get(i).getId()) {
                 user.setId(id);
-                user.setName(name);
-                user.setEmail(email);
-                user.setLogin(login);
-                user.setPassword(password);
-                user.setCountry(new Country(country));
-                user.setCity(new City(city));
-                user.setRole(new Role(role));
+                user.setName(newUser.getName());
+                user.setEmail(newUser.getEmail());
+                user.setLogin(newUser.getLogin());
+                user.setPassword(newUser.getPassword());
+                user.setCountry(new Country(newUser.getCountry()));
+                user.setCity(new City(newUser.getCity()));
+                user.setRole(new Role(newUser.getRole()));
                 users.set(i, user);
                 break;
             }

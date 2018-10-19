@@ -1,0 +1,67 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="create_role" author="ruslan.m">
+        <createTable tableName="role">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(20)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_country" author="ruslan.m">
+        <createTable tableName="country">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(30)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_city" author="ruslan.m">
+        <createTable tableName="city">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(20)"/>
+            <column name="country_id" type="int">
+                <constraints foreignKeyName="fk_city_country" references="country(id)" nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_users" author="ruslan.m">
+        <createTable tableName="users">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(20)"/>
+            <column name="email" type="varchar(20)"/>
+            <column name="login" type="varchar(20)">
+                <constraints unique="true"/>
+            </column>
+            <column name="password" type="varchar(30)"/>
+            <column name="create_date" type="timestamp"/>
+            <column name="role_id" type="int">
+                <constraints foreignKeyName="fk_user_role" references="role(id)" nullable="false"/>
+            </column>
+            <column name="country_id" type="int">
+                <constraints foreignKeyName="fk_users_country_id" references="country(id)" nullable="false"/>
+            </column>
+            <column name="city_id" type="int">
+                <constraints foreignKeyName="fk_users_city_id" references="city(id)" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="tag-1.0" author="ruslan.m">
+        <tagDatabase tag="1.0"/>
+    </changeSet>
+
+</databaseChangeLog>

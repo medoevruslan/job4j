@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+    <title>OrderPage</title>
+    <script>
+
+        var params = new URLSearchParams(window.location.search);
+
+        $(document).ready(function () {
+            var price = params.get('price');
+            var seat = params.get('seat');
+            $('#choose').text('You have chosen ' + seat + '. Total sum is ' + price + ' RUB');
+        });
+
+        $(document).ready(function () {
+            $('#form').validate ({
+                rules: {
+                    fname: "required",
+                    lname: "required",
+                    phone: {
+                        required: true,
+                        digits: true
+                    }
+                }
+            });
+        });
+
+        function buy() {
+            var v = $('#form').valid();
+            if(v) {
+                var accId = storeAccount();
+                linkToSeat(accId);
+                window.location = 'index.html';
+            }
+        }
+
+        function storeAccount() {
+            var accountId;
+            var account = new Object();
+            account.lastName = $('#lastName').val();
+            account.middleName = $('#middleName').val();
+            account.firstName = $('#firstName').val();
+            account.phoneNumber = $('#phone').val();
+            $.ajax({
+                async: false,
+                url: 'hall',
+                type: 'post',
+                dataType: 'text/plain',
+                contentType: 'text/plain',
+                data: JSON.stringify(account),
+                complete: function (data) {
+                    accountId = data.responseText;
+                }
+            });
+            return accountId;
+        }
+
+        function linkToSeat(accountId) {
+            var seatId = params.get("id");
+            $.ajax({
+                url: 'hall',
+                type: 'post',
+                dataType: 'text/plain',
+                data: ({accId: accountId, seatId: seatId})
+            });
+        }
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="row pt-3">
+    </div>
+    <div class="row">
+        <form class="form-group" id="form">
+            <div class="form-group">
+                <label for="firstName">First name</label>
+                <input type="text" class="form-control" name="fname" id="firstName" placeholder="first name...">
+            </div>
+            <div class="form-group">
+                <label for="middleName">Middle name</label>
+                <input type="text" class="form-control" name="mname" id="middleName" placeholder="middle name...">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last name</label>
+                <input type="text" class="form-control" name="lname" id="lastName" placeholder="last name...">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text" class="form-control" name="phone" id="phone" placeholder="phone...">
+            </div>
+            <button type="button" class="btn btn-success" onclick="buy();">Buy</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

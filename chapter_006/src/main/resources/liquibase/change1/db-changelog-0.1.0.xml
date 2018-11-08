@@ -1,0 +1,53 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="create_accounts" author="ruslan.m">
+      <createTable tableName="accounts">
+          <column name="id" type="int" autoIncrement="true">
+              <constraints primaryKey="true"/>
+          </column>
+          <column name="last_name" type="varchar(30)"/>
+          <column name="middle_name" type="varchar(30)"/>
+          <column name="first_name" type="varchar(30)"/>
+          <column name="phone" type="int"/>
+      </createTable>
+  </changeSet>
+
+    <changeSet id="create_halls" author="ruslan.m">
+      <createTable tableName="halls">
+          <column name="id" type="int" autoIncrement="true">
+              <constraints primaryKey="true"/>
+          </column>
+          <column name="name" type="varchar(50)"/>
+          <column name="rows" type="int"/>
+          <column name="seats" type="int"/>
+      </createTable>
+    </changeSet>
+
+    <changeSet id="create_seats" author="ruslan.m">
+      <createTable tableName="seats">
+          <column name="id" type="int" autoIncrement="true">
+              <constraints primaryKey="true"/>
+          </column>
+          <column name="name" type="varchar(10)"/>
+          <column name="row" type="int"/>
+          <column name="number" type="int"/>
+          <column name="price" type="int"/>
+          <column name="hall_id" type="int">
+              <constraints foreignKeyName="fk_seat_hall" references="halls(id)" nullable="false"/>
+          </column>
+          <column name="account_id" type="int">
+              <constraints foreignKeyName="fk_seat_account" references="accounts(id)" unique="true"/>
+          </column>
+      </createTable>
+    </changeSet>
+
+    <changeSet id="tag-1.0" author="">
+        <tagDatabase tag="1.0"/>
+    </changeSet>
+
+</databaseChangeLog>

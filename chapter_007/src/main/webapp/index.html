@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create new task</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            loadTasks();
+        });
+
+        function loadTasks() {
+            $.ajax({
+                url: 'tasks',
+                type: $('#showAll').is(':checked') ? 'get' : 'post',
+                dataType: 'json',
+                complete: function (data) {
+                    var tasks = JSON.parse(data.responseText);
+                    tasks.forEach(function (task) {
+                        fillTable(task)
+                    })
+                }
+            });
+        }
+
+        function fillTable(task) {
+            $('#table tbody').append(
+                '<tr><td>' + task.desc + '</td>'
+                + '<td>' + task.created + '</td>'
+                + '<td></td></tr>');
+            appendCheckbox(task);
+        }
+
+        function appendCheckbox(task) {
+            $('<input>', {
+                type: 'checkbox',
+                name: 'checkDone',
+                id: task.id,
+                checked: task.done
+            }).appendTo('#table tbody tr td:last');
+        }
+
+        $(document).on('change', '#showAll', function () {
+            $('#table tbody').empty();
+            loadTasks();
+        });
+
+        $(document).on('change', 'input[name=checkDone]', function () {
+            var taskId = $(this).attr('id');
+            $.ajax({
+                url: 'update',
+                type: 'get',
+                contentType: 'text/html',
+                data: ({taskId: taskId, taskDone: $(this).is(':checked')})
+            });
+        });
+
+        function create() {
+            if ($('#descr').val() !== '') {
+                var desc = $('#descr').val();
+                $.ajax({
+                    url: 'create',
+                    type: 'get',
+                    contentType: 'text/html',
+                    data: ({description: desc}),
+                    complete: function () {
+                        $('#table tbody').empty();
+                        $('#descr').attr('placeholder', 'write a description...').val('');
+                        loadTasks();
+                    }
+                });
+            } else {
+                $('#descr').attr('placeholder', 'please write a description of a task');
+            }
+        }
+
+    </script>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row form-group">
+        <div class="col-md-4">
+            <br>
+            <textarea class="form-control required" name="descr" id="descr"
+                      placeholder="write a description..."></textarea>
+            <br>
+            <button type="button" class="btn btn-success" style="margin-bottom: 10px" onclick="create();">Create</button>
+        </div>
+        <br>
+        <div class="col-md-8">
+            <table class="table table-bordered form-group" id="table">
+                <thead>
+                <tr class="active">
+                    <th>Description
+                        <span style="float: right">show all <input type="checkbox" name="showSwitch" id="showAll"></span>
+                    </th>
+                    <th class="col-md-3">Created</th>
+                    <th class="col-md-1">Done</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

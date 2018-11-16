@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+
+    <listener>
+        <listener-class>ru.job4j.todolist.controller.Init</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>log4jConfig</param-name>
+        <param-value>log4j.properties</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>TasksServlet</servlet-name>
+        <servlet-class>ru.job4j.todolist.controller.Tasks</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TasksServlet</servlet-name>
+        <url-pattern>/tasks</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CreateServlet</servlet-name>
+        <servlet-class>ru.job4j.todolist.controller.Create</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateServlet</servlet-name>
+        <url-pattern>/create</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UpdateServlet</servlet-name>
+        <servlet-class>ru.job4j.todolist.controller.Update</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateServlet</servlet-name>
+        <url-pattern>/update</url-pattern>
+    </servlet-mapping>
+</web-app>

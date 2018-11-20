@@ -7,6 +7,8 @@ import ru.job4j.todolist.persistent.HibernateUtil;
 import ru.job4j.todolist.persistent.ItemRepository;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Implementation of ItemRepository.
@@ -20,11 +22,7 @@ public class ItemManager implements ItemRepository {
      */
     @Override
     public void add(Item item) {
-        Session session = this.factory.openSession();
-        session.beginTransaction();
-        session.save(item);
-        session.getTransaction().commit();
-        session.close();
+        this.tx(session -> session.save(item));
     }
 
     /**
@@ -33,12 +31,10 @@ public class ItemManager implements ItemRepository {
      */
     @Override
     public void update(Item item) {
-        Session session = this.factory.openSession();
-        session.beginTransaction();
-        Item it = session.load(Item.class, item.getId());
-        it.setDone(item.isDone());
-        session.getTransaction().commit();
-        session.close();
+        this.tx(session -> {
+            Item it = session.load(Item.class, item.getId());
+            it.setDone(item.isDone());
+        });
     }
 
     /**
@@ -47,11 +43,7 @@ public class ItemManager implements ItemRepository {
      */
     @Override
     public void delete(Item item) {
-        Session session = this.factory.openSession();
-        session.beginTransaction();
-        session.delete(item);
-        session.getTransaction().commit();
-        session.close();
+        this.tx(session -> session.delete(item));
     }
 
     /**
@@ -60,12 +52,8 @@ public class ItemManager implements ItemRepository {
      */
     @Override
     public List<Item> findAll() {
-        Session session = this.factory.openSession();
-        session.beginTransaction();
-        List<Item> result = session.createQuery("from Item").list();
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        return this.getItems(
+                session -> session.createQuery("from Item ").list());
     }
 
     /**
@@ -74,11 +62,35 @@ public class ItemManager implements ItemRepository {
      */
     @Override
     public List<Item> findUndone() {
-        Session session = this.factory.openSession();
+        return this.getItems(
+                session -> session.createQuery("from Item where done = false ").list());
+    }
+
+    private <T> T getItems(final Function<Session, T> command) {
+        final Session session = this.factory.openSession();
         session.beginTransaction();
-        List<Item> result = session.createQuery("from Item where done = false ").list();
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        try {
+            return command.apply(session);
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.getTransaction().commit();
+            session.close();
+        }
+    }
+
+    private void tx(final Consumer<Session> command) {
+        final Session session = this.factory.openSession();
+        session.beginTransaction();
+        try {
+            command.accept(session);
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.getTransaction().commit();
+            session.close();
+        }
     }
 }

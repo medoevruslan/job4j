@@ -1,6 +1,5 @@
 package ru.job4j.todolist.controller;
 
-import ru.job4j.todolist.FindUtil;
 import ru.job4j.todolist.service.ItemService;
 
 import javax.servlet.ServletException;
@@ -13,14 +12,15 @@ import java.io.IOException;
  * Servlet which fetch items from database.
  */
 public class Tasks extends HttpServlet {
+    private final ItemService service = ItemService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        FindUtil.getInstance().findItems(resp, () -> ItemService.getInstance().findAll());
+       service.findItems(resp, service::findAll);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        FindUtil.getInstance().findItems(resp, () -> ItemService.getInstance().findUndone());
+        service.findItems(resp, service::findUndone);
     }
 }

@@ -1,0 +1,18 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ru.job4j.carstore.model.Car" table="cars">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <many-to-one name="body"
+                     column="body_id"
+                     class="ru.job4j.carstore.model.Body"/>
+        <many-to-one name="engine"
+                     column="engine_id"
+                     class="ru.job4j.carstore.model.Engine"/>
+        <many-to-one name="transmission"
+                     column="transmission_id"
+                     class="ru.job4j.carstore.model.Transmission"/>
+    </class>
+</hibernate-mapping>

@@ -21,13 +21,14 @@ public class SeatManager implements SeatDAO {
     private static final Logger LOG = Logger.getLogger(SeatManager.class);
 
     /**
-     * Method adds model to database.
+     * Method adds entity to database.
      * @param model Model to add.
-     * @return Id of added model.
+     * @return Id of added entity.
      */
     @Override
     public int add(Seat model) {
         int result = -1;
+        ResultSet rset = null;
         try (Connection conn = DataBase.getInstance().getConnetion();
              AutoRollback rollback = new AutoRollback(conn);
              PreparedStatement statement = conn.prepareStatement(Query.ADD.query)) {
@@ -36,14 +37,15 @@ public class SeatManager implements SeatDAO {
             statement.setInt(3, model.getSeatNum());
             statement.setInt(4, model.getPrice());
             statement.setInt(5, model.getAccountId());
-            ResultSet rset = statement.executeQuery();
+            rset = statement.executeQuery();
             while (rset.next()) {
                 result = rset.getInt("id");
             }
-            this.closeRSet(rset);
             rollback.commit();
         } catch (SQLException e) {
             LOG.error("Can't add seat", e);
+        } finally {
+            this.closeRSet(rset);
         }
         return result;
     }
@@ -82,7 +84,7 @@ public class SeatManager implements SeatDAO {
     }
 
     /**
-     * Updates the model.
+     * Updates the entity.
      * @param model Model to update.
      * @return Result of update (true or false).
      */
@@ -104,7 +106,7 @@ public class SeatManager implements SeatDAO {
     }
 
     /**
-     * Removes the model from database.
+     * Removes the entity from database.
      * @param model Model to remove.
      * @return Result of remove (true or false).
      */
@@ -131,11 +133,12 @@ public class SeatManager implements SeatDAO {
     @Override
     public Optional<Account> findAccountBySeat(Seat seat) {
         Optional<Account> result = Optional.empty();
+        ResultSet rset = null;
         try (Connection conn = DataBase.getInstance().getConnetion();
-            AutoRollback rollback = new AutoRollback(conn);
-            PreparedStatement statement = conn.prepareStatement(Query.FIND_BY_SEAT.query)) {
+             AutoRollback rollback = new AutoRollback(conn);
+             PreparedStatement statement = conn.prepareStatement(Query.FIND_BY_SEAT.query)) {
             statement.setInt(1, seat.getId());
-            ResultSet rset = statement.executeQuery();
+            rset = statement.executeQuery();
             while (rset.next()) {
                 int id = rset.getInt("id");
                 String lastName = rset.getString("last_name");
@@ -148,23 +151,26 @@ public class SeatManager implements SeatDAO {
             }
         } catch (SQLException e) {
             LOG.error("Can't get account by seat", e);
+        } finally {
+            this.closeRSet(rset);
         }
         return result;
     }
 
     /**
-     * Finds the model by id.
-     * @param id Id to find the model.
+     * Finds the entity by id.
+     * @param id Id to find the entity.
      * @return Model.
      */
     @Override
     public Optional<Seat> findById(int id) {
         Optional<Seat> result = Optional.empty();
+        ResultSet rset = null;
         try (Connection conn = DataBase.getInstance().getConnetion();
              AutoRollback rollback = new AutoRollback(conn);
              PreparedStatement statement = conn.prepareStatement(Query.FIND_BY_ID.query)) {
             statement.setInt(1, id);
-            ResultSet rset = statement.executeQuery();
+            rset = statement.executeQuery();
             while (rset.next()) {
                 int row = rset.getInt("row");
                 int number = rset.getInt("number");
@@ -180,6 +186,8 @@ public class SeatManager implements SeatDAO {
             rollback.commit();
         } catch (SQLException e) {
             LOG.error("Can't find seat by id", e);
+        } finally {
+            this.closeRSet(rset);
         }
         return result;
     }

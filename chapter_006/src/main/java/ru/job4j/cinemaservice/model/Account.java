@@ -1,7 +1,7 @@
 package ru.job4j.cinemaservice.model;
 
 /**
- * Account model.
+ * Account entity.
  */
 public class Account extends Model {
    private String firstName;

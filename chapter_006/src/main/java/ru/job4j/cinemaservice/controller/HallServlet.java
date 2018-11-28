@@ -1,5 +1,4 @@
 package ru.job4j.cinemaservice.controller;
-
 import ru.job4j.cinemaservice.model.Account;
 import ru.job4j.cinemaservice.model.Seat;
 import ru.job4j.cinemaservice.service.AccountService;
@@ -7,7 +6,6 @@ import ru.job4j.cinemaservice.service.SeatService;
 import ru.job4j.cinemaservice.utils.ActionDispatcher;
 import ru.job4j.cinemaservice.utils.StaticMapper;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +28,7 @@ public class HallServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String accId = req.getParameter("accId");
         String seatId = req.getParameter("seatId");
         if (accId == null) {

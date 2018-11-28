@@ -1,7 +1,7 @@
 package ru.job4j.cinemaservice.model;
 
 /**
- * Seat model.
+ * Seat entity.
  */
 public class Seat extends Model {
     private int accountId;

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Account DAO.
@@ -19,13 +20,14 @@ public class AccountManager implements AccountDAO {
     private static final Logger LOG = Logger.getLogger(AccountManager.class);
 
     /**
-     * Method adds model to database.
+     * Method adds entity to database.
      * @param model Model to add.
-     * @return Id of added model.
+     * @return Id of added entity.
      */
     @Override
     public int add(Account model) {
         int id = -1;
+        ResultSet rset = null;
         try (Connection conn = DataBase.getInstance().getConnetion();
              AutoRollback rollback = new AutoRollback(conn);
              PreparedStatement statement = conn.prepareStatement(Query.ADD.query)) {
@@ -33,20 +35,18 @@ public class AccountManager implements AccountDAO {
             statement.setString(2, model.getMiddleName());
             statement.setString(3, model.getFirstName());
             statement.setInt(4, model.getPhoneNumber());
-            ResultSet rset = statement.executeQuery();
+            rset = statement.executeQuery();
             while (rset.next()) {
                 id = rset.getInt("id");
             }
-            rollback.commit();
-            this.closeRSet(rset);
         } catch (SQLException e) {
-            LOG.error("Can't add account", e);
+            LOG.error("Can't add model", e);
         }
         return id;
     }
 
     /**
-     * Updates the model.
+     * Updates the entity.
      * @param model Model to update.
      * @return Result of update (true or false).
      */
@@ -70,7 +70,7 @@ public class AccountManager implements AccountDAO {
     }
 
     /**
-     * Removes the model from database.
+     * Removes the entity from database.
      * @param model Model to remove.
      * @return Result of remove (true or false).
      */
@@ -90,18 +90,19 @@ public class AccountManager implements AccountDAO {
     }
 
     /**
-     * Finds the model by id.
-     * @param id Id to find the model.
+     * Finds the entity by id.
+     * @param id Id to find the entity.
      * @return Model.
      */
     @Override
     public Optional<Account> findById(int id) {
         Optional<Account> result = Optional.empty();
+        ResultSet rset = null;
         try (Connection conn = DataBase.getInstance().getConnetion();
              AutoRollback rollback = new AutoRollback(conn);
              PreparedStatement statement = conn.prepareStatement(Query.FIND_BY_ID.query)) {
             statement.setInt(1, id);
-            ResultSet rset = statement.executeQuery();
+            rset = statement.executeQuery();
             while (rset.next()) {
                 result = Optional.of(this.constructAccount(rset));
             }
@@ -109,6 +110,8 @@ public class AccountManager implements AccountDAO {
             this.closeRSet(rset);
         } catch (SQLException e) {
             LOG.error("Can't find account by id", e);
+        } finally {
+            this.closeRSet(rset);
         }
         return result;
     }
@@ -136,8 +139,8 @@ public class AccountManager implements AccountDAO {
     }
 
     /**
-     * Helps construct the model by given ResultSet.
-     * @param rset ResultSet to build the model.
+     * Helps construct the entity by given ResultSet.
+     * @param rset ResultSet to build the entity.
      * @return Model.
      * @throws SQLException SQLException.
      */

@@ -1,7 +1,7 @@
 package ru.job4j.cinemaservice.model;
 
 /**
- * Hall model.
+ * Hall entity.
  */
 public class Hall extends Model {
     private int seats;

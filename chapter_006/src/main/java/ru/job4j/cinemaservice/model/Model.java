@@ -1,7 +1,7 @@
 package ru.job4j.cinemaservice.model;
 
 /**
- * Abstract model.
+ * Abstract entity.
  */
 public abstract class Model {
     private int id;

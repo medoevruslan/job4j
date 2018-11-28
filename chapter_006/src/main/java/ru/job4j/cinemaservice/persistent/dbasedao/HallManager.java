@@ -18,27 +18,29 @@ public class HallManager implements HallDAO {
     private static final Logger LOG = Logger.getLogger(HallManager.class);
 
     /**
-     * Method adds model to database.
+     * Method adds entity to database.
      * @param model Model to add.
-     * @return Id of added model.
+     * @return Id of added entity.
      */
     @Override
     public int add(Hall model) {
         int id = -1;
+        ResultSet rset = null;
         try (Connection conn = DataBase.getInstance().getConnetion();
              AutoRollback rollback = new AutoRollback(conn);
              PreparedStatement statement = conn.prepareStatement(Query.ADD.query)) {
             statement.setString(1, model.getName());
             statement.setInt(2, model.getRows());
             statement.setInt(3, model.getSeats());
-            ResultSet rset = statement.executeQuery();
+            rset = statement.executeQuery();
             while (rset.next()) {
                 id = rset.getInt("id");
             }
             rollback.commit();
-            this.closeRSet(rset);
         } catch (SQLException e) {
             LOG.error("Can't add hall", e);
+        } finally {
+            this.closeRSet(rset);
         }
         return id;
     }
@@ -56,7 +58,7 @@ public class HallManager implements HallDAO {
     }
 
     /**
-     * Updates the model.
+     * Updates the entity.
      * @param model Model to update.
      * @return Result of update (true or false).
      */
@@ -77,7 +79,7 @@ public class HallManager implements HallDAO {
     }
 
     /**
-     * Removes the model from database.
+     * Removes the entity from database.
      * @param model Model to remove.
      * @return Result of remove (true or false).
      */
@@ -97,26 +99,28 @@ public class HallManager implements HallDAO {
     }
 
     /**
-     * Finds the model by id.
-     * @param id Id to find the model.
+     * Finds the entity by id.
+     * @param id Id to find the entity.
      * @return Model.
      */
     @Override
     public Optional<Hall> findById(int id) {
         Optional<Hall> result = Optional.empty();
+        ResultSet rset = null;
         try (Connection conn = DataBase.getInstance().getConnetion();
              AutoRollback rollback = new AutoRollback(conn);
              PreparedStatement statement = conn.prepareStatement(Query.FIND_BY_ID.query)) {
             statement.setInt(1, id);
-            ResultSet rset = statement.executeQuery();
+            rset = statement.executeQuery();
             while (rset.next()) {
                 String name = rset.getString("name");
                 result = Optional.of(new Hall(id, name));
             }
             rollback.commit();
-            this.closeRSet(rset);
         } catch (SQLException e) {
             LOG.error("Can't find hall by id ", e);
+        } finally {
+            this.closeRSet(rset);
         }
         return result;
     }
@@ -155,11 +159,12 @@ public class HallManager implements HallDAO {
      */
     private ArrayList<Seat> getSeatsByRow(int row) {
         ArrayList<Seat> result = new ArrayList<>();
+        ResultSet rset = null;
         try (Connection conn = DataBase.getInstance().getConnetion();
              AutoRollback rollback = new AutoRollback(conn);
              PreparedStatement statement = conn.prepareStatement(Query.GET_SEATS_BY_ROW.query)) {
             statement.setInt(1, row);
-            ResultSet rset = statement.executeQuery();
+             rset = statement.executeQuery();
             while (rset.next()) {
                 int id = rset.getInt("id");
                 int number = rset.getInt("number");
@@ -171,10 +176,11 @@ public class HallManager implements HallDAO {
                 seat.setAccountId(rset.getInt("account_id"));
                 result.add(seat);
             }
-            this.closeRSet(rset);
             rollback.commit();
         } catch (SQLException e) {
             LOG.error("Can't get seats by hall", e);
+        } finally {
+            this.closeRSet(rset);
         }
         return result;
     }

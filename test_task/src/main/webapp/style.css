@@ -1,0 +1,69 @@
+body {
+    font-family: "Times New Roman", sans-serif;
+}
+
+button {
+    width: 25em;
+    height: 2em;
+    border-radius: 10px;
+    border: 0;
+}
+
+button.greeting-btn {
+    margin: auto;
+}
+
+button:hover {
+    background: darkgray;
+}
+
+input {
+    width: 70%;
+    border: 0;
+    border-radius: 5px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.greeting {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    background: #DDDDDD;
+    border-radius: 10px;
+    border: #B3B3B3 solid 1px;
+    padding: 10px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form {
+    width: 50%;
+    background: #DDDDDD;
+    border-radius: 10px;
+    border: #B3B3B3 solid 1px;
+}
+
+#form {
+    padding: 30px;
+    text-align: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+
+
+
+
+
+

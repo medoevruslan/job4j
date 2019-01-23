@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<script>
+
+    var params = new URLSearchParams(window.location.search);
+
+    $(document).ready(function () {
+        var login = params.get('login');
+        if (login == null) {
+            $.ajax({
+                async: false,
+                url: 'userdata',
+                type: 'get',
+                dataType: 'text/plain',
+                complete: function (data) {
+                   login = data.responseText;
+               }
+            });
+        }
+        $('#login').text(login);
+    });
+
+    function logOut() {
+        $.ajax({
+            url: 'logout',
+            type: 'get',
+            success: function () {
+                window.location = 'login.html';
+            }
+        });
+    }
+
+</script>
+<body>
+
+<div class="container">
+    <div class="greeting">
+        <h1>Hello, <span id="login"></span></h1>
+        <button class="greeting-btn" type="button" onclick="logOut();">Logout</button>
+    </div>
+</div>
+
+</body>
+</html>

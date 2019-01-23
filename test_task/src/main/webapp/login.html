@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Login page</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+</head>
+<script>
+
+    $(document).ready(function () {
+        $('#form').validate({
+            rules: {
+                login: 'required',
+                password: 'required'
+            }
+        })
+    });
+
+    function getUserCredentials() {
+        return {login: $('#login').val(),
+            password: $('#password').val(),
+            remember: $('#remember').is(':checked')};
+    }
+
+    function logIn() {
+        if ($('#form').valid()) {
+            var user = getUserCredentials();
+            $.ajax({
+                url: 'login',
+                type: 'post',
+                dataType: 'text/plain',
+                data: ({
+                    login: user.login,
+                    password: user.password,
+                    remember: user.remember
+                }),
+                complete: function (data) {
+                    var response = data.responseText;
+                    if (response === 'false') {
+                        $('#msq').text('Login or password is incorrect')
+                    } else {
+                        window.location = 'index.html?login=' + user.login;
+                    }
+                }
+            });
+        }
+    }
+
+    function register() {
+        if ($('#form').valid()) {
+            var user = getUserCredentials();
+            $.ajax({
+                url: 'register',
+                type: 'post',
+                dataType: 'text/plain',
+                data: ({
+                    login: user.login,
+                    password: user.password
+                }),
+                complete: function (data) {
+                    var response = data.responseText;
+                    if (response === 'true') {
+                        $('#msq').text('Login is already exist');
+                    } else {
+                        window.location = 'index.html?login=' + user.login;
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+<body>
+<div class="container">
+    <div class="login-form">
+        <form id="form">
+            <p><label for="login">Login</label></p>
+            <p><label for="login" class="error" style="color: red"></label></p>
+            <p><input type="text" name="login" id="login"></p>
+            <p><label for="password">Password</label></p>
+            <p><label for="password" class="error" style="color: red"></label></p>
+            <p><input type="password" name="password" id="password"></p>
+            <p id="msq" style="color: red"></p>
+            <div class="buttons">
+                <p><button type="button" onclick="logIn();">SignIn</button></p>
+                <p><button type="button" onclick="register();">Register</button></p>
+            </div>
+            <p><label for="remember">Remember me<input type="checkbox" name="remember" id="remember"></label></p>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

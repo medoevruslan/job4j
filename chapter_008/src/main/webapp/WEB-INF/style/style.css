@@ -1,0 +1,55 @@
+.container {
+    display: flex;
+    margin-top: 50px;
+}
+
+.work-space {
+    display: flex;
+    flex-direction: row;
+    background: #f6f6f6;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    width: 100%;
+    margin: 30px;
+}
+
+.fields {
+    margin: 30px;
+    width: 100%;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 200px 0.7fr;
+    grid-gap: 15px;
+}
+
+form .save-btn {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+form .upload {
+    grid-column: 2;
+}
+
+form .errorSize {
+    grid-column: 2;
+    color: red;
+}
+
+label {
+    font-family: "Times New Roman", sans-serif;
+}
+
+#sel-manufact, #sel-model, #sel-body, #sel-transmission, #engine {
+    width: 200px;
+}
+
+input.price {
+    width: 100px;
+}
+
+input, textarea {
+    border-radius: 5px;
+}

@@ -1,0 +1,137 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="create_users" author="ruslan.m">
+        <sql>
+          CREATE TABLE users (
+            id SERIAL PRIMARY KEY ,
+            login VARCHAR(30),
+            password VARCHAR(20),
+            email VARCHAR(20)
+          );
+        </sql>
+        <rollback>
+            DROP TABLE users CASCADE;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_engines" author="ruslan.m">
+        <sql>
+            CREATE TABLE engines (
+            id SERIAL PRIMARY KEY,
+            capacity FLOAT
+            );
+        </sql>
+        <rollback>
+            DROP TABLE engines CASCADE;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_transmissions" author="ruslan.m">
+        <sql>
+            CREATE TABLE transmissions (
+            id SERIAL PRIMARY KEY,
+            type VARCHAR(10)
+            );
+        </sql>
+        <rollback>
+            DROP TABLE transmissions CASCADE;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_bodies" author="ruslan.m">
+        <sql>
+            CREATE TABLE bodies (
+            id SERIAL PRIMARY KEY,
+            type VARCHAR(20)
+            );
+        </sql>
+        <rollback>
+            DROP TABLE bodies;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_manufacturers" author="ruslan.m">
+        <sql>
+            CREATE TABLE manufacturers (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(30)
+            );
+        </sql>
+        <rollback>
+            DROP TABLE manufacturers CASCADE;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_models" author="ruslan.m">
+        <sql>
+            CREATE TABLE models (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(30),
+            manufacturer_id INT REFERENCES manufacturers(id)
+            );
+        </sql>
+        <rollback>
+            DROP TABLE models CASCADE;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_cars" author="ruslan.m">
+        <sql>
+            CREATE TABLE cars (
+            id SERIAL PRIMARY KEY,
+            manufacturer VARCHAR(100),
+            model VARCHAR(100),
+            engine VARCHAR(30),
+            transmission VARCHAR(30),
+            body VARCHAR(30)
+            );
+        </sql>
+        <rollback>
+            DROP TABLE cars CASCADE;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_items" author="ruslan.m">
+        <sql>
+            CREATE TABLE items (
+            id SERIAL PRIMARY KEY ,
+            header VARCHAR(100),
+            description TEXT,
+            price INT,
+            sold BOOL,
+            created TIMESTAMP,
+            user_id INT REFERENCES users(id),
+            car_id INT REFERENCES cars(id)
+            );
+        </sql>
+        <rollback>
+            DROP TABLE items CASCADE;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_images" author="ruslan.m">
+        <sql>
+            CREATE TABLE images (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(30),
+            path VARCHAR(255),
+            item_id INT REFERENCES items(id)
+            );
+        </sql>
+        <rollback>
+            DROP TABLE images CASCADE;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="tag-1.0" author="ruslan.m">
+        <tagDatabase tag="1.0"/>
+    </changeSet>
+
+</databaseChangeLog>
+
+

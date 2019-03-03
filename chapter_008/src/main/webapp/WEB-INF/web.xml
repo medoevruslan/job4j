@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+    
+    <listener>
+        <listener-class>ru.job4j.carstore.controller.InitServlet</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>log4j</param-name>
+        <param-value>/WEB-INF/resources/log4j.properties</param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>Auth</filter-name>
+        <filter-class>ru.job4j.carstore.controller.Authentication</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Auth</filter-name>
+        <url-pattern>/secure/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>ManufacturerLoader</filter-name>
+        <filter-class>ru.job4j.carstore.controller.CreateItemLoader</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ManufacturerLoader</filter-name>
+        <url-pattern>/newItem</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>MultipartFilter</filter-name>
+        <filter-class>ru.job4j.carstore.controller.MultipartFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>MultipartFilter</filter-name>
+        <url-pattern>/newItem</url-pattern>
+    </filter-mapping>
+
+
+    <servlet>
+        <servlet-name>MainPage</servlet-name>
+        <servlet-class>ru.job4j.carstore.controller.MainPage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MainPage</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ImageServlet</servlet-name>
+        <servlet-class>ru.job4j.carstore.controller.Image</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ImageServlet</servlet-name>
+        <url-pattern>/images/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CheckAuth</servlet-name>
+        <servlet-class>ru.job4j.carstore.controller.CheckAuth</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CheckAuth</servlet-name>
+        <url-pattern>/checkAuth</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CreateUser</servlet-name>
+        <servlet-class>ru.job4j.carstore.controller.UserCreate</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateUser</servlet-name>
+        <url-pattern>/create</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SigniIn</servlet-name>
+        <servlet-class>ru.job4j.carstore.controller.SignIn</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SigniIn</servlet-name>
+        <url-pattern>/signIn</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>ru.job4j.carstore.controller.Logout</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Profile</servlet-name>
+        <servlet-class>ru.job4j.carstore.controller.Profile</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Profile</servlet-name>
+        <url-pattern>/secure/profile</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CreateItem</servlet-name>
+        <servlet-class>ru.job4j.carstore.controller.ItemCreate</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateItem</servlet-name>
+        <url-pattern>/newItem</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UpdateItem</servlet-name>
+        <servlet-class>ru.job4j.carstore.controller.ItemUpdate</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateItem</servlet-name>
+        <url-pattern>/updateItem</url-pattern>
+    </servlet-mapping>
+
+</web-app>

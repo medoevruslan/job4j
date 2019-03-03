@@ -1,10 +1,12 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="entity">
-    <class name="ru.job4j.carstore.entity.Engine" table="engines">
+    <class name="ru.job4j.carstore.entity.User" table="users">
         <id name="id" column="id">
             <generator class="identity"/>
         </id>
-        <property name="capacity" column="capacity"/>
+        <property name="login" column="login"/>
+        <property name="password" column="password"/>
+        <property name="email" column="email"/>
     </class>
 </hibernate-mapping>

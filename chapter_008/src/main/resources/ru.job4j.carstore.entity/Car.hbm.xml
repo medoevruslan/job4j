@@ -5,17 +5,10 @@
         <id name="id" column="id">
             <generator class="identity"/>
         </id>
-        <many-to-one name="manufacturer"
-                     column="manufacturer_id"
-                     class="ru.job4j.carstore.entity.Manufacturer"/>
-        <many-to-one name="body"
-                     column="body_id"
-                     class="ru.job4j.carstore.entity.Body"/>
-        <many-to-one name="engine"
-                     column="engine_id"
-                     class="ru.job4j.carstore.entity.Engine"/>
-        <many-to-one name="transmission"
-                     column="transmission_id"
-                     class="ru.job4j.carstore.entity.Transmission"/>
+        <property name="manufacturer" column="manufacturer"/>
+        <property name="model" column="model"/>
+        <property name="body" column="body"/>
+        <property name="engine" column="engine"/>
+        <property name="transmission" column="transmission"/>
     </class>
 </hibernate-mapping>

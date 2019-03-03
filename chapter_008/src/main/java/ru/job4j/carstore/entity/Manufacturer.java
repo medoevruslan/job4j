@@ -1,7 +1,7 @@
 package ru.job4j.carstore.entity;
 
-
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "manufacturers")
@@ -11,11 +11,11 @@ public class Manufacturer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "manufacturer")
-    private String manufacturer;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "model")
-    private String model;
+    @OneToMany(mappedBy = "manufacturers")
+    private List<Model> models;
 
     public Manufacturer() {
     }
@@ -24,9 +24,8 @@ public class Manufacturer {
         this.id = id;
     }
 
-    public Manufacturer(String manufacturer, String model) {
-        this.manufacturer = manufacturer;
-        this.model = model;
+    public Manufacturer(String name) {
+        this.name = name;
     }
 
     public Integer getId() {
@@ -37,20 +36,20 @@ public class Manufacturer {
         this.id = id;
     }
 
-    public String getManufacturer() {
-        return this.manufacturer;
+    public String getName() {
+        return this.name;
     }
 
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getModel() {
-        return this.model;
+    public List<Model> getModels() {
+        return models;
     }
 
-    public void setModel(String model) {
-        this.model = model;
+    public void setModels(List<Model> models) {
+        this.models = models;
     }
 
     @Override
@@ -60,7 +59,7 @@ public class Manufacturer {
             result = true;
         } else if (o != null && getClass() == o.getClass()) {
             Manufacturer mnfrer = (Manufacturer) o;
-            result = this.id == mnfrer.id && this.model.equals(mnfrer.model);
+            result = this.id == mnfrer.id;
         }
         return result;
     }
@@ -69,7 +68,6 @@ public class Manufacturer {
     public int hashCode() {
         int result = 17;
         result = 31 * result + this.id;
-        result = 31 * result + (this.model != null ? this.model.hashCode() : 0);
         return result;
     }
 
@@ -77,8 +75,8 @@ public class Manufacturer {
     public String toString() {
         return "Manufacturer{"
                 + "id=" + id
-                + ", manufacturer='" + manufacturer + '\''
-                + ", model='" + model + '\''
+                + ", name='" + name + '\''
+                + ", models=" + models
                 + '}';
     }
 }

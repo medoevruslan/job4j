@@ -1,0 +1,24 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="entity">
+    <class name="ru.job4j.carstore.entity.Item" table="items">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="header" column="header"/>
+        <property name="description" column="description"/>
+        <property name="price" column="price"/>
+        <property name="created" column="created"/>
+        <property name="sold" column="sold"/>
+        <many-to-one name="user"
+                     column="user_id"
+                     class="ru.job4j.carstore.entity.User"/>
+        <many-to-one name="car"
+                     column="car_id"
+                     class="ru.job4j.carstore.entity.Car"/>
+        <bag name="images" inverse="true" cascade="all-delete-orphan">
+            <key column="item_id"/>
+            <one-to-many class="ru.job4j.carstore.entity.Image"/>
+        </bag>
+    </class>
+</hibernate-mapping>

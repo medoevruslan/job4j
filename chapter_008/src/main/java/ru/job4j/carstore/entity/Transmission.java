@@ -15,9 +15,6 @@ public class Transmission {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "gears")
-    private Byte gears;
-
     public Transmission() {
     }
 
@@ -25,9 +22,8 @@ public class Transmission {
         this.id = id;
     }
 
-    public Transmission(String type, byte gears) {
+    public Transmission(String type) {
         this.type = type;
-        this.gears = gears;
     }
 
     public Integer getId() {
@@ -46,14 +42,6 @@ public class Transmission {
         this.type = type;
     }
 
-    public Byte getGears() {
-        return this.gears;
-    }
-
-    public void setGears(Byte gears) {
-        this.gears = gears;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -64,13 +52,12 @@ public class Transmission {
         }
         Transmission that = (Transmission) o;
         return this.id == that.id
-                && this.gears == that.gears
                 && Objects.equals(this.type, that.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.type, this.gears);
+        return Objects.hash(this.id, this.type);
     }
 
     @Override
@@ -78,7 +65,6 @@ public class Transmission {
         return "Transmission{"
                 + "id=" + id
                 + ", type='" + type + '\''
-                + ", gears=" + gears
                 + '}';
     }
 }

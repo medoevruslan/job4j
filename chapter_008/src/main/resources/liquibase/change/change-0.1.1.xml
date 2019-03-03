@@ -1,0 +1,50 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <changeSet id="add_manufacturers" author="ruslan.m">
+        <sql>
+            INSERT INTO manufacturers (name) VALUES ('Audi'), ('BMW'), ('Chevrolet'), ('Mazda');
+        </sql>
+        <rollback>
+            DELETE FROM manufacturers;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="add_models" author="ruslan.m">
+        <sql>
+            INSERT INTO models (name, manufacturer_id) VALUES ('TT', 1), ('Q7', 1), ('325', 2), ('750', 2)
+            , ('Corvette', 3), ('Camaro', 3), ('626', 4), ('323', 4);
+        </sql>
+        <rollback>
+            DELETE FROM models;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="add_body" author="ruslan.m">
+        <sql>
+            INSERT INTO bodies (type) VALUES ('Hatchback'), ('Sedan'), ('Coupe'), ('Universal');
+        </sql>
+        <rollback>
+            DELETE FROM bodies;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="add_transmission" author="ruslan.m">
+        <sql>
+            INSERT INTO transmissions (type) VALUES ('Automatic'), ('Manual');
+        </sql>
+        <rollback>
+            DELETE FROM transmissions;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="tag-1.1" author="ruslan.m">
+        <tagDatabase tag="1.1"/>
+    </changeSet>
+
+</databaseChangeLog>

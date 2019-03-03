@@ -48,4 +48,5 @@ public class ManufacturerService implements DAO<Manufacturer> {
     public void deleteAll() {
         this.manager.deleteAll();
     }
+
 }

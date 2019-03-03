@@ -14,9 +14,6 @@ public class Body {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "color")
-    private String color;
-
     public Body() {
     }
 
@@ -24,9 +21,8 @@ public class Body {
         this.id = id;
     }
 
-    public Body(String type, String color) {
+    public Body(String type) {
         this.type = type;
-        this.color = color;
     }
 
     public Integer getId() {
@@ -45,14 +41,6 @@ public class Body {
         this.type = type;
     }
 
-    public String getColor() {
-        return this.color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -63,13 +51,12 @@ public class Body {
         }
         Body body = (Body) o;
         return this.id == body.id
-                && Objects.equals(this.type, body.type)
-                && Objects.equals(this.color, body.color);
+                && Objects.equals(this.type, body.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.type, this.color);
+        return Objects.hash(this.id, this.type);
     }
 
     @Override
@@ -77,7 +64,6 @@ public class Body {
         return "Body{"
                 + "id=" + id
                 + ", type='" + type + '\''
-                + ", color='" + color + '\''
                 + '}';
     }
 }

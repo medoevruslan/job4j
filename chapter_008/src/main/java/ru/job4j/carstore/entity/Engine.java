@@ -11,9 +11,6 @@ public class Engine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "horsePower")
-    private Integer horsePower;
-
     @Column(name = "capacity")
     private Float capacity;
 
@@ -24,8 +21,7 @@ public class Engine {
         this.id = id;
     }
 
-    public Engine(int horsePower, float capacity) {
-        this.horsePower = horsePower;
+    public Engine(float capacity) {
         this.capacity = capacity;
     }
 
@@ -35,14 +31,6 @@ public class Engine {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getHorsePower() {
-        return this.horsePower;
-    }
-
-    public void setHorsePower(Integer horsePower) {
-        this.horsePower = horsePower;
     }
 
     public Float getCapacity() {
@@ -60,8 +48,7 @@ public class Engine {
             result = true;
         } else if (o != null && getClass() == o.getClass()) {
             Engine engine = (Engine) o;
-            result = this.id == engine.id && this.capacity == engine.capacity
-                    && this.horsePower == engine.horsePower;
+            result = this.id == engine.id && this.capacity == engine.capacity;
         }
         return result;
     }
@@ -71,7 +58,6 @@ public class Engine {
         int result = 17;
         result = 31 * result + this.id;
         result = 31 * result + Float.floatToIntBits(this.capacity);
-        result = 31 * result + this.horsePower;
         return result;
     }
 
@@ -79,7 +65,6 @@ public class Engine {
     public String toString() {
         return "Engine{"
                 + "id=" + id
-                + ", horsePower=" + horsePower
                 + ", capacity=" + capacity
                 + '}';
     }

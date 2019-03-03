@@ -11,21 +11,20 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "manufacturer")
-    private Manufacturer manufacturer;
+    @Column(name = "manufacturer")
+    private String manufacturer;
 
-    @ManyToOne
-    @JoinColumn(name = "transmission")
-    private Transmission transmission;
+    @Column(name = "model")
+    private String model;
 
-    @ManyToOne
-    @JoinColumn(name = "engine")
-    private Engine engine;
+    @Column(name = "transmission")
+    private String transmission;
 
-    @ManyToOne
-    @JoinColumn(name = "body")
-    private Body body;
+    @Column(name = "engine")
+    private String engine;
+
+    @Column(name = "body")
+    private String body;
 
     public Car() {
     }
@@ -34,7 +33,7 @@ public class Car {
         this.id = id;
     }
 
-    public Car(Manufacturer manufacturer, Transmission transmission, Engine engine, Body body) {
+    public Car(String manufacturer, String model, String transmission, String engine, String body) {
         this.manufacturer = manufacturer;
         this.transmission = transmission;
         this.engine = engine;
@@ -49,35 +48,43 @@ public class Car {
         this.id = id;
     }
 
-    public Manufacturer getManufacturer() {
+    public String getManufacturer() {
         return this.manufacturer;
     }
 
-    public void setManufacturer(Manufacturer manufacturer) {
+    public void setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
     }
 
-    public Transmission getTransmission() {
+    public String getTransmission() {
         return this.transmission;
     }
 
-    public void setTransmission(Transmission transmission) {
+    public void setTransmission(String transmission) {
         this.transmission = transmission;
     }
 
-    public Engine getEngine() {
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getEngine() {
         return this.engine;
     }
 
-    public void setEngine(Engine engine) {
+    public void setEngine(String engine) {
         this.engine = engine;
     }
 
-    public Body getBody() {
+    public String getBody() {
         return this.body;
     }
 
-    public void setBody(Body body) {
+    public void setBody(String body) {
         this.body = body;
     }
 
@@ -92,6 +99,7 @@ public class Car {
         Car car = (Car) o;
         return this.id == car.id
                 && Objects.equals(this.manufacturer, car.manufacturer)
+                && Objects.equals(this.model, car.model)
                 && Objects.equals(this.transmission, car.transmission)
                 && Objects.equals(this.engine, car.engine)
                 && Objects.equals(this.body, car.body);
@@ -99,7 +107,7 @@ public class Car {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.manufacturer, this.transmission, this.engine, this.body);
+        return Objects.hash(this.id, this.manufacturer, this.model, this.transmission, this.engine, this.body);
     }
 
     @Override
@@ -107,6 +115,7 @@ public class Car {
         return "Car{"
                 + "id=" + id
                 + ", manufacturer=" + manufacturer
+                + ", model=" + model
                 + ", transmission=" + transmission
                 + ", engine=" + engine
                 + ", body=" + body

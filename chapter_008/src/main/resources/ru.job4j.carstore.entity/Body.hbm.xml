@@ -6,6 +6,5 @@
             <generator class="identity"/>
         </id>
         <property name="type" column="type"/>
-        <property name="color" column="color"/>
     </class>
 </hibernate-mapping>

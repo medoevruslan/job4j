@@ -13,6 +13,11 @@
         nav ul li:last-child {
             margin-left: 1em;
         }
+
+        .btn-filter {
+            margin: 1em 0;
+            width: 100%;
+        }
     </style>
     <script>
 
@@ -34,8 +39,31 @@
             $('#regForm').validate();
         });
 
-        function loadItems() {
-            var items = ${requestScope.items};
+        $(document).ready(function () {
+            $.each(fetchManufacturers(), function () {
+                $('#sel-manufact').append($("<option/>", {
+                    value: this.value,
+                    text: this.value
+                }));
+            });
+            $('#sel-manufact').bind('change', function () {
+                $('#sel-model').empty();
+                $('#sel-model').append($("<option/>", {
+                    text: '...',
+                    selected: 'selected'
+                }));
+                var manufacturer = $('#sel-manufact option:selected').text();
+                $.each(fetchModels(manufacturer), function () {
+                    $('#sel-model').append($("<option/>", {
+                        value: this.value,
+                        text: this.value
+                    }));
+                });
+            });
+        });
+
+        function loadItems(items = ${requestScope.items}) {
+            $('#table tbody').empty();
             $.each(items, function () {
                 if (!this.sold) {
                     $('#table tbody').append(
@@ -51,6 +79,80 @@
             });
         }
 
+        function filter() {
+            var day = $('#filterDay').is(':checked');
+            var photo = $('#filterPhoto').is(':checked');
+            var manufacturer = $('#sel-manufact').val();
+            var model = $('#sel-model').val();
+            var items = ${requestScope.items};
+            if (items != null) {
+                items = filterLastDay(day, items);
+                items = filterByPhoto(photo, items);
+                items = filterByManufacturer(manufacturer, model, items);
+                loadItems(items);
+            }
+        }
+
+        function filterLastDay(filter, items) {
+            var threshold = new Date().setHours(0, 0, 0, 0);
+            if (filter) {
+                items = items.filter(function (item) {
+                    return item.created >= threshold;
+                });
+            }
+            return items;
+        }
+
+        function filterByPhoto(filter, items) {
+            if (filter) {
+                items = items.filter(function (item) {
+                   return item.images.length !== 0;
+                });
+            }
+            return items;
+        }
+
+        function filterByManufacturer(manufacturer, model, items) {
+            if (manufacturer !== "...") {
+                if (model !== "...") {
+                    items = items.filter(function (item) {
+                        return (item.car.manufacturer === manufacturer && item.car.model === model);
+                    });
+                } else {
+                    items = items.filter(function (item) {
+                        return (item.car.manufacturer === manufacturer);
+                    });
+                }
+            }
+            return items;
+        }
+
+        function fetchManufacturers() {
+            var manufacturers = [];
+            <c:forEach var="manufacturer" items="${sessionScope.manufacturers}">
+            manufacturers.push({
+                id: "${manufacturer.id}",
+                value: "${manufacturer.name}"
+            });
+            </c:forEach>
+            return manufacturers;
+        }
+
+        function fetchModels(manufacturer) {
+            var models = [];
+            <c:forEach var="manufacturers" items="${sessionScope.manufAndModels}">
+            <c:forEach var="model" items="${manufacturers.value}">
+            if (manufacturer === "${manufacturers['key']}") {
+                models.push({
+                    id: "${model.id}",
+                    value: "${model.name}"
+                });
+            }
+            </c:forEach>
+            </c:forEach>
+            return models;
+        }
+        
         function checkAuth() {
             $.ajax({
                 url: 'checkAuth',
@@ -138,6 +240,26 @@
         </ul>
     </div>
 </nav>
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <div class="checkbox">
+            <label><input type="checkbox" name="day" id="filterDay" value="lastDay">Current day items</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" name="photo" id="filterPhoto" value="withPhoto">Only with photo</label>
+        </div>
+        <label for="sel-manufact">Filter by manufacturer and model</label>
+        <select class="form-control" id="sel-manufact">
+            <option selected="selected">...</option>
+        </select>
+        <label for="sel-model"></label>
+        <select class="form-control" id="sel-model">
+            <option selected="selected">...</option>
+        </select>
+        <button type="submit" class="btn btn-success btn-filter" onclick="filter();">Filter</button>
+    </div>
+</div>
 
 <div>
     <table class="table table-bordered form-group" id="table">

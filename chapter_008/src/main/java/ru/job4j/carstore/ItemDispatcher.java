@@ -1,6 +1,7 @@
 package ru.job4j.carstore;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.log4j.Logger;
 import ru.job4j.carstore.entity.*;
 import ru.job4j.carstore.service.*;
 
@@ -15,6 +16,7 @@ import java.util.Random;
  * Class create new car and set all data to it.
  */
 public class ItemDispatcher {
+    private static final Logger LOG = Logger.getLogger(ItemDispatcher.class);
     private static final ItemDispatcher INSTANCE = new ItemDispatcher();
 
     private ItemDispatcher() { }
@@ -63,7 +65,7 @@ public class ItemDispatcher {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+           LOG.error(String.format("Can't set image to item %d", item.getId()), e);
         }
     }
 

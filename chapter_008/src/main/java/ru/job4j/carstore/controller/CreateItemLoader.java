@@ -1,20 +1,12 @@
 package ru.job4j.carstore.controller;
 
-import ru.job4j.carstore.entity.Manufacturer;
-import ru.job4j.carstore.entity.Model;
 import ru.job4j.carstore.service.BodyService;
-import ru.job4j.carstore.service.ManufacturerService;
 import ru.job4j.carstore.service.TransmissionService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 
 /**
  * Controller passes all data via session that are needed to create new item.

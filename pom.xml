@@ -24,6 +24,7 @@
         <module>chapter_008</module>
         <module>Codewars</module>
         <module>test_task</module>
+        <module>chapter_009</module>
     </modules>
 
     <profiles>

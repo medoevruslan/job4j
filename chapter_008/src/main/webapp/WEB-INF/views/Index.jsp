@@ -81,51 +81,64 @@
 
         function filter() {
             var day = $('#filterDay').is(':checked');
-            var photo = $('#filterPhoto').is(':checked');
+            var byPhoto = $('#filterPhoto').is(':checked');
             var manufacturer = $('#sel-manufact').val();
             var model = $('#sel-model').val();
-            var items = ${requestScope.items};
-            if (items != null) {
-                items = filterLastDay(day, items);
-                items = filterByPhoto(photo, items);
-                items = filterByManufacturer(manufacturer, model, items);
-                loadItems(items);
-            }
-        }
-
-        function filterLastDay(filter, items) {
-            var threshold = new Date().setHours(0, 0, 0, 0);
-            if (filter) {
-                items = items.filter(function (item) {
-                    return item.created >= threshold;
-                });
-            }
-            return items;
-        }
-
-        function filterByPhoto(filter, items) {
-            if (filter) {
-                items = items.filter(function (item) {
-                   return item.images.length !== 0;
-                });
-            }
-            return items;
-        }
-
-        function filterByManufacturer(manufacturer, model, items) {
-            if (manufacturer !== "...") {
-                if (model !== "...") {
-                    items = items.filter(function (item) {
-                        return (item.car.manufacturer === manufacturer && item.car.model === model);
-                    });
-                } else {
-                    items = items.filter(function (item) {
-                        return (item.car.manufacturer === manufacturer);
-                    });
+            $.ajax({
+                url: "itemFilter",
+                type: 'post',
+                dataType: "json",
+                data: ({manufacturer: manufacturer,model: model, byPhoto: byPhoto, day: day}),
+                complete: function (data) {
+                    var resp = JSON.parse(data.responseText);
+                    loadItems(resp);
                 }
-            }
-            return items;
+            });
         }
+
+        <%--function jsFilter() {--%>
+            <%--var items = ${requestScope.items};--%>
+            <%--if (items != null) {--%>
+                <%--items = filterLastDay(day, items);--%>
+                <%--items = filterByPhoto(byPhoto, items);--%>
+                <%--items = filterByManufacturer(manufacturer, model, items);--%>
+                <%--loadItems(items);--%>
+            <%--}--%>
+        <%--}--%>
+
+        <%--function filterLastDay(filter, items) {--%>
+            <%--var threshold = new Date().setHours(0, 0, 0, 0);--%>
+            <%--if (filter) {--%>
+                <%--items = items.filter(function (item) {--%>
+                    <%--return item.created >= threshold;--%>
+                <%--});--%>
+            <%--}--%>
+            <%--return items;--%>
+        <%--}--%>
+
+        <%--function filterByPhoto(filter, items) {--%>
+            <%--if (filter) {--%>
+                <%--items = items.filter(function (item) {--%>
+                   <%--return item.images.length !== 0;--%>
+                <%--});--%>
+            <%--}--%>
+            <%--return items;--%>
+        <%--}--%>
+
+        <%--function filterByManufacturer(manufacturer, model, items) {--%>
+            <%--if (manufacturer !== "...") {--%>
+                <%--if (model !== "...") {--%>
+                    <%--items = items.filter(function (item) {--%>
+                        <%--return (item.car.manufacturer === manufacturer && item.car.model === model);--%>
+                    <%--});--%>
+                <%--} else {--%>
+                    <%--items = items.filter(function (item) {--%>
+                        <%--return (item.car.manufacturer === manufacturer);--%>
+                    <%--});--%>
+                <%--}--%>
+            <%--}--%>
+            <%--return items;--%>
+        <%--}--%>
 
         function fetchManufacturers() {
             var manufacturers = [];
@@ -244,10 +257,10 @@
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
         <div class="checkbox">
-            <label><input type="checkbox" name="day" id="filterDay" value="lastDay">Current day items</label>
+            <label><input type="checkbox" name="day" id="filterDay" value="currDay">Current day items</label>
         </div>
         <div class="checkbox">
-            <label><input type="checkbox" name="photo" id="filterPhoto" value="withPhoto">Only with photo</label>
+            <label><input type="checkbox" name="byPhoto" id="filterPhoto" value="withPhoto">Only with byPhoto</label>
         </div>
         <label for="sel-manufact">Filter by manufacturer and model</label>
         <select class="form-control" id="sel-manufact">

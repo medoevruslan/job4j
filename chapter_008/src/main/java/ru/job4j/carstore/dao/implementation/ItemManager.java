@@ -4,9 +4,15 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.job4j.carstore.HibernateUtil;
+import ru.job4j.carstore.ItemFilter;
 import ru.job4j.carstore.dao.ItemDAO;
+import ru.job4j.carstore.entity.Car;
 import ru.job4j.carstore.entity.Item;
+import ru.job4j.carstore.entity.User;
 
+import javax.persistence.criteria.*;
+import javax.servlet.ServletRequest;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.function.Function;
 
@@ -27,10 +33,59 @@ public class ItemManager implements ItemDAO {
     }
 
     @Override
+    public Item findByName(String name) {
+        return (Item) this.tx(session -> session.createQuery("from Item i where i.header = :name")
+                .setParameter("name", name).getSingleResult());
+    }
+
+    @Override
+    public List<Item> findByModel(User model) {
+        return this.tx(session -> session.createQuery("from Item i where i.user = :user")
+                .setParameter("user", model).list());
+    }
+
+    @Override
+    public List<Item> findByDate(Timestamp time) {
+        return this.tx(session -> session.createQuery("from Item i where i.created = :created")
+                .setParameter("created", time).list());
+    }
+
+    @Override
+    public List<Item> findByManufacturer(String manufacturer) {
+        return this.tx(session -> {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Item> cr = cb.createQuery(Item.class);
+            Root<Item> root = cr.from(Item.class);
+            Join<Item, Car> car =  root.join("car");
+            cr.select(root).where(cb.equal(car.get("manufacturer"), manufacturer));
+            return session.createQuery(cr).list();
+        });
+    }
+
+    @Override
+    public List<Item> findByManufacturerAndModel(String manufacturer, String model) {
+        return this.tx(session -> {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Item> cr = cb.createQuery(Item.class);
+            Root<Item> root = cr.from(Item.class);
+            Join<Item, Car> car =  root.join("car");
+            Predicate clause = cb.and(cb.equal(car.get("manufacturer"), manufacturer),
+                                     (cb.equal(car.get("model"), model)));
+            cr.select(root).where(clause);
+            return session.createQuery(cr).list();
+        });
+    }
+
+    @Override
+    public List<Item> filter(ServletRequest req) {
+        return ItemFilter.getInstance().applyFilter(req);
+    }
+
+    @Override
     public void delete(Item entity) {
         this.tx(session -> {
-           session.delete(entity);
-           return null;
+            session.delete(entity);
+            return null;
         });
     }
 
@@ -47,8 +102,8 @@ public class ItemManager implements ItemDAO {
     @Override
     public void deleteAll() {
         this.tx(session -> {
-           session.createQuery("delete from Item").executeUpdate();
-           return null;
+            session.createQuery("delete from Item").executeUpdate();
+            return null;
         });
     }
 

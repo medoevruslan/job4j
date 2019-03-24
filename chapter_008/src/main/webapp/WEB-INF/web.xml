@@ -123,4 +123,13 @@
         <url-pattern>/updateItem</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ItemFilter</servlet-name>
+        <servlet-class>ru.job4j.carstore.controller.ItemFilterController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ItemFilter</servlet-name>
+        <url-pattern>/itemFilter</url-pattern>
+    </servlet-mapping>
+
 </web-app>

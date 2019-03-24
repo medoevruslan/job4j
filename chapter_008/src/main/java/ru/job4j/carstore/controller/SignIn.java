@@ -3,7 +3,6 @@ package ru.job4j.carstore.controller;
 import ru.job4j.carstore.entity.User;
 import ru.job4j.carstore.service.UserService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

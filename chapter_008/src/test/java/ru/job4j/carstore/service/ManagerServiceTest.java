@@ -1,8 +1,6 @@
 package ru.job4j.carstore.service;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.modules.junit4.PowerMockRunner;
 import ru.job4j.carstore.dao.DAO;
 import ru.job4j.carstore.entity.*;
 

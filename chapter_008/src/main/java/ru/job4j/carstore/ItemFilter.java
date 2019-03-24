@@ -103,7 +103,7 @@ public class ItemFilter {
     private void createFilterByInput(ServletRequest req) {
         this.manufacturer = req.getParameter("manufacturer");
         this.model = req.getParameter("model");
-        this.byPhoto = Boolean.valueOf(req.getParameter("photo"));
+        this.byPhoto = Boolean.valueOf(req.getParameter("byPhoto"));
         this.currDay = Boolean.valueOf(req.getParameter("day"));
     }
 

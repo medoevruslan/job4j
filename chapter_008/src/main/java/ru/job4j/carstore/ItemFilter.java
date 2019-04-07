@@ -16,10 +16,6 @@ import java.util.stream.Collectors;
  * Supplementary class filters items.
  */
 public class ItemFilter {
-    private String manufacturer;
-    private String model;
-    private boolean byPhoto;
-    private boolean currDay;
     private final ArrayList<Supplier> filters = new ArrayList<>();
     private static final ItemFilter INSTANCE = new ItemFilter();
     private final ItemDAO iService = ItemService.getInstance();
@@ -36,18 +32,18 @@ public class ItemFilter {
      * Filter unit.
      * @return Supplier with approriate method.
      */
-    private Supplier<List<Item>> byManufacturer() {
-        return () -> this.manufacturer.equals("...")
+    private Supplier<List<Item>> byManufacturer(String manufacturer) {
+        return () -> manufacturer.equals("...")
                 ?  this.iService.findAll()
-                : this.iService.findByManufacturer(this.manufacturer);
+                : this.iService.findByManufacturer(manufacturer);
     }
 
     /**
      * Filter unit.
      * @return Supplier with approriate method.
      */
-    private Supplier<List<Item>> byManufacturerAndModel() {
-        return () -> this.iService.findByManufacturerAndModel(this.manufacturer, this.model);
+    private Supplier<List<Item>> byManufacturerAndModel(String manufacturer, String model) {
+        return () -> this.iService.findByManufacturerAndModel(manufacturer, model);
     }
 
     /**
@@ -82,11 +78,15 @@ public class ItemFilter {
     /**
      * Fills the list with essential filters.
      */
-    private void initialize() {
-        if (!this.model.equals("...")) {
-            this.addFilter(this.byManufacturerAndModel());
+    private void initialize(ServletRequest req) {
+        String manufacturer = req.getParameter("manufacturer");
+        String model = req.getParameter("model");
+        boolean byPhoto = Boolean.valueOf(req.getParameter("byPhoto"));
+        boolean currDay = Boolean.valueOf(req.getParameter("day"));
+        if (!req.getParameter("model").equals("...")) {
+            this.addFilter(this.byManufacturerAndModel(manufacturer, model));
         } else {
-            this.addFilter(this.byManufacturer());
+            this.addFilter(this.byManufacturer(manufacturer));
         }
         if (byPhoto) {
             this.addFilter(this.byPhotoPresence());
@@ -97,59 +97,15 @@ public class ItemFilter {
     }
 
     /**
-     * Creates suitable filter to use.
-     * @param req
-     */
-    private void createFilterByInput(ServletRequest req) {
-        this.manufacturer = req.getParameter("manufacturer");
-        this.model = req.getParameter("model");
-        this.byPhoto = Boolean.valueOf(req.getParameter("byPhoto"));
-        this.currDay = Boolean.valueOf(req.getParameter("day"));
-    }
-
-    /**
      * Applies the filter to the given items.
      * @param req
      * @return
      */
     public List<Item> applyFilter(ServletRequest req) {
-        this.createFilterByInput(req);
-        this.initialize();
+        this.initialize(req);
         for (Supplier<List<Item>> filter: this.filters) {
             this.items = filter.get();
         }
         return this.items;
-    }
-
-    public boolean isByPhoto() {
-        return byPhoto;
-    }
-
-    public void setByPhoto(boolean byPhoto) {
-        this.byPhoto = byPhoto;
-    }
-
-    public boolean isCurrDay() {
-        return currDay;
-    }
-
-    public void setCurrDay(boolean currDay) {
-        this.currDay = currDay;
-    }
-
-    public String getManufacturer() {
-        return manufacturer;
-    }
-
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
     }
 }

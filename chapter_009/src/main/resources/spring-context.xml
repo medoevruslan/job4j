@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean abstract="true" id="abstractBean" class="ru.job4j.beans.AbstractBean">
+        <constructor-arg name="injectedBean" ref="injectedBean"/>
+    </bean>
+    <bean id="injectedBean" class="ru.job4j.beans.InjectedBean"/>
+    <bean id="myBean" class="ru.job4j.beans.MyBean" parent="abstractBean"/>
+
+</beans>
